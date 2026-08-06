@@ -93,8 +93,16 @@ ActivityShell.init({
     const chartWrap = document.createElement("div");
     chartWrap.className = "dr-chart-wrap";
     chartCol.appendChild(chartWrap);
+    // The SVG curve itself has no text content, so a screen reader has
+    // nothing to read from it directly — this stays in sync as a plain-text
+    // stand-in for "what the curve shows."
+    const curveDescription = document.createElement("p");
+    curveDescription.className = "dr-curve-description";
+    curveDescription.setAttribute("aria-live", "polite");
+    chartCol.appendChild(curveDescription);
     const readouts = document.createElement("div");
     readouts.className = "dr-readouts";
+    readouts.setAttribute("aria-live", "polite");
     chartCol.appendChild(readouts);
     const shapeNote = document.createElement("p");
     chartCol.appendChild(shapeNote);
@@ -110,6 +118,14 @@ ActivityShell.init({
       const simResult = DoseResponseModel.simulateReplicates(scatterDoses, params, {
         noiseSd, replicates, seed: replicateSeed, shape, cytotoxicityThreshold
       });
+
+      const peakIdx = smoothTrue.reduce((best, v, i) => (v > smoothTrue[best] ? i : best), 0);
+      curveDescription.textContent =
+        `At the lowest tested dose (${MathUtils.formatNumber(smoothDoses[0], 2)}) the response is about ` +
+        `${MathUtils.formatNumber(smoothTrue[0], 1)}; it peaks around ${MathUtils.formatNumber(smoothTrue[peakIdx], 1)} ` +
+        `near dose ${MathUtils.formatNumber(smoothDoses[peakIdx], 2)}; at the highest tested dose ` +
+        `(${MathUtils.formatNumber(smoothDoses[smoothDoses.length - 1], 2)}) it is about ` +
+        `${MathUtils.formatNumber(smoothTrue[smoothTrue.length - 1], 1)}.`;
 
       const yMax = Math.max(params.top, ...smoothTrue, ...simResult.flatMap((r) => r.replicateValues)) * 1.15 || 1;
       const yMin = Math.min(0, params.bottom, ...simResult.flatMap((r) => r.replicateValues));

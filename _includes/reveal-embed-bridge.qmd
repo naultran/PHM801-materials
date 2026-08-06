@@ -1,6 +1,7 @@
 <!-- Included via revealjs `include-after-body` from lectures/*.qmd (depth 1: ../js, ../index.html). -->
 <a class="lecture-home-link" href="../index.html">← Course Home</a>
 <script src="../js/embed-bridge.js"></script>
+<script src="../js/text-to-speech.js"></script>
 <script>
 (function () {
   var tries = 0;
@@ -9,9 +10,30 @@
     if (window.Reveal && typeof window.Reveal.isReady === "function" && window.Reveal.isReady()) {
       clearInterval(iv);
       EmbedBridge.parentInit();
+      initReadAloud();
     } else if (tries > 100) {
       clearInterval(iv);
     }
   }, 100);
+
+  function getSlideText(section) {
+    if (!section) return "";
+    var clone = section.cloneNode(true);
+    var strip = clone.querySelectorAll("button, iframe, .activity-embed-controls, aside.notes, .read-aloud-btn");
+    for (var i = 0; i < strip.length; i++) strip[i].remove();
+    return clone.textContent.replace(/\s+/g, " ").trim();
+  }
+
+  function initReadAloud() {
+    if (!window.TextToSpeech) return;
+    var btn = TextToSpeech.createReadAloudButton(
+      function () { return getSlideText(Reveal.getCurrentSlide()); },
+      { label: "🔊 Read this slide", className: "lecture-read-aloud-btn" }
+    );
+    if (!btn) return; // no speech synthesis support in this browser
+    document.body.appendChild(btn);
+    // Don't keep reading a slide the presenter has already navigated away from.
+    Reveal.on("slidechanged", function () { TextToSpeech.stop(); });
+  }
 })();
 </script>

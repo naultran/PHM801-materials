@@ -156,9 +156,12 @@ ActivityShell.init({
     resultsHeading.textContent = "Similarity to each reference tissue";
     rightCol.appendChild(resultsHeading);
     const resultsWrap = document.createElement("div");
+    resultsWrap.setAttribute("aria-live", "polite");
+    resultsWrap.setAttribute("aria-atomic", "true");
     rightCol.appendChild(resultsWrap);
     const marginNote = document.createElement("p");
     marginNote.className = "sm-margin-note";
+    marginNote.setAttribute("aria-live", "polite");
     rightCol.appendChild(marginNote);
     const revealNote = document.createElement("div");
     revealNote.className = "sm-reveal-note";

@@ -22,6 +22,14 @@ function buildActivityHeader({ title, instructions, galleryHref }) {
 
   topRow.appendChild(homeLink);
 
+  if (window.TextToSpeech) {
+    const readBtn = TextToSpeech.createReadAloudButton(
+      () => [title, instructions].filter(Boolean).join(". "),
+      { label: "🔊 Read instructions", className: "touch-target read-aloud-btn" }
+    );
+    if (readBtn) topRow.appendChild(readBtn);
+  }
+
   const h1 = document.createElement("h1");
   h1.textContent = title;
 

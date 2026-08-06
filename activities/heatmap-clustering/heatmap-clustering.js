@@ -216,6 +216,16 @@ ActivityShell.init({
     scrollWrap.appendChild(heatmapSvg);
     chartArea.appendChild(scrollWrap);
 
+    // The heatmap/dendrogram are plain SVG shapes with no text content, so a
+    // screen reader has nothing to read from them directly. This paragraph
+    // is a live, always-current text description of the same clustering
+    // result — sample order left-to-right doubles as the description, since
+    // adjacent samples are exactly the ones the algorithm judged most alike.
+    const clusterDescription = document.createElement("p");
+    clusterDescription.className = "hm-cluster-description";
+    clusterDescription.setAttribute("aria-live", "polite");
+    chartArea.appendChild(clusterDescription);
+
     const legend = document.createElement("div");
     legend.className = "hm-legend";
     legend.innerHTML = '<span>Low</span><span class="hm-legend-swatch"></span><span>High</span>';
@@ -223,6 +233,7 @@ ActivityShell.init({
 
     const infoPanel = document.createElement("div");
     infoPanel.className = "hm-info-panel";
+    infoPanel.setAttribute("aria-live", "polite");
     infoPanel.textContent = "Click a sample label below the heatmap to see its nearest neighbor and the genes driving that similarity.";
     chartArea.appendChild(infoPanel);
 
@@ -270,6 +281,12 @@ ActivityShell.init({
 
       const orderedSamples = leafOrderIds.map((id) => samples.find((s) => s.id === id));
       const orderedSampleIdx = orderedSamples.map((s) => samples.indexOf(s));
+
+      clusterDescription.textContent = freezeOrder
+        ? `Sample order is frozen at: ${orderedSamples.map((s) => s.label).join(", ")}. ` +
+          `Cell colors below reflect the current values, but columns will not reorder until you unfreeze.`
+        : `Clustered sample order, most similar neighbors adjacent (${distanceMetric} distance, ${linkage} linkage): ` +
+          `${orderedSamples.map((s) => s.label).join(", ")}.`;
 
       // ---- draw dendrogram (only meaningful when we actually have one this update) ----
       const width = LEFT_MARGIN + CELL_W * samples.length + 20;

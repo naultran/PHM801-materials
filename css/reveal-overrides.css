@@ -78,6 +78,25 @@
   cursor: pointer;
 }
 
+.lecture-read-aloud-btn {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 40;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #c7cdd4;
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: #18453b;
+  cursor: pointer;
+  font-weight: 600;
+}
+.lecture-read-aloud-btn:hover,
+.lecture-read-aloud-btn:focus-visible {
+  border-color: #18453b;
+}
+
 .lecture-home-link {
   position: fixed;
   bottom: 10px;

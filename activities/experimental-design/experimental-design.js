@@ -97,6 +97,7 @@ ActivityShell.init({
 
     const summaryRow = document.createElement("div");
     summaryRow.className = "ed-summary-row";
+    summaryRow.setAttribute("aria-live", "polite");
     resultsCol.appendChild(summaryRow);
 
     const chartsWrap = document.createElement("div");
@@ -108,6 +109,14 @@ ActivityShell.init({
     const powerHeading = document.createElement("h4"); powerHeading.textContent = "Estimated power vs. replicate count";
     volcanoWrap.appendChild(volcanoHeading);
     powerWrap.appendChild(powerHeading);
+    // Both charts are plain SVG with no readable text of their own — each
+    // gets a live plain-text description alongside it.
+    const volcanoDescription = document.createElement("p");
+    volcanoDescription.setAttribute("aria-live", "polite");
+    volcanoWrap.appendChild(volcanoDescription);
+    const powerDescription = document.createElement("p");
+    powerDescription.setAttribute("aria-live", "polite");
+    powerWrap.appendChild(powerDescription);
     chartsWrap.appendChild(volcanoWrap);
     chartsWrap.appendChild(powerWrap);
 
@@ -118,6 +127,12 @@ ActivityShell.init({
       const yVals = genes.map((g) => -Math.log10(Math.max(g.p, 1e-12)));
       const xMax = Math.max(1, ...xVals.map(Math.abs));
       const yMax = Math.max(1, ...yVals) * 1.1;
+
+      const significantCount = genes.filter((g) => g.q < alpha).length;
+      volcanoDescription.textContent =
+        `Each point is one of ${genes.length} genes: fold change on the horizontal axis, statistical ` +
+        `evidence (-log10 p-value) on the vertical axis. ${significantCount} of ${genes.length} genes are ` +
+        `significant after FDR correction (shown filled rather than open).`;
       const xScale = SvgUtils.linearScale([-xMax, xMax], [M.left, W - M.right]);
       const yScale = SvgUtils.linearScale([0, yMax], [H - M.bottom, M.top]);
 
@@ -150,6 +165,12 @@ ActivityShell.init({
       const nMin = data.nRange[0], nMax = data.nRange[1];
       const ns = MathUtils.linspace(nMin, nMax, nMax - nMin + 1);
       const powers = ns.map((nn) => StatsUtils.estimatePower(effectSizeMean, variabilitySd, nn, alpha));
+
+      const currentPower = StatsUtils.estimatePower(effectSizeMean, variabilitySd, currentN, alpha);
+      powerDescription.textContent =
+        `Estimated power rises from ${MathUtils.formatNumber(powers[0], 2)} at n=${nMin} to ` +
+        `${MathUtils.formatNumber(powers[powers.length - 1], 2)} at n=${nMax}. At the current setting, ` +
+        `n=${currentN}, estimated power is ${MathUtils.formatNumber(currentPower, 2)}.`;
       const xScale = SvgUtils.linearScale([nMin, nMax], [M.left, W - M.right]);
       const yScale = SvgUtils.linearScale([0, 1], [H - M.bottom, M.top]);
 

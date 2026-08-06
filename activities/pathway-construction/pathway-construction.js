@@ -28,6 +28,7 @@ function buildStage(stageConfig, containerEl) {
   const hintNote = document.createElement("p");
   hintNote.className = "pw-hint-note";
   hintNote.hidden = true;
+  hintNote.setAttribute("aria-live", "polite");
   section.appendChild(hintNote);
 
   const trayHeading = document.createElement("p");
@@ -77,6 +78,7 @@ function buildStage(stageConfig, containerEl) {
   const feedback = document.createElement("div");
   feedback.className = "pw-feedback";
   feedback.hidden = true;
+  feedback.setAttribute("aria-live", "polite");
   section.appendChild(feedback);
 
   const keyboardMount = document.createElement("div");

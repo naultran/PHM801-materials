@@ -129,6 +129,10 @@ ActivityShell.init({
     // ---- results ----
     const scoreRow = document.createElement("div");
     scoreRow.className = "mx-score-row";
+    // aria-live="polite" (not "assertive") specifically so this doesn't
+    // interrupt/spam a screen reader while a slider is actively being
+    // dragged — updates queue and get announced without cutting anything off.
+    scoreRow.setAttribute("aria-live", "polite");
     rightCol.appendChild(scoreRow);
 
     const compositionHeading = document.createElement("h4");

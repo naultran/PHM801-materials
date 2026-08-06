@@ -84,6 +84,7 @@ ActivityShell.init({
     const geneDescription = document.createElement("p");
     geneDescription.style.fontSize = "var(--font-size-sm)";
     geneDescription.style.color = "var(--color-text-muted)";
+    geneDescription.setAttribute("aria-live", "polite");
     controls.appendChild(geneDescription);
 
     function sliderRow(labelText, min, max, step, value, onInput, formatFn) {
@@ -129,6 +130,10 @@ ActivityShell.init({
     trueBox.className = "sp-canvas-box";
     trueBox.innerHTML = "<h4>True single-cell resolution</h4>";
     const trueCanvas = document.createElement("canvas");
+    // Canvas pixels carry no text a screen reader can read — role="img" +
+    // aria-label (kept current in update(), below) is the accessible
+    // stand-in, same purpose as alt text on a static image.
+    trueCanvas.setAttribute("role", "img");
     trueBox.appendChild(trueCanvas);
     canvasesRow.appendChild(trueBox);
 
@@ -136,11 +141,13 @@ ActivityShell.init({
     capturedBox.className = "sp-canvas-box";
     capturedBox.innerHTML = "<h4>Captured (spot-averaged) view</h4>";
     const capturedCanvas = document.createElement("canvas");
+    capturedCanvas.setAttribute("role", "img");
     capturedBox.appendChild(capturedCanvas);
     canvasesRow.appendChild(capturedBox);
 
     const readouts = document.createElement("div");
     readouts.className = "sp-readouts";
+    readouts.setAttribute("aria-live", "polite");
     mainCol.appendChild(readouts);
 
     const CELL_PX = 8;
@@ -204,6 +211,16 @@ ActivityShell.init({
       const regionScore = MathUtils.mean(rightHalf) - MathUtils.mean(leftHalf);
       const resolutionLabel = spacing <= 2 ? "High" : spacing <= 5 ? "Medium" : "Low";
       const singleValue = selectedCell ? grid[selectedCell.y][selectedCell.x] : null;
+
+      // Canvas fallback text (role="img" + aria-label, set on the trueBox/
+      // capturedBox <h4> already gives "which panel"; this adds "what it
+      // currently shows" since canvas pixels carry no text of their own).
+      trueCanvas.setAttribute("aria-label",
+        `${gene.label} at true single-cell resolution. Whole-tissue average ${MathUtils.formatNumber(bulkAvg, 2)}, ` +
+        `right half minus left half ${MathUtils.formatNumber(regionScore, 2)}.`);
+      capturedCanvas.setAttribute("aria-label",
+        `${gene.label} after spot capture (blur radius ${MathUtils.formatNumber(sigma, 1)}, spot spacing ${spacing} cells) — ` +
+        `${resolutionLabel.toLowerCase()} resolution; local detail is averaged together within each spot.`);
 
       readouts.innerHTML = "";
       const tiles = [

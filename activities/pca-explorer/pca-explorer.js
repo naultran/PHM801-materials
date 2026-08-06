@@ -140,6 +140,12 @@ ActivityShell.init({
     const plotHeading = document.createElement("h4");
     plotHeading.textContent = "Sample scores";
     plotCol.appendChild(plotHeading);
+    // The scatter plot itself is unlabeled SVG dots — this stays in sync as
+    // a plain-text stand-in, set once per completed layout (not once per
+    // animation frame, which would spam a screen reader mid-transition).
+    const scatterDescription = document.createElement("p");
+    scatterDescription.setAttribute("aria-live", "polite");
+    plotCol.appendChild(scatterDescription);
     const plotWrap = document.createElement("div");
     plotCol.appendChild(plotWrap);
     const legend = document.createElement("div");
@@ -148,12 +154,14 @@ ActivityShell.init({
     const varianceNote = document.createElement("p");
     varianceNote.style.fontSize = "var(--font-size-sm)";
     varianceNote.style.color = "var(--color-text-muted)";
+    varianceNote.setAttribute("aria-live", "polite");
     plotCol.appendChild(varianceNote);
 
     const loadingsHeading = document.createElement("h4");
     loadingsHeading.textContent = "What drives this axis?";
     loadingsCol.appendChild(loadingsHeading);
     const loadingsWrap = document.createElement("div");
+    loadingsWrap.setAttribute("aria-live", "polite");
     loadingsCol.appendChild(loadingsWrap);
 
     const W = 460, H = 420, M = 40;
@@ -263,6 +271,14 @@ ActivityShell.init({
       const matrix = buildMatrix(genes);
       const result = PCA.runPCA(matrix, { standardize });
       const newScores = result.scores.map((row) => [row[pcX] || 0, row[pcY] || 0]);
+
+      // Set once per completed layout (not per animation frame) so this
+      // doesn't spam a screen reader mid-transition.
+      const groups = groupsForColorBy();
+      scatterDescription.textContent =
+        `Scatter plot of ${samples.length} samples on PC${pcX + 1} vs PC${pcY + 1}, colored by ${colorBy} ` +
+        `(${groups.length} groups: ${groups.join(", ")}). See the loadings panel below for which genes drive ` +
+        `each axis.`;
 
       if (animFrame) cancelAnimationFrame(animFrame);
       if (fallbackTimer) clearTimeout(fallbackTimer);
