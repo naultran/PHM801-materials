@@ -1,0 +1,221 @@
+/**
+ * Common bootstrap every activity page uses: renders the header, mode badge,
+ * seed controls, fetches the activity's data JSON (with a real error message
+ * instead of a silent failure), and calls the activity's own render()
+ * function. Keeps this boilerplate out of every individual activity file.
+ *
+ * Depends on: prng.js, mode-manager.js, embed-bridge.js, content-notice.js
+ * (all loaded first as classic <script> tags).
+ */
+
+function buildActivityHeader({ title, instructions, galleryHref }) {
+  const header = document.createElement("header");
+  header.className = "activity-header";
+
+  const topRow = document.createElement("div");
+  topRow.className = "activity-header__top";
+
+  const homeLink = document.createElement("a");
+  homeLink.className = "activity-header__home touch-target";
+  homeLink.href = galleryHref || "../index.html";
+  homeLink.textContent = "← Activity Gallery";
+
+  const modeBadge = document.createElement("span");
+  modeBadge.className = "mode-badge";
+
+  topRow.appendChild(homeLink);
+  topRow.appendChild(modeBadge);
+
+  const h1 = document.createElement("h1");
+  h1.textContent = title;
+
+  header.appendChild(topRow);
+  header.appendChild(h1);
+
+  if (instructions) {
+    const instr = document.createElement("p");
+    instr.className = "activity-instructions";
+    instr.textContent = instructions;
+    header.appendChild(instr);
+  }
+
+  return { header, modeBadge };
+}
+
+function buildControlsBar(controller, { defaultSeed }) {
+  const bar = document.createElement("div");
+  bar.className = "activity-controls-bar";
+  bar.setAttribute("role", "group");
+  bar.setAttribute("aria-label", "Activity controls");
+
+  const modeLabel = document.createElement("label");
+  modeLabel.className = "activity-controls-bar__item";
+  const modeText = document.createElement("span");
+  modeText.textContent = "Mode";
+  const modeSelect = document.createElement("select");
+  modeSelect.className = "touch-target";
+  ModeManager.VALID_MODES.forEach((m) => {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = m.replace(/-/g, " ");
+    modeSelect.appendChild(opt);
+  });
+  modeSelect.value = controller.mode;
+  modeSelect.addEventListener("change", () => controller.setMode(modeSelect.value));
+  modeLabel.appendChild(modeText);
+  modeLabel.appendChild(modeSelect);
+
+  const seedGroup = document.createElement("div");
+  seedGroup.className = "activity-controls-bar__item seed-controls";
+
+  const seedDisplay = document.createElement("span");
+  seedDisplay.className = "seed-controls__value";
+
+  const randomBtn = document.createElement("button");
+  randomBtn.type = "button";
+  randomBtn.className = "touch-target";
+  randomBtn.textContent = "New random seed";
+  randomBtn.addEventListener("click", () => controller.setSeed(PRNG.randomSeed()));
+
+  const copyBtn = document.createElement("button");
+  copyBtn.type = "button";
+  copyBtn.className = "touch-target";
+  copyBtn.textContent = "Copy seed link";
+  copyBtn.addEventListener("click", async () => {
+    const url = controller.shareableURL();
+    try {
+      await navigator.clipboard.writeText(url);
+      copyBtn.textContent = "Copied!";
+    } catch (err) {
+      window.prompt("Copy this link:", url);
+    }
+    setTimeout(() => { copyBtn.textContent = "Copy seed link"; }, 1500);
+  });
+
+  const resetSeedBtn = document.createElement("button");
+  resetSeedBtn.type = "button";
+  resetSeedBtn.className = "touch-target";
+  resetSeedBtn.textContent = "Reset to default seed";
+  resetSeedBtn.addEventListener("click", () => controller.setSeed(defaultSeed));
+
+  seedGroup.appendChild(seedDisplay);
+  seedGroup.appendChild(randomBtn);
+  seedGroup.appendChild(copyBtn);
+  seedGroup.appendChild(resetSeedBtn);
+
+  const resetBtn = document.createElement("button");
+  resetBtn.type = "button";
+  resetBtn.className = "touch-target activity-reset-btn";
+  resetBtn.textContent = "Reset activity";
+
+  bar.appendChild(modeLabel);
+  bar.appendChild(seedGroup);
+  bar.appendChild(resetBtn);
+
+  return { bar, modeSelect, seedDisplay, resetBtn };
+}
+
+function showActivityError(container, message) {
+  container.innerHTML = "";
+  const box = document.createElement("div");
+  box.className = "activity-error-box";
+  box.setAttribute("role", "alert");
+  const strong = document.createElement("strong");
+  strong.textContent = "This activity ran into a problem. ";
+  const span = document.createElement("span");
+  span.textContent = message;
+  box.appendChild(strong);
+  box.appendChild(span);
+  container.appendChild(box);
+}
+
+/**
+ * @param {{rootId?:string, title:string, dataUrl?:string, defaultSeed?:number,
+ *   defaultMode?:string, instructions?:string, galleryHref?:string,
+ *   render: (data:any, ctx:object) => (undefined|{reset?:Function})}} opts
+ */
+async function initActivityShell(opts) {
+  const {
+    rootId = "activity-root",
+    title,
+    dataUrl,
+    defaultSeed = 12345,
+    defaultMode = "student-exploration",
+    instructions = "",
+    render
+  } = opts;
+
+  const root = document.getElementById(rootId);
+  if (!root) {
+    console.error("ActivityShell: root element not found:", rootId);
+    return;
+  }
+  root.innerHTML = "";
+
+  const controller = ModeManager.createModeController({ defaultMode, defaultSeed });
+  const { header, modeBadge } = buildActivityHeader({ title, instructions, galleryHref: opts.galleryHref });
+  const { bar, modeSelect, seedDisplay, resetBtn } = buildControlsBar(controller, { defaultSeed });
+
+  const mount = document.createElement("main");
+  mount.className = "activity-mount";
+  mount.id = "activity-mount";
+
+  root.appendChild(header);
+  root.appendChild(bar);
+  root.appendChild(mount);
+
+  function updateChrome() {
+    modeBadge.textContent = controller.mode.replace(/-/g, " ");
+    modeSelect.value = controller.mode;
+    seedDisplay.textContent = `Seed: ${controller.seed}`;
+  }
+
+  let data = null;
+  if (dataUrl) {
+    try {
+      const resp = await fetch(dataUrl);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status} while loading ${dataUrl}`);
+      data = await resp.json();
+    } catch (err) {
+      console.error(err);
+      updateChrome();
+      showActivityError(
+        mount,
+        `Could not load ${dataUrl}. If you opened this file directly from disk (a file:// URL), ` +
+        `browsers block local data loading — open it via "quarto preview" or a local web server ` +
+        `instead. Details: ${err && err.message ? err.message : err}`
+      );
+      return { controller };
+    }
+  }
+
+  let currentRenderResult = null;
+  function doRender() {
+    mount.innerHTML = "";
+    updateChrome();
+    const rng = PRNG.createRNG(controller.seed);
+    try {
+      currentRenderResult = render(data, {
+        mode: controller.mode, seed: controller.seed, rng, container: mount, controller
+      }) || null;
+    } catch (err) {
+      console.error(err);
+      showActivityError(mount, err && err.message ? err.message : String(err));
+    }
+  }
+
+  controller.subscribe(doRender);
+  resetBtn.addEventListener("click", () => {
+    if (currentRenderResult && typeof currentRenderResult.reset === "function") currentRenderResult.reset();
+    else doRender();
+  });
+
+  doRender();
+
+  if (window.EmbedBridge) EmbedBridge.childInit();
+  if (window.ContentNotice) ContentNotice.mountAboutLink();
+
+  return { controller, rerender: doRender };
+}
+
+window.ActivityShell = { init: initActivityShell, showActivityError };

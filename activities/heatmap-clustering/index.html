@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynamic Heatmap &amp; Hierarchical Clustering</title>
+<link rel="stylesheet" href="../../css/variables.css">
+<link rel="stylesheet" href="../../css/base.css">
+<link rel="stylesheet" href="../../css/activity-shell.css">
+<link rel="stylesheet" href="../../css/components.css">
+<style>
+  .hm-layout { display: grid; grid-template-columns: 15rem 1fr; gap: var(--space-6); align-items: start; }
+  @media (max-width: 1000px) { .hm-layout { grid-template-columns: 1fr; } }
+  .hm-controls fieldset { margin-bottom: var(--space-4); }
+  .hm-checklist { max-height: 12rem; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+  .hm-checklist label { display: flex; align-items: center; gap: 6px; font-size: var(--font-size-sm); }
+  .hm-scroll { overflow-x: auto; }
+  .hm-sample-label { cursor: pointer; }
+  .hm-sample-label:hover, .hm-sample-label.is-selected { font-weight: 700; fill: var(--color-primary); }
+  .hm-info-panel { margin-top: var(--space-4); padding: var(--space-4); background: var(--color-bg-alt); border-radius: var(--radius); font-size: var(--font-size-sm); }
+  .hm-legend { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-sm); margin-top: var(--space-2); }
+  .hm-legend-swatch { width: 120px; height: 14px; border-radius: 3px; background: linear-gradient(to right, #1b3a5c, #ffffff, #b5651d); }
+</style>
+</head>
+<body>
+<div id="activity-root"></div>
+
+<script src="../../js/prng.js"></script>
+<script src="../../js/math-utils.js"></script>
+<script src="../../js/similarity.js"></script>
+<script src="../../js/clustering.js"></script>
+<script src="../../js/svg-utils.js"></script>
+<script src="../../js/mode-manager.js"></script>
+<script src="../../js/embed-bridge.js"></script>
+<script src="../../js/content-notice.js"></script>
+<script src="../../js/activity-shell.js"></script>
+<script src="./heatmap-clustering.js"></script>
+</body>
+</html>

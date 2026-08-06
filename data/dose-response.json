@@ -1,0 +1,20 @@
+{
+  "title": "Dose-Response Laboratory",
+  "compounds": [
+    {
+      "id": "compound_x",
+      "label": "Compound X (fictional)",
+      "top": 100,
+      "bottom": 5,
+      "ec50": 10,
+      "hillSlope": 1.5,
+      "doseRangeLog10": [-2, 3],
+      "doseCount": 60,
+      "cytotoxicityThreshold": 300
+    }
+  ],
+  "defaultNoiseSd": 6,
+  "defaultReplicates": 3,
+  "defaultShape": "monotonic",
+  "defaultSeed": 5150
+}

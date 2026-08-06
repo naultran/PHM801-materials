@@ -1,0 +1,178 @@
+/**
+ * Base reset, typography, and accessibility rules shared by every page on the
+ * site (Quarto website pages AND standalone activity pages, which link this
+ * file directly). Activity-specific chrome lives in activity-shell.css;
+ * shared widgets (badges, notice panel, etc.) live in components.css.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--color-text);
+  background: var(--color-bg);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+}
+
+h1, h2, h3, h4 {
+  color: var(--color-primary-dark);
+  line-height: 1.25;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+/* Visible focus indicator everywhere — never rely on the browser default alone */
+:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* Minimum touch target size for any interactive control */
+.touch-target,
+button,
+input[type="range"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+a.btn-lecture {
+  min-height: var(--touch-target-min);
+}
+
+button, select, input {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Landing / resources page components ---- */
+
+.lecture-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-5);
+  margin: var(--space-5) 0 var(--space-6);
+}
+
+.lecture-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.lecture-card h3 {
+  margin-top: 0;
+  font-size: var(--font-size-lg);
+}
+
+.lecture-card h3 a {
+  text-decoration: none;
+}
+
+a.btn-lecture {
+  display: inline-flex;
+  align-items: center;
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+a.btn-lecture:hover,
+a.btn-lecture:focus-visible {
+  background: var(--color-primary-dark);
+}
+
+/* ---- Content and Development Notice ---- */
+
+.content-notice {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.content-notice__summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.content-notice__body {
+  margin: var(--space-3) 0 0;
+}
+
+/* Fixed "About this material" link + overlay panel, injected by content-notice.js
+   on standalone activity pages (never shown when embedded in a lecture iframe). */
+
+.about-material-link {
+  position: fixed;
+  bottom: var(--space-3);
+  right: var(--space-3);
+  z-index: 40;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.about-material-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 41;
+  background: rgba(16, 37, 57, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.about-material-panel[hidden] {
+  display: none;
+}
+
+.about-material-panel__inner {
+  position: relative;
+  max-width: 42rem;
+  width: 100%;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+}
+
+.about-material-panel__close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted);
+}

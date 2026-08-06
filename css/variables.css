@@ -1,0 +1,79 @@
+/**
+ * Design tokens shared by the Quarto website pages and every activity page.
+ * Palette chosen to remain distinguishable under common forms of color-blindness
+ * (deuteranopia/protanopia/tritanopia) — status colors are never the only signal;
+ * every status also gets an icon/shape/label in the HTML that uses these tokens.
+ */
+:root {
+  /* Core palette: navy/teal academic, avoiding red-green as the only contrast pair */
+  --color-primary: #1b3a5c;
+  --color-primary-dark: #102539;
+  --color-primary-light: #3d6a94;
+  --color-accent: #b5651d;      /* amber/rust — used for "attention", not "error" */
+  --color-bg: #ffffff;
+  --color-bg-alt: #f4f6f8;
+  --color-surface: #ffffff;
+  --color-border: #c7cdd4;
+  --color-text: #17202a;
+  --color-text-muted: #4b5563;
+
+  /* Status colors: always paired with an icon/shape in markup, never color alone */
+  --color-success: #1b7a4b;
+  --color-success-bg: #e6f4ec;
+  --color-warning: #9a6300;
+  --color-warning-bg: #fbf1dc;
+  --color-danger: #a3291e;
+  --color-danger-bg: #fbeae8;
+  --color-neutral: #3b4a5a;
+  --color-neutral-bg: #eaedf0;
+
+  /* Categorical palette for charts (color-blind conscious, Okabe-Ito derived) */
+  --series-1: #0072b2;
+  --series-2: #d55e00;
+  --series-3: #009e73;
+  --series-4: #cc79a7;
+  --series-5: #e69f00;
+  --series-6: #56b4e9;
+
+  --focus-color: #d55e00;
+
+  --font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-size-base: 1.125rem;
+  --font-size-lg: 1.375rem;
+  --font-size-xl: 1.75rem;
+  --font-size-sm: 0.95rem;
+  --line-height-base: 1.55;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+
+  --radius: 8px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 3px rgba(16, 37, 57, 0.12);
+  --shadow-md: 0 4px 14px rgba(16, 37, 57, 0.16);
+
+  --touch-target-min: 44px;
+
+  --transition-fast: 150ms;
+  --transition-base: 300ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #10161d;
+    --color-bg-alt: #171f28;
+    --color-surface: #1b2530;
+    --color-border: #3a4652;
+    --color-text: #eef2f6;
+    --color-text-muted: #b7c2cc;
+    --color-primary-light: #6ea3cf;
+    --color-success-bg: #113124;
+    --color-warning-bg: #332609;
+    --color-danger-bg: #351512;
+  }
+}

@@ -1,0 +1,67 @@
+/**
+ * Small overrides layered on top of Quarto's built-in "simple" reveal.js
+ * theme: larger base text for back-of-room legibility, activity-embed
+ * iframe sizing, and the persistent "back to course home" link.
+ */
+
+.reveal {
+  font-size: 30px;
+}
+.reveal h1, .reveal h2, .reveal h3 {
+  color: #1b3a5c;
+}
+.reveal .slides section .fragment { transition: none; }
+
+.activity-embed {
+  margin-top: 0.5em;
+}
+.activity-embed iframe.activity-iframe {
+  width: 100%;
+  min-height: 520px;
+  border: 1px solid #c7cdd4;
+  border-radius: 8px;
+  background: #fff;
+}
+.activity-embed-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.3em;
+}
+.activity-embed-controls button {
+  font-size: 0.5em;
+  padding: 0.3em 0.8em;
+  border-radius: 6px;
+  border: 1px solid #c7cdd4;
+  background: #f4f6f8;
+  cursor: pointer;
+}
+
+.lecture-home-link {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 40;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #c7cdd4;
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: #1b3a5c;
+  text-decoration: none;
+}
+
+.video-placeholder {
+  width: 100%;
+  max-width: 640px;
+  border: 1px solid #c7cdd4;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+.video-transcript-note {
+  font-size: 0.55em;
+  color: #4b5563;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .slides section { transition: none !important; }
+}

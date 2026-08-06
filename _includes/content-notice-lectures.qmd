@@ -1,0 +1,4 @@
+<!-- For depth-1 pages only: files under lectures/ (one directory below the repo root). -->
+<div id="content-notice-mount"></div>
+<script src="../js/content-notice.js"></script>
+<script>ContentNotice.render('content-notice-mount', { expanded: true });</script>

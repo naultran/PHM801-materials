@@ -1,0 +1,4 @@
+_site/
+.quarto/
+preview-out.log
+preview-err.log

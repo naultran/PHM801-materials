@@ -1,0 +1,59 @@
+---
+title: "Sequencing in Pharmacology & Toxicology"
+subtitle: "An interactive, browser-based lecture course"
+page-layout: article
+---
+
+This course template demonstrates how a modern sequencing-focused pharmacology and
+toxicology lecture can be delivered entirely through an ordinary web browser — no
+software installation, no account, no computational runtime. Open a lecture link,
+follow along on the projected screen, and interact with the same activities on your
+own device when the instructor invites you to.
+
+::: {.callout-note appearance="simple"}
+**This is a demonstration template.** The scientific content, gene names, and datasets
+throughout this site are small and **fictional**, used only to illustrate the
+interactive mechanics. An instructor will replace them with authentic course material.
+:::
+
+## Lectures
+
+::: {.lecture-grid}
+
+::: {.lecture-card}
+### [What Can Sequencing Tell Us in Pharmacology and Toxicology?](lectures/lecture-01-showcase.html)
+A complete demonstration lecture (~18 slides) alternating conventional teaching
+slides with hands-on interactive activities: signature matching, dynamic
+clustering, pathway construction, mixture simulation, dose-response modeling,
+experimental design, PCA, and spatial resolution.
+
+[Open lecture →](lectures/lecture-01-showcase.html){.btn-lecture}
+:::
+
+::: {.lecture-card}
+### [Blank Lecture Template](lectures/lecture-02-template.html)
+A skeleton lecture with the same slide setup, navigation, and attribution
+footer as the demonstration lecture, ready to be filled in with real content.
+Intended for instructors building a new lecture, not for students.
+
+[Open template →](lectures/lecture-02-template.html){.btn-lecture}
+:::
+
+:::
+
+## Explore activities on their own
+
+Every interactive activity used in the lectures can also be opened directly, outside
+of any slide deck, from the [**Activity Gallery**](activities/index.html) — useful for
+self-study, review after class, or previewing an activity before building a lecture
+around it.
+
+## For instructors
+
+See the [Resources page](resources.qmd) for setup, editing, and deployment
+documentation, including how to replace the fictional example data with real course
+content.
+
+## About this material
+
+{{< include _includes/content-notice.qmd >}}

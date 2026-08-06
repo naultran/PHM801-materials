@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Activity Gallery</title>
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/gallery.css">
+<style>
+  .activity-card__preview--solid { display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.1rem; text-align: center; padding: var(--space-3); }
+</style>
+</head>
+<body>
+<div class="gallery-header">
+  <a class="gallery-home-link" href="../index.html">← Course Home</a>
+  <h1>Activity Gallery</h1>
+  <p>Every interactive activity from the demonstration lecture, available to open on its own — useful for
+    self-study, review after class, or previewing an activity before building a lecture slide around it.</p>
+</div>
+
+<h2 class="gallery-section-title">Interactive activities</h2>
+<div class="activity-grid" id="core-activity-grid"></div>
+
+<h2 class="gallery-section-title">Reusable components</h2>
+<div class="activity-grid" id="component-activity-grid"></div>
+
+<h2 class="gallery-section-title">Coming soon</h2>
+<div class="activity-grid" id="placeholder-activity-grid"></div>
+
+<div id="content-notice-mount" style="max-width:1100px;margin:2rem auto;padding:0 1.5rem;"></div>
+
+<script src="../js/content-notice.js"></script>
+<script>
+  const CORE_ACTIVITIES = [
+    { slug: "signature-matcher", title: "Biological Signature Matcher", color: "var(--series-1)",
+      description: "Compare an adjustable unknown sample against three reference tissues using Pearson, cosine, or Euclidean similarity." },
+    { slug: "heatmap-clustering", title: "Dynamic Heatmap & Hierarchical Clustering", color: "var(--series-2)",
+      description: "A live-reclustering heatmap with dendrograms, freeze-order comparison, and nearest-neighbor explanations." },
+    { slug: "pathway-construction", title: "Pathway & Mechanism Construction", color: "var(--series-3)",
+      description: "Drag genes into pathways and events into a mechanistic sequence, with a full keyboard alternative." },
+    { slug: "mixture-simulator", title: "Bulk-Tissue Mixture Simulator", color: "var(--series-4)",
+      description: "Separate cell-composition changes from cell-activation changes in a simulated bulk measurement." },
+    { slug: "dose-response", title: "Dose-Response Laboratory", color: "var(--series-5)",
+      description: "Explore Hill-curve dose-response behavior, including nonmonotonic and cytotoxicity-driven artifacts." },
+    { slug: "experimental-design", title: "Experimental Design & Statistical Power", color: "var(--series-6)",
+      description: "Volcano plots and a power curve that respond live to replicate count, effect size, and variability." },
+    { slug: "pca-explorer", title: "PCA / Dimensionality Reduction Explorer", color: "var(--color-primary)",
+      description: "Watch principal components recompute and animate as you change genes, standardization, or noise." },
+    { slug: "spatial-explorer", title: "Spatial Transcriptomics Explorer", color: "var(--color-accent)",
+      description: "See how increasing capture-spot size blurs single-location resolution into a bulk-like average." }
+  ];
+
+  const COMPONENT_ACTIVITIES = [
+    { slug: "prediction-demo", title: "Component Demo: Prediction, Commitment & Feedback", color: "var(--color-neutral)",
+      description: "The reusable predict-then-reveal widget used inside the Signature Matcher, on its own." },
+    { slug: "before-after-demo", title: "Component Demo: Before/After Reveal", color: "var(--color-neutral)",
+      description: "The reusable before/after reveal component used inside the Mixture Simulator, on its own." }
+  ];
+
+  function cardHTML(a, folder, isPlaceholder) {
+    const preview = isPlaceholder
+      ? `<img class="activity-card__preview" src="../assets/placeholder-previews/${a.previewImage}" alt="">`
+      : `<div class="activity-card__preview activity-card__preview--solid" style="background:${a.color}">${a.title}</div>`;
+    const badge = isPlaceholder
+      ? `<span class="status-badge-coming-soon">Coming soon</span>`
+      : `<span class="status-badge-live">Working activity</span>`;
+    const link = isPlaceholder
+      ? `<a class="activity-card__link" href="${folder}/index.html">Preview</a>`
+      : `<a class="activity-card__link" href="${folder}/index.html">Try it</a>`;
+    return `<div class="activity-card">${preview}<div class="activity-card__body">${badge}
+      <h3>${a.title}</h3><p>${a.description}</p>${link}</div></div>`;
+  }
+
+  document.getElementById("core-activity-grid").innerHTML =
+    CORE_ACTIVITIES.map((a) => cardHTML(a, a.slug, false)).join("");
+  document.getElementById("component-activity-grid").innerHTML =
+    COMPONENT_ACTIVITIES.map((a) => cardHTML(a, a.slug, false)).join("");
+
+  fetch("../data/placeholders.json")
+    .then((r) => r.json())
+    .then((data) => {
+      document.getElementById("placeholder-activity-grid").innerHTML =
+        data.placeholders.map((p) => cardHTML(p, p.folder, true)).join("");
+    })
+    .catch((err) => {
+      document.getElementById("placeholder-activity-grid").innerHTML =
+        `<p>Could not load placeholder activities: ${err.message}</p>`;
+    });
+
+  ContentNotice.render("content-notice-mount", { expanded: false });
+</script>
+</body>
+</html>

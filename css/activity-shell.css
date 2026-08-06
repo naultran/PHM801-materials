@@ -1,0 +1,166 @@
+/**
+ * Chrome built by js/activity-shell.js: header, mode badge, seed controls,
+ * error box, activity mount area. Loaded by every activities/*/index.html.
+ */
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg-alt);
+}
+
+#activity-root {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-5) var(--space-8);
+}
+
+.activity-header__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.activity-header__home {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+}
+
+.mode-badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.activity-header h1 {
+  font-size: var(--font-size-xl);
+  margin: var(--space-3) 0 var(--space-2);
+}
+
+.activity-instructions {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  max-width: 65ch;
+  margin: 0 0 var(--space-4);
+}
+
+.activity-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-5);
+}
+
+.activity-controls-bar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.seed-controls {
+  flex-wrap: wrap;
+}
+
+.seed-controls__value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--color-text);
+  padding-right: var(--space-2);
+}
+
+.activity-reset-btn {
+  margin-left: auto;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.activity-controls-bar button,
+.activity-controls-bar select {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.activity-controls-bar button:hover,
+.activity-controls-bar button:focus-visible {
+  border-color: var(--color-primary);
+}
+
+.activity-mount {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+
+.activity-error-box {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+/* Drag-and-drop affordances (used by pathway-construction.css too, kept here
+   since makeDraggable() in dnd-utils.js is shared infrastructure) */
+
+.dnd-draggable {
+  cursor: grab;
+  touch-action: none;
+}
+
+.dnd-dragging {
+  cursor: grabbing;
+  box-shadow: var(--shadow-md);
+  opacity: 0.95;
+}
+
+.dnd-dropzone-hover {
+  outline: 3px dashed var(--color-primary);
+  outline-offset: 2px;
+}
+
+.keyboard-alt-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.keyboard-alt-panel__hint {
+  flex-basis: 100%;
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}

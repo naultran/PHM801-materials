@@ -1,0 +1,47 @@
+project:
+  type: website
+  output-dir: _site
+  # activities/, data/, js/, css/, assets/ are plain static files (not Quarto
+  # source docs). Listing them here guarantees they are copied verbatim into
+  # _site/ even though nothing in them is auto-discoverable by Quarto's HTML
+  # cross-reference scanner (e.g. JSON files loaded via fetch() from inside a
+  # .js file are invisible to that scanner).
+  resources:
+    - "activities/**"
+    - "data/**"
+    - "js/**"
+    - "css/**"
+    - "assets/**"
+
+website:
+  title: "Sequencing in Pharmacology & Toxicology"
+  description: "An interactive, browser-based lecture course template for teaching sequencing concepts in pharmacology and toxicology."
+  site-url: "https://naultran.github.io/interactive-lecture-test/"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: lectures/lecture-01-showcase.qmd
+        text: Demonstration Lecture
+      - href: activities/index.html
+        text: Activity Gallery
+      - href: resources.qmd
+        text: Resources
+    right:
+      - icon: github
+        href: https://github.com/naultran/interactive-lecture-test
+        aria-label: GitHub repository
+  page-footer:
+    center: "Course template for teaching pharmacology and toxicology through sequencing data."
+
+format:
+  html:
+    theme: cosmo
+    css: [css/variables.css, css/base.css]
+    toc: false
+    grid:
+      body-width: 900px
+    link-external-newwindow: true
+
+execute:
+  freeze: auto

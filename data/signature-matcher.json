@@ -1,0 +1,35 @@
+{
+  "title": "Match the Unknown Biological Signature",
+  "genes": [
+    { "id": "gene_a", "label": "Gene A (fictional keratin marker)" },
+    { "id": "gene_b", "label": "Gene B (fictional metabolic enzyme)" },
+    { "id": "gene_c", "label": "Gene C (fictional immune marker)" },
+    { "id": "gene_d", "label": "Gene D (fictional structural protein)" },
+    { "id": "gene_e", "label": "Gene E (fictional transporter)" },
+    { "id": "gene_f", "label": "Gene F (fictional stress-response gene)" },
+    { "id": "gene_g", "label": "Gene G (fictional secreted factor)" },
+    { "id": "gene_h", "label": "Gene H (fictional housekeeping gene)" }
+  ],
+  "candidates": [
+    {
+      "id": "tissue_a",
+      "label": "Tissue A (fictional liver-like)",
+      "values": [1.5, 8.5, 2.0, 3.0, 7.5, 2.5, 3.5, 5.0],
+      "description": "High metabolic-enzyme and transporter activity, low immune signal."
+    },
+    {
+      "id": "tissue_b",
+      "label": "Tissue B (fictional immune-tissue-like)",
+      "values": [2.0, 2.0, 8.5, 2.5, 2.0, 4.0, 7.0, 5.0],
+      "description": "Dominated by immune and secreted-factor markers."
+    },
+    {
+      "id": "tissue_c",
+      "label": "Tissue C (fictional epithelial-like)",
+      "values": [8.0, 3.0, 2.5, 7.5, 3.0, 3.0, 2.5, 5.0],
+      "description": "High structural-protein and keratin-marker expression."
+    }
+  ],
+  "defaultNoiseSd": 0.6,
+  "defaultSeed": 12345
+}

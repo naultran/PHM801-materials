@@ -1,0 +1,60 @@
+{
+  "placeholders": [
+    {
+      "id": "gene-pathway-interpretation",
+      "folder": "placeholder-gene-pathway",
+      "number": 5,
+      "title": "Gene-to-Pathway Interpretation",
+      "description": "Starts from a deliberately overwhelming list of fictional differentially expressed genes. Buttons progressively sort by fold change, filter by statistical evidence, group by pathway, collapse into biological functions, and surface a possible mechanistic interpretation — with an optional demo of how an inappropriate background gene set can produce a misleadingly strong enrichment result.",
+      "previewImage": "gene-pathway-interpretation.svg"
+    },
+    {
+      "id": "biomarker-panel-builder",
+      "folder": "placeholder-biomarker-panel",
+      "number": 8,
+      "title": "Biomarker Panel Builder",
+      "description": "Students select genes from a candidate panel to build a predictive signature, see training accuracy, sensitivity/specificity, a confusion matrix, and an ROC curve — then find out how the panel performs on a hidden test set, with a challenge to build the smallest panel that still generalizes.",
+      "previewImage": "biomarker-panel-builder.svg"
+    },
+    {
+      "id": "mechanistic-network-explorer",
+      "folder": "placeholder-network-explorer",
+      "number": 11,
+      "title": "Mechanistic Network Explorer",
+      "description": "A small molecular network where students can activate a receptor, inhibit a kinase, knock down a transcription factor, or block a feedback loop and watch downstream nodes update — designed to make the distinction between correlation, known regulation, and inferred causation concrete.",
+      "previewImage": "mechanistic-network-explorer.svg"
+    },
+    {
+      "id": "match-the-mechanism",
+      "folder": "placeholder-match-mechanism",
+      "number": 12,
+      "title": "Match-the-Mechanism Puzzle",
+      "description": "Draggable evidence pieces (exposure, target binding, transcriptomic signature, pathway enrichment, histopathology, cell-type response, spatial location, dose-response behavior — some of them distractors) get arranged into an evidence chain, with feedback on what supports association, mechanism, or causality, and what's insufficient on its own.",
+      "previewImage": "match-the-mechanism.svg"
+    },
+    {
+      "id": "sequencing-method-selection",
+      "folder": "placeholder-method-selection",
+      "number": 13,
+      "title": "Sequencing Method Selection Challenge",
+      "description": "Given a fictional research question, students choose among bulk RNA-seq, single-cell/single-nucleus RNA-seq, spatial transcriptomics, a targeted panel, long-read sequencing, ATAC-seq, or multi-omics, and allocate a limited relative budget across animals, cells, depth, resolution, and conditions to see what each design can and can't answer.",
+      "previewImage": "sequencing-method-selection.svg"
+    },
+    {
+      "id": "sequencing-pipeline-assembly",
+      "folder": "placeholder-pipeline-assembly",
+      "number": 14,
+      "title": "Sequencing Pipeline Assembly",
+      "description": "Draggable pipeline blocks, from biological question through validation, get placed in order (with branching where appropriate), plus hidden failure cards — batch confounded with treatment, poor RNA quality, too few replicates, wrong reference genome, cell-composition change, data leakage, an inappropriate statistical threshold — that students must place at the right pipeline stage.",
+      "previewImage": "sequencing-pipeline-assembly.svg"
+    },
+    {
+      "id": "annotation-classification-game",
+      "folder": "placeholder-annotation-game",
+      "number": 15,
+      "title": "Annotation and Classification Game",
+      "description": "Students label fictional samples one at a time from a small expression profile, a simple browser-based classifier trains on those labels, gets tested on new examples, and the activity shows how inconsistent or biased labeling degrades performance — with the ability to correct labels and retrain.",
+      "previewImage": "annotation-classification-game.svg"
+    }
+  ]
+}

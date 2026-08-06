@@ -1,0 +1,37 @@
+---
+title: "Resources"
+subtitle: "Documentation for instructors"
+page-layout: article
+---
+
+This page collects the documents an instructor needs to run, extend, and maintain
+this course site. All three live at the root of the repository so they're easy to
+find from a file browser or GitHub.
+
+## Setup and day-to-day use
+
+**[README](https://github.com/naultran/interactive-lecture-test/blob/main/README.md)** —
+installing Quarto, previewing the site locally, adding a lecture, adding a slide,
+adding an activity, replacing fictional JSON data, adding images/video, changing the
+theme, deploying to GitHub Pages, restoring an old version with Git, branching per
+semester, and troubleshooting common classroom problems.
+
+## Activity-by-activity reference
+
+**[INTERACTIVITY-GUIDE.md](https://github.com/naultran/interactive-lecture-test/blob/main/INTERACTIVITY-GUIDE.md)** —
+for every demonstration activity: the teaching question it supports, what students
+manipulate, what recalculates, which file holds the data, which file holds the
+behavior, how to replace the example, known technical limits, accessibility notes,
+and approximate performance limits.
+
+## What's practical in a static browser lecture
+
+**[TECHNICAL-LIMITS.md](https://github.com/naultran/interactive-lecture-test/blob/main/TECHNICAL-LIMITS.md)** —
+a plain-language breakdown of what's straightforward, what needs care, and what's
+out of scope for a GitHub-Pages-only, no-backend lecture site, plus the specific
+simplifications made in this template (dataset sizes, combined noise controls, no
+UMAP, etc.).
+
+## About this material
+
+{{< include _includes/content-notice.qmd >}}

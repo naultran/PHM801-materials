@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" role="img" aria-label="Sequencing Method Selection preview">
+  <rect x="0" y="0" width="400" height="225" fill="#f4f6f8"/>
+  <rect x="0.5" y="0.5" width="399" height="224" fill="none" stroke="#c7cdd4"/>
+  <g transform="translate(150,40)">
+      <g stroke="#1b3a5c" stroke-width="2.5" fill="none">
+        <line x1="50" y1="0" x2="15" y2="40"/>
+        <line x1="50" y1="0" x2="50" y2="40"/>
+        <line x1="50" y1="0" x2="85" y2="40"/>
+      </g>
+      <circle cx="50" cy="0" r="8" fill="#1b3a5c"/>
+      <circle cx="15" cy="48" r="7" fill="#b5651d"/>
+      <circle cx="50" cy="48" r="7" fill="#b5651d"/>
+      <circle cx="85" cy="48" r="7" fill="#b5651d"/></g>
+  <text x="200" y="195" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="700" fill="#1b3a5c">Sequencing Method Selection</text>
+  <text x="200" y="213" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#b5651d">Coming soon</text>
+</svg>

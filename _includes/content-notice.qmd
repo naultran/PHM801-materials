@@ -1,0 +1,4 @@
+<!-- For depth-0 pages only: index.qmd, resources.qmd (files that live at the repo root). -->
+<div id="content-notice-mount"></div>
+<script src="js/content-notice.js"></script>
+<script>ContentNotice.render('content-notice-mount', { expanded: true });</script>

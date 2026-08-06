@@ -1,0 +1,94 @@
+---
+title: "Lecture Title Goes Here"
+subtitle: "One-line description of this lecture"
+author: "Course Instructor"
+format:
+  revealjs:
+    theme: simple
+    css: ../css/reveal-overrides.css
+    slide-number: true
+    progress: true
+    controls: true
+    hash: true
+    center: false
+    transition: none
+    include-after-body: ../_includes/reveal-embed-bridge.qmd
+---
+
+<!--
+  BLANK LECTURE TEMPLATE
+  =======================
+  Copy this file to create a new lecture (see README.md "How to add a lecture" /
+  "How to duplicate the lecture template"). Everything below is a worked,
+  commented example of the two slide types you'll use most:
+
+    1. A conventional slide (plain Markdown, like this one's heading below)
+    2. An activity-embed slide (an <iframe> pointing at a page under
+       activities/<slug>/index.html)
+
+  Delete the example content and comments as you fill in real material.
+  Keep the YAML front matter above mostly as-is — it's what gives you
+  keyboard/touch navigation, fullscreen, speaker notes, a progress bar, slide
+  numbers, and a link back to the course homepage "for free."
+-->
+
+## Example: a conventional slide
+
+<!--
+  Ordinary Markdown. A level-2 heading ("##") starts a new slide.
+  Keep slides short — a handful of bullet points, not a wall of text.
+-->
+
+- Replace this bullet with your first point
+- Keep bullets short enough to read from the back of a room
+- Add speaker notes (see below) for anything you want to say but not display
+
+::: {.notes}
+Speaker notes go in a `.notes` fenced div like this one. Press "s" during the
+presentation to open the speaker view.
+:::
+
+## Example: an activity-embed slide
+
+<!--
+  This is the exact pattern used throughout lecture-01-showcase.qmd. To embed
+  a real activity:
+    1. Pick an activity folder under activities/<slug>/
+    2. Set src to "../activities/<slug>/index.html"
+    3. Optionally add query params: ?mode=student-exploration&seed=12345
+       (mode is one of instructor | student-exploration | review — see
+       INTERACTIVITY-GUIDE.md; seed is any integer, used for reproducibility)
+    4. Give the iframe a descriptive `title` attribute (screen readers use it)
+    5. Keep the "Reset this activity" button — it reloads just that iframe
+-->
+
+::: {.activity-embed-controls}
+<button onclick="EmbedBridge.reloadIframe(this)">↻ Reset this activity</button>
+:::
+::: {.activity-embed}
+<iframe class="activity-iframe" loading="lazy" title="REPLACE ME: activity title"
+  src="../activities/signature-matcher/index.html?mode=student-exploration&seed=12345"></iframe>
+:::
+
+::: {.notes}
+Add discussion prompts here: what should students notice? What should you ask
+them once they've tried it themselves?
+:::
+
+## Example: embedding an image
+
+<!-- Place image files under images/ or assets/ and reference them with a relative path. -->
+
+<!-- ![Alt text describing the figure](../images/example-figure.png) -->
+
+Replace this slide with a real figure, or delete it if you don't need one yet.
+
+## About this material
+
+<!--
+  Keep this slide (or an equivalent) at the end of every lecture — it's the
+  required attribution notice. Do not edit its wording; the text lives once
+  in js/content-notice.js and is pulled in here automatically.
+-->
+
+{{< include ../_includes/content-notice-lectures.qmd >}}

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" role="img" aria-label="Gene-to-Pathway Interpretation preview">
+  <rect x="0" y="0" width="400" height="225" fill="#f4f6f8"/>
+  <rect x="0.5" y="0.5" width="399" height="224" fill="none" stroke="#c7cdd4"/>
+  <g transform="translate(150,40)">
+      <g stroke="#1b3a5c" stroke-width="3" fill="none">
+        <line x1="0" y1="10" x2="100" y2="10"/>
+        <line x1="10" y1="10" x2="45" y2="55"/>
+        <line x1="30" y1="10" x2="45" y2="55"/>
+        <line x1="50" y1="10" x2="45" y2="55"/>
+        <line x1="70" y1="10" x2="55" y2="55"/>
+        <line x1="90" y1="10" x2="55" y2="55"/>
+      </g>
+      <circle cx="45" cy="70" r="14" fill="#1b3a5c"/>
+      <circle cx="55" cy="95" r="10" fill="#b5651d"/></g>
+  <text x="200" y="195" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="700" fill="#1b3a5c">Gene-to-Pathway Interpretation</text>
+  <text x="200" y="213" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#b5651d">Coming soon</text>
+</svg>

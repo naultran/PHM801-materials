@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biological Signature Matcher</title>
+<link rel="stylesheet" href="../../css/variables.css">
+<link rel="stylesheet" href="../../css/base.css">
+<link rel="stylesheet" href="../../css/activity-shell.css">
+<link rel="stylesheet" href="../../css/components.css">
+<style>
+  .sm-layout { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--space-6); align-items: start; }
+  @media (max-width: 900px) { .sm-layout { grid-template-columns: 1fr; } }
+  .sm-gene-row { display: grid; grid-template-columns: 10rem 1fr 3rem; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2); }
+  .sm-gene-row--muted { opacity: 0.45; }
+  .sm-gene-row__label { font-size: var(--font-size-sm); }
+  .sm-gene-row__value { text-align: right; font-variant-numeric: tabular-nums; }
+  .sm-toolbar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin-bottom: var(--space-4); }
+  .sm-bar-row { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
+  .sm-bar-row__label { width: 9rem; flex-shrink: 0; font-size: var(--font-size-sm); }
+  .sm-bar-row__track { flex: 1; background: var(--color-bg-alt); border-radius: 4px; height: 26px; position: relative; overflow: hidden; }
+  .sm-bar-row__fill { height: 100%; background: var(--color-primary); }
+  .sm-bar-row__fill.is-best { background: var(--color-success); }
+  .sm-bar-row__score { width: 4.5rem; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .sm-margin-note { margin-top: var(--space-3); font-size: var(--font-size-sm); color: var(--color-text-muted); }
+  .sm-metric-explainer { font-size: var(--font-size-sm); color: var(--color-text-muted); background: var(--color-bg-alt); border-radius: var(--radius); padding: var(--space-3); margin-top: var(--space-3); }
+  .sm-reveal-note { margin-top: var(--space-3); padding: var(--space-3); border-radius: var(--radius); background: var(--color-bg-alt); }
+</style>
+</head>
+<body>
+<div id="activity-root"></div>
+
+<script src="../../js/prng.js"></script>
+<script src="../../js/math-utils.js"></script>
+<script src="../../js/similarity.js"></script>
+<script src="../../js/mode-manager.js"></script>
+<script src="../../js/embed-bridge.js"></script>
+<script src="../../js/content-notice.js"></script>
+<script src="../../js/activity-shell.js"></script>
+<script src="../../js/prediction-component.js"></script>
+<script src="./signature-matcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "title": "Experimental Design & Statistical Power",
+  "defaultGeneCount": 200,
+  "geneCountRange": [20, 500],
+  "baselineMean": 8,
+  "defaultVariabilitySd": 1.2,
+  "variabilitySdRange": [0.3, 3],
+  "defaultEffectSizeMean": 1.0,
+  "effectSizeRange": [0.1, 3],
+  "defaultPctDE": 0.1,
+  "defaultN": 4,
+  "nRange": [2, 30],
+  "defaultAlpha": 0.05,
+  "defaultSeed": 2024
+}

@@ -1,0 +1,123 @@
+/**
+ * Shared small widgets used across multiple activities: status badges,
+ * range-slider styling, tables, the prediction component, and the
+ * before/after reveal component. Status is always icon + color + text —
+ * never color alone.
+ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+.badge-correct { background: var(--color-success-bg); color: var(--color-success); }
+.badge-correct::before { content: "\2713"; }
+.badge-incorrect { background: var(--color-danger-bg); color: var(--color-danger); }
+.badge-incorrect::before { content: "\2717"; }
+.badge-partial { background: var(--color-warning-bg); color: var(--color-warning); }
+.badge-partial::before { content: "\25CF"; }
+.badge-neutral { background: var(--color-neutral-bg); color: var(--color-neutral); }
+.badge-neutral::before { content: "\2022"; }
+
+/* Form controls */
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--color-primary);
+}
+
+label.field-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.control-row {
+  margin-bottom: var(--space-4);
+}
+
+.control-row__value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+fieldset.control-group {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  margin: 0 0 var(--space-4);
+}
+fieldset.control-group legend {
+  font-weight: 700;
+  padding: 0 var(--space-2);
+}
+
+table.data-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--font-size-sm);
+}
+table.data-table th,
+table.data-table td {
+  border: 1px solid var(--color-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+}
+table.data-table th {
+  background: var(--color-bg-alt);
+}
+
+/* ---- Prediction, Commitment & Feedback component ---- */
+
+.prediction-widget {
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  background: var(--color-bg-alt);
+  margin-bottom: var(--space-5);
+}
+.prediction-widget__prompt {
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+}
+.prediction-widget__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+.prediction-widget__feedback {
+  margin-top: var(--space-3);
+}
+.prediction-widget[data-committed="true"] select,
+.prediction-widget[data-committed="true"] input {
+  opacity: 0.7;
+}
+
+/* ---- Before/After Reveal component ---- */
+
+.before-after {
+  margin-bottom: var(--space-5);
+}
+.before-after__content {
+  transition: opacity var(--transition-base) ease;
+}
+.before-after__content--swapping {
+  opacity: 0;
+}
+.before-after__reveal-btn {
+  margin-top: var(--space-3);
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  font-weight: 700;
+  cursor: pointer;
+}

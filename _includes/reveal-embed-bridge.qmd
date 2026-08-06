@@ -1,0 +1,17 @@
+<!-- Included via revealjs `include-after-body` from lectures/*.qmd (depth 1: ../js, ../index.html). -->
+<a class="lecture-home-link" href="../index.html">← Course Home</a>
+<script src="../js/embed-bridge.js"></script>
+<script>
+(function () {
+  var tries = 0;
+  var iv = setInterval(function () {
+    tries++;
+    if (window.Reveal && typeof window.Reveal.isReady === "function" && window.Reveal.isReady()) {
+      clearInterval(iv);
+      EmbedBridge.parentInit();
+    } else if (tries > 100) {
+      clearInterval(iv);
+    }
+  }, 100);
+})();
+</script>
