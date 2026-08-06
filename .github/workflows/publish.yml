@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup-quarto@v2
+        uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Render site
         run: quarto render
