@@ -1,20 +1,13 @@
 /**
- * Reads/writes the shared `?mode=` and `?seed=` query-string contract that
- * every activity understands, and provides a tiny pub/sub controller so an
- * activity's own visible mode toggle can update state without a full reload.
+ * Reads/writes the shared `?seed=` query-string contract that every activity
+ * understands, and provides a tiny pub/sub controller so an activity's own
+ * seed controls can update state without a full reload.
  *
  * Depends on: prng.js (load first, for seedFromString/randomSeed).
  */
 
-const VALID_MODES = ["instructor", "student-exploration", "review"];
-
 function readParams() {
   return new URLSearchParams(window.location.search);
-}
-
-function getMode(defaultMode = "student-exploration") {
-  const m = readParams().get("mode");
-  return VALID_MODES.includes(m) ? m : defaultMode;
 }
 
 function getSeedFromURL(defaultSeed = null) {
@@ -41,34 +34,26 @@ function buildShareableURL(params) {
 }
 
 /**
- * Bundles mode+seed state for one activity page with a subscribe() hook so
+ * Bundles seed state for one activity page with a subscribe() hook so
  * activity-shell.js (and the activity's own render function) can react when
- * the visible mode/seed controls change, without reloading the iframe.
+ * the seed controls change, without reloading the iframe.
  */
-function createModeController(opts = {}) {
-  let mode = getMode(opts.defaultMode || "student-exploration");
+function createSeedController(opts = {}) {
   let seed = getSeedFromURL(opts.defaultSeed !== undefined ? opts.defaultSeed : PRNG.randomSeed());
   const listeners = [];
   function notify() {
-    listeners.forEach((fn) => fn({ mode, seed }));
+    listeners.forEach((fn) => fn({ seed }));
   }
   return {
-    get mode() { return mode; },
     get seed() { return seed; },
-    setMode(newMode) {
-      if (!VALID_MODES.includes(newMode)) return;
-      mode = newMode;
-      setURLParam("mode", mode);
-      notify();
-    },
     setSeed(newSeed) {
       seed = newSeed;
       setURLParam("seed", seed);
       notify();
     },
     subscribe(fn) { listeners.push(fn); },
-    shareableURL() { return buildShareableURL({ mode, seed }); }
+    shareableURL() { return buildShareableURL({ seed }); }
   };
 }
 
-window.ModeManager = { VALID_MODES, getMode, getSeedFromURL, setURLParam, buildShareableURL, createModeController };
+window.ModeManager = { getSeedFromURL, setURLParam, buildShareableURL, createSeedController };

@@ -7,8 +7,8 @@ this style of site at all.
 
 Every activity shares the same architecture: `data/<slug>.json` holds all replaceable
 scientific content, `activities/<slug>/<slug>.js` holds the behavior, and
-`js/activity-shell.js` provides the common header/mode-badge/seed-controls/reset-button chrome
-so the activity file only implements its own visualization and controls.
+`js/activity-shell.js` provides the common header/seed-controls/reset-button chrome so the
+activity file only implements its own visualization and controls.
 
 ---
 

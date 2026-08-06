@@ -51,19 +51,38 @@ function childInit(opts = {}) {
 
 /** Call once from the lecture deck, after Reveal.initialize(). */
 function parentInit() {
+  // Cap well inside the visible slide, not just at some fixed pixel value —
+  // Reveal.js slides don't grow or scroll to fit oversized content, so a
+  // too-tall iframe bleeds off the bottom of the screen with no way to reach
+  // it. Content taller than this cap gets its own internal scrollbar inside
+  // the iframe instead, which stays reachable.
+  //
+  // This has to stay entirely within Reveal's own *pre-scale* CSS coordinate
+  // space (offsetTop/clientHeight), the same space frame.style.height is set
+  // in. getBoundingClientRect()/window.innerHeight are POST-scale real screen
+  // pixels (Reveal zooms the whole deck to fit the window via a CSS
+  // transform) — mixing the two spaces, or trying to convert between them
+  // with Reveal.getScale(), is what made earlier versions of this
+  // unreliable. offsetTop/clientHeight are immune to the ancestor transform
+  // by definition, so no conversion is needed at all.
+  function applyCap(frame) {
+    const naturalHeight = Number(frame.dataset.naturalHeight);
+    if (!Number.isFinite(naturalHeight)) return;
+    const section = frame.closest("section");
+    if (!section) return;
+    const availableHeight = section.clientHeight - frame.offsetTop - 60;
+    const maxHeight = Math.max(200, availableHeight);
+    frame.style.height = Math.min(Math.max(naturalHeight, 200), maxHeight) + "px";
+  }
+
   window.addEventListener("message", (evt) => {
     if (evt.origin !== window.location.origin) return;
     const data = evt.data;
     if (data && data.type === "activity:resize" && typeof data.height === "number") {
-      // Cap well inside the visible slide, not just at some fixed pixel
-      // value — Reveal.js slides don't grow or scroll to fit oversized
-      // content, so a too-tall iframe bleeds off the bottom of the screen
-      // with no way to reach it. Content taller than this cap gets its own
-      // internal scrollbar inside the iframe instead, which stays reachable.
-      const maxHeight = Math.max(320, Math.min(600, window.innerHeight - 220));
       document.querySelectorAll("iframe.activity-iframe").forEach((frame) => {
         if (frame.contentWindow === evt.source) {
-          frame.style.height = Math.min(Math.max(data.height, 320), maxHeight) + "px";
+          frame.dataset.naturalHeight = String(data.height);
+          applyCap(frame);
         }
       });
     }
@@ -74,6 +93,10 @@ function parentInit() {
     slideEl.querySelectorAll("iframe.activity-iframe").forEach((frame) => {
       if (frame.contentWindow) {
         frame.contentWindow.postMessage({ type: "activity:visibility", visible }, window.location.origin);
+      }
+      if (visible) {
+        setTimeout(() => applyCap(frame), 350);
+        setTimeout(() => applyCap(frame), 900);
       }
     });
   }

@@ -1,16 +1,58 @@
 /**
  * Small overrides layered on top of Quarto's built-in "simple" reveal.js
  * theme: larger base text for back-of-room legibility, activity-embed
- * iframe sizing, and the persistent "back to course home" link.
+ * iframe sizing, the persistent "back to course home" link, and a masthead
+ * matching the instructor's MSU letterhead (colors/fonts pulled from
+ * Nault_AI-EHS-WayneState.pptx: masthead #18453b, accent stripe #67c521,
+ * Arial throughout). The MSU logo itself is an .emf in that deck, which
+ * browsers can't render — swap the "Michigan State University" text below
+ * for a real <img> (PNG/SVG) if/when a web-usable logo file is available.
  */
 
 .reveal {
   font-size: 30px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .reveal h1, .reveal h2, .reveal h3 {
-  color: #1b3a5c;
+  color: #18453b;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .reveal .slides section .fragment { transition: none; }
+
+.reveal .slides section {
+  /* No position override here on purpose — Reveal.js sets its own position
+     (absolute) on slides to overlay pre-rendered nearby slides at the same
+     spot; overriding it to `relative` made several of them stack in normal
+     document flow instead, blowing out the slide height. `position: absolute`
+     is just as valid an anchor for the ::before/::after below. */
+  padding-top: 78px;
+}
+.reveal .slides section::before {
+  content: "Michigan State University";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: #18453b;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 28px;
+  box-sizing: border-box;
+  z-index: 5;
+}
+.reveal .slides section::after {
+  content: "";
+  position: absolute;
+  top: 56px; left: 0; right: 0;
+  height: 5px;
+  background: #67c521;
+  z-index: 5;
+}
 
 .activity-embed {
   margin-top: 0.5em;

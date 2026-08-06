@@ -12,6 +12,8 @@ format:
     hash: true
     center: false
     transition: none
+    width: 1050
+    height: 800
     include-after-body: ../_includes/reveal-embed-bridge.qmd
 ---
 
@@ -55,9 +57,8 @@ presentation to open the speaker view.
   a real activity:
     1. Pick an activity folder under activities/<slug>/
     2. Set src to "../activities/<slug>/index.html"
-    3. Optionally add query params: ?mode=student-exploration&seed=12345
-       (mode is one of instructor | student-exploration | review — see
-       INTERACTIVITY-GUIDE.md; seed is any integer, used for reproducibility)
+    3. Optionally add a query param: ?seed=12345 (any integer — fixes the
+       starting scenario so it's reproducible)
     4. Give the iframe a descriptive `title` attribute (screen readers use it)
     5. Keep the "Reset this activity" button — it reloads just that iframe
 -->
@@ -67,7 +68,7 @@ presentation to open the speaker view.
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="REPLACE ME: activity title"
-  src="../activities/signature-matcher/index.html?mode=student-exploration&seed=12345"></iframe>
+  src="../activities/signature-matcher/index.html?seed=12345"></iframe>
 :::
 
 ::: {.notes}

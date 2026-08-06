@@ -12,6 +12,8 @@ format:
     hash: true
     center: false
     transition: none
+    width: 1050
+    height: 800
     include-after-body: ../_includes/reveal-embed-bridge.qmd
 ---
 
@@ -81,7 +83,7 @@ Try the activity below yourself once your instructor invites you to.
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="Biological Signature Matcher activity"
-  src="../activities/signature-matcher/index.html?mode=student-exploration&seed=12345"></iframe>
+  src="../activities/signature-matcher/index.html?seed=12345"></iframe>
 :::
 
 ::: {.notes}
@@ -102,7 +104,7 @@ Discuss: did every similarity metric agree on the best match?
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="Dynamic Heatmap and Hierarchical Clustering activity"
-  src="../activities/heatmap-clustering/index.html?mode=student-exploration&seed=7001"></iframe>
+  src="../activities/heatmap-clustering/index.html?seed=7001"></iframe>
 :::
 
 ::: {.notes}
@@ -123,7 +125,7 @@ Then unfreeze and switch linkage from average to single — does the grouping st
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="Pathway and Mechanism Construction activity"
-  src="../activities/pathway-construction/index.html?mode=student-exploration&seed=3141"></iframe>
+  src="../activities/pathway-construction/index.html?seed=3141"></iframe>
 :::
 
 ::: {.notes}
@@ -143,7 +145,7 @@ Point out the keyboard-alternative controls under each stage — useful to demo 
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="Bulk-Tissue Mixture Simulator activity"
-  src="../activities/mixture-simulator/index.html?mode=student-exploration&seed=9090"></iframe>
+  src="../activities/mixture-simulator/index.html?seed=9090"></iframe>
 :::
 
 ::: {.notes}
@@ -164,7 +166,7 @@ explanation — composition changed in one, activation state changed in the othe
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="Dose-Response Laboratory activity"
-  src="../activities/dose-response/index.html?mode=student-exploration&seed=5150"></iframe>
+  src="../activities/dose-response/index.html?seed=5150"></iframe>
 :::
 
 ::: {.notes}
@@ -185,7 +187,7 @@ curve there is misleading.
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="Experimental Design and Statistical Power activity"
-  src="../activities/experimental-design/index.html?mode=student-exploration&seed=2024"></iframe>
+  src="../activities/experimental-design/index.html?seed=2024"></iframe>
 :::
 
 ::: {.notes}
@@ -207,7 +209,7 @@ show run-to-run variability.
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="PCA and Dimensionality Reduction Explorer activity"
-  src="../activities/pca-explorer/index.html?mode=student-exploration&seed=8002"></iframe>
+  src="../activities/pca-explorer/index.html?seed=8002"></iframe>
 :::
 
 ::: {.notes}
@@ -228,7 +230,7 @@ By default, batch dominates PC1 — check the loadings panel together. Then excl
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="Spatial Transcriptomics Explorer activity"
-  src="../activities/spatial-explorer/index.html?mode=student-exploration&seed=9003"></iframe>
+  src="../activities/spatial-explorer/index.html?seed=9003"></iframe>
 :::
 
 ::: {.notes}

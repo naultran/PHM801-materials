@@ -97,25 +97,25 @@ To **embed an existing activity** in a lecture slide, copy this pattern (see any
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="Descriptive activity title"
-  src="../activities/<slug>/index.html?mode=student-exploration&seed=12345"></iframe>
+  src="../activities/<slug>/index.html?seed=12345"></iframe>
 :::
 ```
 
-`mode` is one of `instructor`, `student-exploration`, or `review`; `seed` is any integer
-(reproducible — same seed always produces the same starting scenario).
+`seed` is any integer (optional — reproducible, same seed always produces the same starting
+scenario; omit it for a fresh random scenario on every load).
 
 To **build a brand-new activity**, follow the pattern of any existing one under `activities/`:
 
 - `activities/<slug>/index.html` — links `css/*.css`, loads the shared `js/*.js` files it
   needs (see the `<script>` order in an existing activity), then its own `<slug>.js`
 - `activities/<slug>/<slug>.js` — calls `ActivityShell.init({ title, dataUrl, defaultSeed,
-  instructions, render(data, {mode, seed, rng, container, controller}) {...} })`
+  instructions, render(data, {seed, rng, container, controller}) {...} })`
 - `data/<slug>.json` — the activity's replaceable scientific content
 - Add a card for it to `activities/index.html` (the gallery)
 
-`activity-shell.js` gives you the header, mode badge, seed controls, and a "Reset activity"
-button automatically — your `render()` function only needs to build the activity's own UI
-inside the `container` it's given.
+`activity-shell.js` gives you the header, seed controls, and a "Reset activity" button
+automatically — your `render()` function only needs to build the activity's own UI inside the
+`container` it's given.
 
 ## 7. How to replace fictional example data
 
@@ -213,8 +213,8 @@ The iframe auto-resizes to its content shortly after the slide becomes active (t
 **Students see a different result than the instructor's projected screen.**
 Expected and by design — each browser tab is completely independent, and unless a `seed=`
 query parameter is fixed, activities use a randomized starting scenario. To show everyone the
-exact same scenario, use a lecture-embed URL with an explicit `&seed=` value (already done
-throughout `lecture-01-showcase.qmd`), or set `?mode=instructor` for a fixed, curated state.
+exact same scenario, use a lecture-embed URL with an explicit `?seed=` value (already done
+throughout `lecture-01-showcase.qmd`).
 
 **One student's changes appear to affect another student, or the projector.**
 This should not be possible — every activity runs in its own iframe with no shared state and

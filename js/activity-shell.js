@@ -1,6 +1,6 @@
 /**
- * Common bootstrap every activity page uses: renders the header, mode badge,
- * seed controls, fetches the activity's data JSON (with a real error message
+ * Common bootstrap every activity page uses: renders the header, seed
+ * controls, fetches the activity's data JSON (with a real error message
  * instead of a silent failure), and calls the activity's own render()
  * function. Keeps this boilerplate out of every individual activity file.
  *
@@ -20,11 +20,7 @@ function buildActivityHeader({ title, instructions, galleryHref }) {
   homeLink.href = galleryHref || "../index.html";
   homeLink.textContent = "← Activity Gallery";
 
-  const modeBadge = document.createElement("span");
-  modeBadge.className = "mode-badge";
-
   topRow.appendChild(homeLink);
-  topRow.appendChild(modeBadge);
 
   const h1 = document.createElement("h1");
   h1.textContent = title;
@@ -39,7 +35,7 @@ function buildActivityHeader({ title, instructions, galleryHref }) {
     header.appendChild(instr);
   }
 
-  return { header, modeBadge };
+  return { header };
 }
 
 function buildControlsBar(controller, { defaultSeed }) {
@@ -47,23 +43,6 @@ function buildControlsBar(controller, { defaultSeed }) {
   bar.className = "activity-controls-bar";
   bar.setAttribute("role", "group");
   bar.setAttribute("aria-label", "Activity controls");
-
-  const modeLabel = document.createElement("label");
-  modeLabel.className = "activity-controls-bar__item";
-  const modeText = document.createElement("span");
-  modeText.textContent = "Mode";
-  const modeSelect = document.createElement("select");
-  modeSelect.className = "touch-target";
-  ModeManager.VALID_MODES.forEach((m) => {
-    const opt = document.createElement("option");
-    opt.value = m;
-    opt.textContent = m.replace(/-/g, " ");
-    modeSelect.appendChild(opt);
-  });
-  modeSelect.value = controller.mode;
-  modeSelect.addEventListener("change", () => controller.setMode(modeSelect.value));
-  modeLabel.appendChild(modeText);
-  modeLabel.appendChild(modeSelect);
 
   const seedGroup = document.createElement("div");
   seedGroup.className = "activity-controls-bar__item seed-controls";
@@ -108,11 +87,10 @@ function buildControlsBar(controller, { defaultSeed }) {
   resetBtn.className = "touch-target activity-reset-btn";
   resetBtn.textContent = "Reset activity";
 
-  bar.appendChild(modeLabel);
   bar.appendChild(seedGroup);
   bar.appendChild(resetBtn);
 
-  return { bar, modeSelect, seedDisplay, resetBtn };
+  return { bar, seedDisplay, resetBtn };
 }
 
 function showActivityError(container, message) {
@@ -131,7 +109,7 @@ function showActivityError(container, message) {
 
 /**
  * @param {{rootId?:string, title:string, dataUrl?:string, defaultSeed?:number,
- *   defaultMode?:string, instructions?:string, galleryHref?:string,
+ *   instructions?:string, galleryHref?:string,
  *   render: (data:any, ctx:object) => (undefined|{reset?:Function})}} opts
  */
 async function initActivityShell(opts) {
@@ -140,7 +118,6 @@ async function initActivityShell(opts) {
     title,
     dataUrl,
     defaultSeed = 12345,
-    defaultMode = "student-exploration",
     instructions = "",
     render
   } = opts;
@@ -152,9 +129,9 @@ async function initActivityShell(opts) {
   }
   root.innerHTML = "";
 
-  const controller = ModeManager.createModeController({ defaultMode, defaultSeed });
-  const { header, modeBadge } = buildActivityHeader({ title, instructions, galleryHref: opts.galleryHref });
-  const { bar, modeSelect, seedDisplay, resetBtn } = buildControlsBar(controller, { defaultSeed });
+  const controller = ModeManager.createSeedController({ defaultSeed });
+  const { header } = buildActivityHeader({ title, instructions, galleryHref: opts.galleryHref });
+  const { bar, seedDisplay, resetBtn } = buildControlsBar(controller, { defaultSeed });
 
   const mount = document.createElement("main");
   mount.className = "activity-mount";
@@ -165,8 +142,6 @@ async function initActivityShell(opts) {
   root.appendChild(mount);
 
   function updateChrome() {
-    modeBadge.textContent = controller.mode.replace(/-/g, " ");
-    modeSelect.value = controller.mode;
     seedDisplay.textContent = `Seed: ${controller.seed}`;
   }
 
@@ -196,7 +171,7 @@ async function initActivityShell(opts) {
     const rng = PRNG.createRNG(controller.seed);
     try {
       currentRenderResult = render(data, {
-        mode: controller.mode, seed: controller.seed, rng, container: mount, controller
+        seed: controller.seed, rng, container: mount, controller
       }) || null;
     } catch (err) {
       console.error(err);
