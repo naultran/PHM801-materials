@@ -2,3 +2,6 @@ _site/
 .quarto/
 preview-out.log
 preview-err.log
+
+/.quarto/
+**/*.quarto_ipynb

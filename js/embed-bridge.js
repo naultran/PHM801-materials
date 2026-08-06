@@ -55,9 +55,15 @@ function parentInit() {
     if (evt.origin !== window.location.origin) return;
     const data = evt.data;
     if (data && data.type === "activity:resize" && typeof data.height === "number") {
+      // Cap well inside the visible slide, not just at some fixed pixel
+      // value — Reveal.js slides don't grow or scroll to fit oversized
+      // content, so a too-tall iframe bleeds off the bottom of the screen
+      // with no way to reach it. Content taller than this cap gets its own
+      // internal scrollbar inside the iframe instead, which stays reachable.
+      const maxHeight = Math.max(320, Math.min(600, window.innerHeight - 220));
       document.querySelectorAll("iframe.activity-iframe").forEach((frame) => {
         if (frame.contentWindow === evt.source) {
-          frame.style.height = Math.min(Math.max(data.height, 320), 1400) + "px";
+          frame.style.height = Math.min(Math.max(data.height, 320), maxHeight) + "px";
         }
       });
     }
