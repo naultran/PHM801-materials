@@ -258,3 +258,4 @@ To turn this into a real lecture, start with these files (in this order):
 
 Do not remove the "Content and Development Notice" — see `js/content-notice.js` for the single
 source of that required wording.
+
