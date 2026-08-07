@@ -1,4 +1,4 @@
-<!-- For depth-0 pages only: index.qmd, resources.qmd. Reads the page's main
+<!-- For depth-0 pages only (currently just index.qmd). Reads the page's main
      content aloud via the same free browser speechSynthesis API used on
      lecture slides and activity pages — see js/text-to-speech.js. -->
 <div id="website-read-aloud-mount"></div>

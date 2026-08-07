@@ -6,9 +6,7 @@ toxicology. It deploys to GitHub Pages with **no backend, no database, and no
 student accounts** — students open a URL and interact immediately.
 
 All example genes, samples, and datasets in this template are small and
-**fictional**, used only to demonstrate the interaction mechanics. See
-[Replacing fictional example data](#replacing-fictional-example-data) below
-before using this for a real course.
+**fictional**, used only to demonstrate the interaction mechanics.
 
 For a deeper reference, see also:
 
@@ -16,6 +14,33 @@ For a deeper reference, see also:
   students manipulate, which files hold data vs. behavior, and how to replace it
 - [`TECHNICAL-LIMITS.md`](TECHNICAL-LIMITS.md) — what's practical (and what isn't) in a static,
   no-backend browser lecture, and the specific simplifications made in this template
+
+> **Note:** this `README.md`, `INTERACTIVITY-GUIDE.md`, and `TECHNICAL-LIMITS.md` only exist
+> here in the repository (excluded from the build via the `render:` list in `_quarto.yml`) —
+> they are deliberately kept off the published GitHub Pages site so students only ever see
+> course content. Read them on GitHub, or in your editor.
+
+## Quick start: making a revision
+
+This is the fastest path from "cloned the repo" to "this is our course." Do these in order;
+each step links to the detailed how-to further down.
+
+1. **Turn the fictional example data into real course content.** Every activity's science
+   lives in one editable JSON file under [`data/`](data/) — nothing else needs to change for a
+   basic content swap. See [§7](#7-how-to-replace-fictional-example-data) and
+   `INTERACTIVITY-GUIDE.md` for each file's exact schema.
+2. **Rewrite the lecture around your new data.** Edit
+   [`lectures/lecture-01-showcase.qmd`](lectures/lecture-01-showcase.qmd) — swap the framing
+   text, objectives, and notes around each activity to match your real content, or start a
+   fresh deck from the template (see [§4](#4-how-to-duplicate-the-lecture-template)).
+3. **Update the homepage.** Edit [`index.qmd`](index.qmd) — course title, description, and the
+   list of lectures.
+4. **Check attribution.** The "Content and Development Notice" is required wording — see
+   `js/content-notice.js`. Update the author name only if authorship actually changes;
+   otherwise leave it as-is.
+5. **Preview, then deploy.** `quarto preview` to check your changes locally
+   ([§2](#2-how-to-preview-the-course-locally)), then push to `main` to deploy
+   ([§11](#11-how-to-deploy-to-github-pages)).
 
 ## 1. How to install Quarto
 
@@ -232,7 +257,7 @@ Everything except embedded YouTube/institutional video continues to work — the
 ## Repository layout
 
 ```
-_quarto.yml, index.qmd, resources.qmd   Quarto website project
+_quarto.yml, index.qmd                  Quarto website project
 _includes/                              shared partials (attribution notice, embed-bridge init)
 lectures/                                Reveal.js lecture decks (.qmd)
 activities/                              one self-contained folder per interactive activity
@@ -243,19 +268,8 @@ assets/                                  static images/previews
 .github/workflows/                       GitHub Pages deploy workflow
 ```
 
-## Replacing fictional example data
+## Content and Development Notice
 
-To turn this into a real lecture, start with these files (in this order):
-
-1. `data/*.json` — replace fictional genes/samples/values with real ones, activity by activity
-   (schemas documented in `INTERACTIVITY-GUIDE.md`)
-2. `lectures/lecture-01-showcase.qmd` — replace the concept-framing text around each activity
-   embed, or start fresh from `lecture-02-template.qmd`
-3. `index.qmd` — update the course title/description and lecture list
-4. Everywhere the string **"Rance Nault"** appears (the attribution notice in
-   `js/content-notice.js`) — update only if authorship changes; otherwise leave as-is per the
-   content notice requirements
-
-Do not remove the "Content and Development Notice" — see `js/content-notice.js` for the single
-source of that required wording.
+Do not remove the "Content and Development Notice" shown on the homepage and on each lecture's
+closing slide — see `js/content-notice.js` for the single source of that required wording.
 

@@ -12,6 +12,16 @@ project:
     - "js/**"
     - "css/**"
     - "assets/**"
+  # Instructor/maintainer documentation is intentionally kept OUT of the
+  # published GitHub Pages site — it's meant to be read as plain Markdown in
+  # the repository (GitHub renders it natively), not as a page students land
+  # on. Excluding it here means the live site is only ever course content.
+  render:
+    - "*.qmd"
+    - "lectures/*.qmd"
+    - "!README.md"
+    - "!INTERACTIVITY-GUIDE.md"
+    - "!TECHNICAL-LIMITS.md"
 
 website:
   title: "Sequencing in Pharmacology & Toxicology"
@@ -25,8 +35,6 @@ website:
         text: Demonstration Lecture
       - href: activities/index.html
         text: Activity Gallery
-      - href: resources.qmd
-        text: Resources
     right:
       - icon: github
         href: https://github.com/naultran/interactive-lecture-test

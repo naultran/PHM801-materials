@@ -30,15 +30,6 @@ experimental design, PCA, and spatial resolution.
 [Open lecture →](lectures/lecture-01-showcase.html){.btn-lecture}
 :::
 
-::: {.lecture-card}
-### [Blank Lecture Template](lectures/lecture-02-template.html)
-A skeleton lecture with the same slide setup, navigation, and attribution
-footer as the demonstration lecture, ready to be filled in with real content.
-Intended for instructors building a new lecture, not for students.
-
-[Open template →](lectures/lecture-02-template.html){.btn-lecture}
-:::
-
 :::
 
 ## Explore activities on their own
@@ -47,12 +38,6 @@ Every interactive activity used in the lectures can also be opened directly, out
 of any slide deck, from the [**Activity Gallery**](activities/index.html) — useful for
 self-study, review after class, or previewing an activity before building a lecture
 around it.
-
-## For instructors
-
-See the [Resources page](resources.qmd) for setup, editing, and deployment
-documentation, including how to replace the fictional example data with real course
-content.
 
 ## About this material
 

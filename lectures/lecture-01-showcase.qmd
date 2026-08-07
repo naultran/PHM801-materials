@@ -24,8 +24,8 @@ interactive, browser-based lecture. The genes, samples, and datasets shown throu
 are **small and fictional** — built to make the interaction mechanics clear, not to
 teach real pharmacology or toxicology content yet.
 
-An instructor will replace this material with authentic course content. See
-[Resources](../resources.html) for how.
+An instructor will replace this material with authentic course content. See the
+repository's `README.md` on GitHub for how.
 
 ::: {.notes}
 Set expectations up front: this is a technology/format demo first, a content demo second.
