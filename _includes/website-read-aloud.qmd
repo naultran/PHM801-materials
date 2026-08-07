@@ -1,0 +1,19 @@
+<!-- For depth-0 pages only: index.qmd, resources.qmd. Reads the page's main
+     content aloud via the same free browser speechSynthesis API used on
+     lecture slides and activity pages — see js/text-to-speech.js. -->
+<div id="website-read-aloud-mount"></div>
+<script src="js/text-to-speech.js"></script>
+<script>
+(function () {
+  if (!window.TextToSpeech) return;
+  var btn = TextToSpeech.createReadAloudButton(
+    function () {
+      var el = document.querySelector("#quarto-document-content");
+      return el ? el.textContent.replace(/\s+/g, " ").trim() : "";
+    },
+    { label: "🔊 Read this page aloud", className: "page-read-aloud-btn" }
+  );
+  var mount = document.getElementById("website-read-aloud-mount");
+  if (btn && mount) mount.appendChild(btn);
+})();
+</script>

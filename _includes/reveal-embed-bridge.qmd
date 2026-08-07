@@ -1,5 +1,11 @@
 <!-- Included via revealjs `include-after-body` from lectures/*.qmd (depth 1: ../js, ../index.html). -->
-<a class="lecture-home-link" href="../index.html">← Course Home</a>
+<!-- Grouped in one flex toolbar (bottom-left) rather than each being its own
+     independently-positioned fixed element — bottom-right is already busy
+     with Reveal's own slide-number/controls, and flex layout means the two
+     buttons never overlap regardless of how wide either one renders. -->
+<div class="lecture-toolbar">
+  <a class="lecture-home-link" href="../index.html">← Course Home</a>
+</div>
 <script src="../js/embed-bridge.js"></script>
 <script src="../js/text-to-speech.js"></script>
 <script>
@@ -31,7 +37,7 @@
       { label: "🔊 Read this slide", className: "lecture-read-aloud-btn" }
     );
     if (!btn) return; // no speech synthesis support in this browser
-    document.body.appendChild(btn);
+    document.querySelector(".lecture-toolbar").appendChild(btn);
     // Don't keep reading a slide the presenter has already navigated away from.
     Reveal.on("slidechanged", function () { TextToSpeech.stop(); });
   }

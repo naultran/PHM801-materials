@@ -78,37 +78,43 @@
   cursor: pointer;
 }
 
-.lecture-read-aloud-btn {
+/* One flex toolbar, bottom-left — deliberately NOT bottom-right, which
+   Reveal's own slide-number/progress/controls already occupy. A previous
+   version put the read-aloud button there as its own independently-fixed
+   element and it visually overlapped the slide-number badge, which is
+   exactly the kind of thing that makes an accessibility control easy to
+   miss even though it technically "works." Flex layout means neither
+   button has to guess the other's rendered width. */
+.lecture-toolbar {
   position: fixed;
-  bottom: 10px;
-  right: 10px;
+  bottom: 12px;
+  left: 12px;
   z-index: 40;
-  font-size: 14px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #c7cdd4;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.lecture-toolbar > * {
+  font-size: 16px;
+  font-weight: 700;
+  background: #ffffff;
+  border: 1.5px solid #18453b;
   border-radius: 6px;
-  padding: 4px 10px;
-  color: #18453b;
+  padding: 7px 14px;
   cursor: pointer;
-  font-weight: 600;
-}
-.lecture-read-aloud-btn:hover,
-.lecture-read-aloud-btn:focus-visible {
-  border-color: #18453b;
-}
-
-.lecture-home-link {
-  position: fixed;
-  bottom: 10px;
-  left: 10px;
-  z-index: 40;
-  font-size: 14px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #c7cdd4;
-  border-radius: 6px;
-  padding: 4px 10px;
-  color: #1b3a5c;
   text-decoration: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+.lecture-home-link {
+  color: #18453b;
+}
+.lecture-read-aloud-btn {
+  color: #18453b;
+}
+.lecture-toolbar > *:hover,
+.lecture-toolbar > *:focus-visible {
+  background: #18453b;
+  color: #ffffff;
 }
 
 .video-placeholder {

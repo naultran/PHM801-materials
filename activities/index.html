@@ -32,6 +32,7 @@
 <div id="content-notice-mount" style="max-width:1100px;margin:2rem auto;padding:0 1.5rem;"></div>
 
 <script src="../js/content-notice.js"></script>
+<script src="../js/text-to-speech.js"></script>
 <script>
   const CORE_ACTIVITIES = [
     { slug: "signature-matcher", title: "Biological Signature Matcher", color: "var(--series-1)",
@@ -90,6 +91,18 @@
     });
 
   ContentNotice.render("content-notice-mount", { expanded: false });
+
+  if (window.TextToSpeech) {
+    const readBtn = TextToSpeech.createReadAloudButton(
+      () => {
+        const clone = document.body.cloneNode(true);
+        clone.querySelectorAll("button, script").forEach((el) => el.remove());
+        return clone.textContent.replace(/\s+/g, " ").trim();
+      },
+      { label: "🔊 Read this page aloud", className: "page-read-aloud-btn" }
+    );
+    if (readBtn) document.body.appendChild(readBtn);
+  }
 </script>
 </body>
 </html>

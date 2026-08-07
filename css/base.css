@@ -176,3 +176,27 @@ a.btn-lecture:focus-visible {
   cursor: pointer;
   color: var(--color-text-muted);
 }
+
+/* Persistent "read this page aloud" control (js/text-to-speech.js), shown
+   on the plain website pages (home, resources) — the same feature exists on
+   every activity page and every lecture slide, styled to match each context. */
+.page-read-aloud-btn {
+  position: fixed;
+  bottom: var(--space-3);
+  left: var(--space-3);
+  z-index: 40;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+.page-read-aloud-btn:hover,
+.page-read-aloud-btn:focus-visible {
+  background: var(--color-primary);
+  color: #fff;
+}
