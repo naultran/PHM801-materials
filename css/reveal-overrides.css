@@ -54,12 +54,24 @@
   z-index: 5;
 }
 
+/* Quarto's auto-generated title slide carries Reveal's special `.center`
+   class, which Reveal's own layout() re-centers vertically via an inline
+   `top` style on every layout pass — regardless of this deck's top-level
+   `center: false` setting. That's what made the title slide look shifted
+   down relative to every other slide. !important beats the inline style. */
+.reveal .slides section.center {
+  top: 0 !important;
+}
+
 .activity-embed {
   margin-top: 0.5em;
 }
 .activity-embed iframe.activity-iframe {
   width: 100%;
-  min-height: 520px;
+  /* Deliberately low: embed-bridge.js caps each iframe to the space left on
+     its slide, and a high min-height here silently beats that cap — a slide
+     whose heading wraps to two lines then overflows the bottom. */
+  min-height: 300px;
   border: 1px solid #c7cdd4;
   border-radius: 8px;
   background: #fff;
@@ -118,8 +130,14 @@
 }
 
 .video-placeholder {
+  display: block;
   width: 100%;
-  max-width: 640px;
+  /* Reveal's own theme sets video { max-width: 95% } — same specificity as a
+     plain class selector, so it wins on source order alone unless this is
+     !important. At 95% width, a 16:9 poster on a 16:9 slide renders almost
+     as tall as the whole slide, leaving no room for the heading/caption —
+     hence the max-height cap too, not just max-width. */
+  max-width: 640px !important;
   border: 1px solid #c7cdd4;
   border-radius: 8px;
   margin: 0 auto;
@@ -127,6 +145,104 @@
 .video-transcript-note {
   font-size: 0.55em;
   color: #4b5563;
+}
+
+/* Small caveat/citation text at the bottom of a slide — same treatment as
+   .video-transcript-note, named generically since it's used on plain
+   content slides too (e.g. the "entire complement*" caveat on TRANSCRIPTOMICS). */
+.slide-footnote {
+  font-size: 0.55em;
+  color: #4b5563;
+  margin-top: 0.75em;
+}
+
+/* Three-across clickable card row (SYSTEMS PHARMACOLOGY IN PRACTICE). Sized
+   to about half of what would fill the slide's full remaining height. 798px
+   is this slide's measured pre-scale section height at the deck's current
+   1280x720 config (720 content + 78 masthead) — re-measure and update this
+   if the configured slide height ever changes again. 148px is this row's
+   own top offset (masthead 78 + this heading's height ~58 + a small natural
+   gap); halved per instructor request so the row no longer fills the whole
+   slide. */
+.practice-cards {
+  display: flex;
+  gap: 24px;
+  height: calc((798px - 148px - 20px) / 2);
+  padding: 8px 24px 24px;
+  box-sizing: border-box;
+}
+.practice-card {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  background: transparent;
+  border: 2px solid #67c521;
+  border-radius: 16px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.practice-card img {
+  /* Percentage width/height (and max-width/max-height) on a replaced element
+     like <img> inside a flex item don't reliably resolve even when the
+     container's own size is definite — a known cross-browser quirk that
+     compounds with object-fit — so the image kept sizing purely from its
+     own aspect ratio and overflowing. Absolute positioning against this
+     card's own box sidesteps that resolution algorithm entirely: inset:20px
+     is unambiguous regardless of how percentages behave here, so
+     object-fit:contain has something solid to letterbox against. */
+  position: absolute;
+  inset: 20px;
+  /* For a replaced element, width/height:auto still derive from its own
+     intrinsic size/ratio even under position:absolute with all four insets
+     set — inset alone fixes position, not size, for elements like <img>.
+     These have to be explicit for the box to actually fill the inset area
+     (all four values agree on the same math, so this isn't a real
+     over-constraint despite specifying both offsets and dimensions). */
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  object-fit: contain;
+}
+.practice-card:hover,
+.practice-card:focus-visible {
+  background: #eaf7db;
+  outline: 3px solid #18453b;
+  outline-offset: 2px;
+}
+
+/* Quarto wraps a standalone image as <figure><p><img></p><figcaption></figure>.
+   Reveal's own theme caps figure images at 95% width and centers them, but
+   leaves the figcaption at the figure's full width — inside a narrow
+   multi-column slide layout that 5% gap becomes a visible mismatch between
+   the image and its caption. Mirror the same sizing on the caption so both
+   edges line up exactly, whatever width the image ends up at. */
+.reveal .slides .column figcaption {
+  max-width: 95%;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+/* The <img> Quarto wraps in <p><img></p> is display:inline by default, so it
+   sits on the paragraph's text baseline — that leaves a sliver of descender
+   space below it (showing up as extra gap before the caption) and can throw
+   off top-alignment against a sibling column. Making it a block element
+   removes both, since it no longer participates in inline baseline layout. */
+.reveal .slides .column figure img {
+  display: block;
+  margin: 0 auto;
+}
+
+/* A portrait (taller-than-wide) figure in a wide column: sized by width alone
+   it would end up taller than the slide, so cap its height as well. Height is
+   the real limit on a 16:9 slide — the column can be 2/3 of the width, but a
+   portrait image inside it can only be as wide as its capped height allows.
+   Add `.tall-figure` next to `.column` to use this. */
+.reveal .slides .column.tall-figure img {
+  display: block;
+  margin: 0 auto;
+  width: auto;
+  max-width: 100%;
+  max-height: 560px;
 }
 
 @media (prefers-reduced-motion: reduce) {

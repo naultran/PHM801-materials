@@ -1,0 +1,157 @@
+.spn-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.spn-checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.spn-description {
+  margin: var(--space-4) 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+}
+
+.spn-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.spn-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.spn-legend-swatch {
+  display: inline-block;
+  width: 28px;
+  height: 3px;
+  background: var(--color-text-muted);
+}
+
+.spn-legend-swatch--highlighted {
+  height: 5px;
+  background: var(--color-danger);
+}
+
+.spn-panels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+}
+
+.spn-panel {
+  flex: 1 1 320px;
+  min-width: 320px;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+}
+
+.spn-panel h3 {
+  margin: 0 0 var(--space-2);
+  text-align: center;
+}
+
+.spn-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.spn-edge {
+  stroke: var(--color-border);
+  stroke-width: 2;
+}
+
+.spn-edge--highlighted {
+  stroke: var(--color-danger);
+  stroke-width: 4;
+}
+
+.spn-shape {
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 1.5;
+}
+
+.spn-node--drug .spn-shape {
+  stroke: var(--color-accent);
+}
+
+.spn-node--gene .spn-shape {
+  stroke: var(--color-neutral);
+}
+
+.spn-node--response .spn-shape {
+  stroke: var(--color-primary-dark);
+  stroke-width: 2;
+}
+
+.spn-node--highlighted .spn-shape {
+  stroke: var(--color-danger);
+  stroke-width: 3;
+  fill: var(--color-danger-bg);
+}
+
+/* Toxicology: yellow fill + dashed lines, so it reads without relying on
+   colour alone. Dark label text is explicit because the default label colour
+   turns light in dark mode, which would be unreadable on yellow. */
+.spn-edge--tox {
+  stroke: #d4a600;
+  stroke-width: 3;
+  stroke-dasharray: 8 5;
+}
+.spn-node--toxgene .spn-shape,
+.spn-node--toxendpoint .spn-shape {
+  fill: #ffe14d;
+  stroke: #8a6d00;
+  stroke-width: 2;
+}
+.spn-node--toxgene .spn-label,
+.spn-node--toxendpoint .spn-label {
+  fill: #17202a;
+}
+.spn-node--toxgene .spn-label {
+  font-size: 12px;
+}
+.spn-node--toxendpoint .spn-label {
+  font-size: 13px;
+}
+.spn-legend-swatch--tox {
+  height: 5px;
+  background: repeating-linear-gradient(90deg, #d4a600 0 8px, transparent 8px 13px);
+}
+
+.spn-label {
+  font-size: 15px;
+  font-weight: 600;
+  text-anchor: middle;
+  fill: var(--color-text);
+}
+
+.spn-label--left {
+  text-anchor: start;
+  font-weight: 500;
+}
+
+@media (max-width: 700px) {
+  .spn-panels {
+    flex-direction: column;
+  }
+}

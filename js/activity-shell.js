@@ -22,14 +22,6 @@ function buildActivityHeader({ title, instructions, galleryHref }) {
 
   topRow.appendChild(homeLink);
 
-  if (window.TextToSpeech) {
-    const readBtn = TextToSpeech.createReadAloudButton(
-      () => [title, instructions].filter(Boolean).join(". "),
-      { label: "🔊 Read instructions", className: "touch-target read-aloud-btn" }
-    );
-    if (readBtn) topRow.appendChild(readBtn);
-  }
-
   const h1 = document.createElement("h1");
   h1.textContent = title;
 
@@ -46,7 +38,15 @@ function buildActivityHeader({ title, instructions, galleryHref }) {
   return { header };
 }
 
-function buildControlsBar(controller, { defaultSeed }) {
+function buildReadAloudButton(title, instructions) {
+  if (!window.TextToSpeech) return null;
+  return TextToSpeech.createReadAloudButton(
+    () => [title, instructions].filter(Boolean).join(". "),
+    { label: "🔊 Read instructions", className: "touch-target read-aloud-btn" }
+  );
+}
+
+function buildControlsBar(controller, { defaultSeed, readAloudBtn }) {
   const bar = document.createElement("div");
   bar.className = "activity-controls-bar";
   bar.setAttribute("role", "group");
@@ -96,6 +96,7 @@ function buildControlsBar(controller, { defaultSeed }) {
   resetBtn.textContent = "Reset activity";
 
   bar.appendChild(seedGroup);
+  if (readAloudBtn) bar.appendChild(readAloudBtn);
   bar.appendChild(resetBtn);
 
   return { bar, seedDisplay, resetBtn };
@@ -139,15 +140,18 @@ async function initActivityShell(opts) {
 
   const controller = ModeManager.createSeedController({ defaultSeed });
   const { header } = buildActivityHeader({ title, instructions, galleryHref: opts.galleryHref });
-  const { bar, seedDisplay, resetBtn } = buildControlsBar(controller, { defaultSeed });
+  const readAloudBtn = buildReadAloudButton(title, instructions);
+  const { bar, seedDisplay, resetBtn } = buildControlsBar(controller, { defaultSeed, readAloudBtn });
 
   const mount = document.createElement("main");
   mount.className = "activity-mount";
   mount.id = "activity-mount";
 
+  // Seed/copy-link/read-aloud controls sit below the activity, not above —
+  // they're utility controls, not the first thing a student should see.
   root.appendChild(header);
-  root.appendChild(bar);
   root.appendChild(mount);
+  root.appendChild(bar);
 
   function updateChrome() {
     seedDisplay.textContent = `Seed: ${controller.seed}`;

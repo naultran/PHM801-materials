@@ -17,10 +17,37 @@
       clearInterval(iv);
       EmbedBridge.parentInit();
       initReadAloud();
+      initCaptionFit();
     } else if (tries > 100) {
       clearInterval(iv);
     }
   }, 100);
+
+  // A standalone slide image gets Reveal's r-stretch treatment: Reveal's JS
+  // sizes the <img> (inline width/height) to fill the space left on the
+  // slide, but the caption Quarto puts after it is an ordinary full-width
+  // paragraph, so it ends up much wider than the figure it describes. CSS
+  // alone can't follow a JS-computed width, so watch each stretched image and
+  // give its caption the same width. ResizeObserver covers every case at once
+  // (initial lazy load, window resize, a hidden slide becoming visible).
+  // Auto-animate slides are skipped so the morph pairs stay untouched.
+  function initCaptionFit() {
+    if (!window.ResizeObserver) return;
+    var imgs = document.querySelectorAll(".reveal .slides section img.r-stretch");
+    imgs.forEach(function (img) {
+      var cap = img.nextElementSibling;
+      if (!cap || !cap.classList.contains("caption")) return;
+      var section = img.closest("section");
+      if (section && section.hasAttribute("data-auto-animate")) return;
+      new ResizeObserver(function () {
+        var w = img.offsetWidth;
+        if (!w) return; // not laid out yet (hidden slide / image still loading)
+        cap.style.width = w + "px";
+        cap.style.marginLeft = "auto";
+        cap.style.marginRight = "auto";
+      }).observe(img);
+    });
+  }
 
   function getSlideText(section) {
     if (!section) return "";

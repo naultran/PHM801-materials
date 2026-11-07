@@ -1,0 +1,27 @@
+{
+  "drug": "Dexamethasone",
+  "receptor": "GR",
+  "genes": ["Fkbp5", "Tsc22d3", "Zbtb16", "Klf15", "Per1", "Sgk1"],
+  "responses": [
+    { "id": "responseA", "label": "Metabolic response" },
+    { "id": "responseB", "label": "Anti-inflammatory response" }
+  ],
+  "geneResponse": {
+    "Fkbp5": "responseA",
+    "Tsc22d3": "responseA",
+    "Zbtb16": "responseA",
+    "Klf15": "responseB",
+    "Per1": "responseB",
+    "Sgk1": "responseB"
+  },
+  "organs": [
+    {
+      "id": "liver", "label": "Liver", "highlightedResponse": "responseA", "classicalEndpoint": true,
+      "toxicology": { "endpoint": "Fatty liver", "genes": ["CYP3A11", "CYP2B10", "CTGF", "CYR61"] }
+    },
+    {
+      "id": "skin", "label": "Skin", "highlightedResponse": "responseB",
+      "toxicology": { "endpoint": "Delayed wound healing", "attachTo": "responseB" }
+    }
+  ]
+}

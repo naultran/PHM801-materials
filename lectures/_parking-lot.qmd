@@ -1,0 +1,316 @@
+---
+title: "Lecture 1 parking lot"
+subtitle: "Slides moved out of lecture-01-showcase.qmd. NOT part of the published site."
+format:
+  revealjs:
+    theme: simple
+    css: ../css/reveal-overrides.css
+    slide-number: true
+    progress: true
+    controls: true
+    hash: true
+    center: false
+    transition: none
+    width: 1280
+    height: 720
+    include-after-body: ../_includes/reveal-embed-bridge.qmd
+---
+
+<!--
+PARKING LOT — read me first
+
+This file holds slides that were in lecture-01-showcase.qmd but are not part of
+the lecture as it is now planned. It starts with an underscore, so Quarto does
+not build it into the website; students never see it. You can still open it in
+VS Code and use the Preview button to look at any slide, and copy a slide back
+into a lecture whenever you want it.
+
+Slides here still use ../ paths, so they work if you copy them into any file
+inside lectures/.
+
+WHAT WAS MOVED OUT
+  - The original 8-activity technology showcase (concept slide + activity slide
+    pairs for: Signature Matcher, Heatmap & Clustering, Pathway & Mechanism
+    Construction, Bulk-Tissue Mixture Simulator, Dose-Response Laboratory,
+    Experimental Design & Power, PCA Explorer, Spatial Explorer), plus its
+    "Why sequencing, and why now?" opener, the placeholder video slide, and the
+    "Putting it together" closer (which said "eight hands-on activities").
+  - Deleted rather than moved (they were empty): three duplicate
+    "WHY THE NETWORK MATTERS" slides that had a title and no content.
+
+WHERE THE MOVED ACTIVITIES MIGHT BE REUSED
+  - Bulk-Tissue Mixture Simulator  -> lecture 2, LO 1 (cellular heterogeneity)
+  - Spatial Transcriptomics Explorer -> lecture 2, LO 2 (spatial organization)
+  - Dose-Response Laboratory -> starting point for the lecture 1, LO 4
+    dose-response-of-gene-expression activity, and for lecture 2, LO 4
+  - Signature Matcher / Heatmap & Clustering -> lecture 2, LO 3 (cell-specific
+    signatures), if you want a second pass at similarity and clustering
+  - Pathway & Mechanism Construction -> could support the lecture 1
+    "mapping genes to mechanisms" section
+  - Experimental Design & Power, PCA Explorer -> not needed by the current
+    objectives; keep for a methods-focused session
+
+STILL TO WRITE FOR LECTURE 1 (not slides yet, so nothing is parked for them)
+  Section 3: mapping genes to mechanisms and dose-response modeling
+    - Functional annotation: what a gene set / pathway database is, over-
+      representation (Fisher) vs. ranked methods (GSEA), the background gene
+      list, multiple-testing correction  (before the Mode of Action activity)
+    - Dose-response modeling of gene expression: potency, benchmark dose,
+      pathway-level points of departure, therapeutic vs. toxic windows
+    - A new activity for the dose-response part (LO 4)
+    - A wrap-up slide that ties the activities back to the four objectives
+-->
+
+## ORIGINAL DEMO DECK (parked)
+
+Everything after this slide is the original technology showcase, kept as-is so it
+can be reused. See the comment at the top of this file for where each piece fits.
+
+
+## Why sequencing, and why now? {.smaller}
+
+- Sequencing turns biological and chemical exposure into measurable, genome-wide signals
+- The same underlying data can support very different questions depending on **design choices**
+- Today's session is organized around eight hands-on activities, each built around one such choice
+
+::: notes
+Brief framing slide — keep it short, the activities carry the teaching load.
+:::
+
+## A note on format (placeholder video) {.smaller}
+
+<video class="video-placeholder" controls preload="none" poster="../assets/placeholder-previews/gene-pathway-interpretation.svg">
+
+<source src="" type="video/mp4">
+
+Your browser does not support embedded video. </video>
+
+<p class="video-transcript-note">
+
+Placeholder video slide — replace the <code>\<source\></code> with a real file or embed URL. Captions/transcript should be added alongside the real recording; this slot demonstrates where a short explainer clip or captioned microscopy video would go. If the video fails to load, the poster image above remains as a static fallback.
+
+</p>
+
+::: notes
+Swap this for a real local MP4 or an institutional/YouTube embed — see README.md "How to embed a video."
+:::
+
+## Signature identity is a pattern, not one gene {auto-animate="true"}
+
+- One marker gene can be misleading on its own
+- A coordinated multigene signature is much harder to fool
+- The similarity **metric** you choose can itself change the answer
+
+Try the activity below yourself once your instructor invites you to.
+
+## Activity: Biological Signature Matcher {auto-animate="true"}
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Biological Signature Matcher activity" src="../activities/signature-matcher/index.html?seed=12345">
+
+</iframe>
+:::
+
+::: notes
+Ask students to try "one marker only" mode first, then switch to multigene and compare confidence. Discuss: did every similarity metric agree on the best match?
+:::
+
+## Clustering reflects your choices, not just your samples {auto-animate="true"}
+
+- Distance metric, linkage rule, and preprocessing all shape the result
+- "Freeze sample order" isolates *value changes* from *relationship changes*
+- The same raw data can tell more than one clustering story
+
+## Activity: Dynamic Heatmap & Hierarchical Clustering {auto-animate="true"}
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Dynamic Heatmap and Hierarchical Clustering activity" src="../activities/heatmap-clustering/index.html?seed=7001">
+
+</iframe>
+:::
+
+::: notes
+Have students toggle "Freeze sample order" on, add noise, and describe what changed vs. what stayed the same. Then unfreeze and switch linkage from average to single — does the grouping structure survive?
+:::
+
+## From gene list to pathway to mechanism {auto-animate="true"}
+
+- Individual genes participate in biological functions and mechanistic sequences
+- Some genes genuinely belong to more than one pathway — ambiguity isn't a bug
+- A mechanism is a *sequence*: exposure → initiating event → cellular response → tissue outcome
+
+## Activity: Pathway & Mechanism Construction {auto-animate="true"}
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Pathway and Mechanism Construction activity" src="../activities/pathway-construction/index.html?seed=3141">
+
+</iframe>
+:::
+
+::: notes
+Point out the keyboard-alternative controls under each stage — useful to demo directly for accessibility.
+:::
+
+## Bulk measurements can hide two different stories {auto-animate="true"}
+
+- A bulk sample mixes every cell together
+- The same apparent change can come from **more of a cell type** or **an angrier cell type**
+- Single-cell resolution is what actually tells these apart
+
+## Activity: Bulk-Tissue Mixture Simulator {auto-animate="true"}
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Bulk-Tissue Mixture Simulator activity" src="../activities/mixture-simulator/index.html?seed=9090">
+
+</iframe>
+:::
+
+::: notes
+Use the two preset buttons to produce two visually similar bulk profiles, then reveal the hidden explanation — composition changed in one, activation state changed in the other.
+:::
+
+## Dose, response, and a common pitfall {auto-animate="true"}
+
+- A response seen only at very high concentrations may not be target-specific
+- Cytotoxic stress alone can produce a rising signal that looks like a real effect
+- The same underlying model can be monotonic, biphasic, adaptive, or cytotoxicity-driven
+
+## Activity: Dose-Response Laboratory {auto-animate="true"}
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Dose-Response Laboratory activity" src="../activities/dose-response/index.html?seed=5150">
+
+</iframe>
+:::
+
+::: notes
+Switch to "Cytotoxicity-driven" and ask students to describe, in their own words, why the rising curve there is misleading.
+:::
+
+## Replicates, variability, and what you can detect {auto-animate="true"}
+
+- Identical experimental designs still produce somewhat different results each run
+- Detecting a real effect depends jointly on replicate count, variability, and effect size
+- Multiple-testing correction changes how many "hits" survive
+
+## Activity: Experimental Design & Statistical Power {auto-animate="true"}
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Experimental Design and Statistical Power activity" src="../activities/experimental-design/index.html?seed=2024">
+
+</iframe>
+:::
+
+::: notes
+Start everyone at n=4 (the default) — most students will detect very few true positives. Then raise n and watch power and true-positive count rise together. Click Reseed a few times at fixed settings to show run-to-run variability.
+:::
+
+## Dimensionality reduction reflects the data you feed it {auto-animate="true"}
+
+- A principal component is a summary of *whatever variation is present in the included genes*
+- A strong technical (batch) effect can dominate a weaker true biological effect
+- Removing or adding genes can change what an axis appears to represent
+
+## Activity: PCA / Dimensionality Reduction Explorer {auto-animate="true"}
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="PCA and Dimensionality Reduction Explorer activity" src="../activities/pca-explorer/index.html?seed=8002">
+
+</iframe>
+:::
+
+::: notes
+By default, batch dominates PC1 — check the loadings panel together. Then exclude the three "batch-sensitive" genes and watch PC1 flip to reflect treatment instead.
+:::
+
+## Location carries information a bulk sample throws away {auto-animate="true"}
+
+- Homogenizing a tissue discards where each signal came from
+- Capture-area (spot) size trades resolution for averaging
+- A large enough capture area starts to look like a bulk measurement again
+
+## Activity: Spatial Transcriptomics Explorer {auto-animate="true"}
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Spatial Transcriptomics Explorer activity" src="../activities/spatial-explorer/index.html?seed=9003">
+
+</iframe>
+:::
+
+::: notes
+Click a single point on the true map, note the value, then increase the capture-area slider and watch the captured view blur that same location into its neighbors.
+:::
+
+## Putting it together {.smaller}
+
+- Every activity today was one lens on the same underlying idea: **design and analysis choices shape what sequencing data can tell you**
+- The [Activity Gallery](../activities/index.html) has these same activities available any time, plus previews of several more (pathway interpretation, biomarker panels, network exploration, method selection, pipeline assembly, and more)
+- Two small reusable building blocks — a **prediction/commitment** widget and a **before/after reveal** — appeared inside several activities today; they're also available as standalone demos
+
+::: notes
+Wrap-up slide — point students at the gallery for after-class review.
+:::

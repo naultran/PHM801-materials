@@ -1,7 +1,7 @@
 ---
-title: "What Can Sequencing Tell Us in Pharmacology and Toxicology?"
-subtitle: "A demonstration lecture — fictional example data"
-author: "Course Instructor"
+title: "Systems Pharmacology I Transcriptomics"
+subtitle: "PHM801 - Fundamental Principles of Pharmacology and Toxicology"
+author: "Rance Nault"
 format:
   revealjs:
     theme: simple
@@ -12,245 +12,251 @@ format:
     hash: true
     center: false
     transition: none
-    width: 1050
-    height: 800
+    width: 1280
+    height: 720
     include-after-body: ../_includes/reveal-embed-bridge.qmd
 ---
 
-## Before we start {.smaller}
+## DECLARING USE OF AI
 
-This lecture demonstrates the technical and instructional design possibilities of an
-interactive, browser-based lecture. The genes, samples, and datasets shown throughout
-are **small and fictional** — built to make the interaction mechanics clear, not to
-teach real pharmacology or toxicology content yet.
+<br>*All material and contents were developed and created by Rance Nault. Generative AI was used to convert traditional lecture slides into interactive lessons with the goal of enhancing the learning experience.*
 
-An instructor will replace this material with authentic course content. See the
-repository's `README.md` on GitHub for how.
+## LEARNING OBJECTIVES
 
-::: {.notes}
-Set expectations up front: this is a technology/format demo first, a content demo second.
+<br>By the end of this lecture you should be able to:
+
+- Distinguish systems biology, systems pharmacology, and systems toxicology.
+- Interpret ‘omic’ signatures of disease states and drug responses.
+- Use ‘omic’ signatures to identify drug targets and mechanisms of action.
+- Evaluate drug efficacy and safety using systems pharmacology approaches.
+
+<!-- ======================================================================
+     SECTION 1 — INTRO TO SYSTEMS            (activity: LO 1)
+     ====================================================================== -->
+
+## WHAT IS SYSTEMS PHARMACOLOGY?
+
+<br>Systems pharmacology is the integration of <b>systems biology</b> and <b>pharmacodynamics</b> used to investigate the interaction of drugs, biology, and disease.
+
+- <a href="https://irp.nih.gov/catalyst/19/6/systems-biology-as-defined-by-nih" target="_blank">"... ask five biomedical researchers to define systems biology, and you'll get 10 different answers... or maybe more."</a>
+- At its simplest, biology is examined at a larger scale looking at the overall network instead of individual parts.
+
+![](/assets/figures/GR-1.png){data-id="gr-image" fig-alt="Diagram of glucocorticoid signaling in a cell. Glucocorticoids enter the cell and bind GR-alpha, which is held in the cytoplasm by heat shock proteins (HSPs). The ligand-bound receptor moves into the nucleus, where it binds glucocorticoid response elements (GREs) to turn genes on (transactivation) or interacts with other transcription factors to turn genes off (transrepression)." fig-align="center" width="50%"}
+
+## WHAT IS SYSTEMS PHARMACOLOGY?
+
+<br>Systems pharmacology is the integration of <b>systems biology</b> and <b>pharmacodynamics</b> used to investigate the interaction of drugs, biology, and disease.
+
+- <a href="https://irp.nih.gov/catalyst/19/6/systems-biology-as-defined-by-nih" target="_blank">"... ask five biomedical researchers to define systems biology, and you'll get 10 different answers... or maybe more."</a>
+
+- At its simplest, biology is examined at a larger scale looking at the overall <b>network</b> instead of individual <b>parts</b>.
+
+![](/assets/figures/GR-2.png){data-id="gr-image" fig-alt="The same glucocorticoid signaling diagram with everything faded except one highlighted step labeled 'part': glucocorticoid binding to GR-alpha. This shows the single molecular event inside the larger network." fig-align="center" width="50%"}
+
+## WHY THE NETWORK MATTERS
+
+<br>Simplification of mechanisms and target evaluations play a key role in drug development and safety testing, but biology is complex - drugs and responses are dependent on the biological context.
+
+- Are pathways independent from each other or will they cross-talk?
+
+- Do genetics cause differences in how the individual *parts* interact?
+
+## WHY THE NETWORK MATTERS - TAMOXIFEN
+
+<br>Tamoxifen is an ERα antagonist in breast tissue, but acts as a partial agonist in bone and endometrium which accounts for some potential off-target effects when used to treat breast cancer. The cellular context (co-factors, transcriptional targets, etc...), or the <b>system</b>, is key to understanding safety.
+
+![](/assets/figures/Tam-1.png){data-id="tam-image" fig-alt="Flow diagram of tamoxifen's tissue-specific actions, all through ER-alpha. It acts as an estradiol (E2) antagonist in the breast (breast cancer decreases) and premenopausal hypothalamus, but as an E2 agonist in the postmenopausal hypothalamus, liver (HDL up, LDL down, clotting factors up, thrombophilia), bone (bone turnover), and postmenopausal endometrium (polyp, hyperplasia, endometrial cancer, uterine sarcoma)." fig-align="center" width="50%"}
+
+## HOW TO *"DO"* SYSTEMS PHARMACOLOGY
+
+<br> Systems pharmacology is technology-driven. One of the major reasons it hasn't always been used as part of pharmacological research is that we didn't have the tools.
+
+- How do we *measure* the changes in the network?
+
+- How do we evaluate changes in the network? 
+
+
+## HOW TO *"DO"* SYSTEMS PHARMACOLOGY
+
+<br> Systems pharmacology is technology-driven. One of the major reasons it hasn't always been used as part of pharmacological research is that we didn't have the tools.
+
+- How do we *measure* the changes in the network? <b>"Omics"</b>
+
+- How do we evaluate changes in the network? <b>Computational & statistical modeling, machine learning, *artificial intelligence?*</b>
+
+  Working with these types of big data required novel strategies and perspectives
+
+## ACTIVITY: Systems Biology, Pharmacology, and Toxicology
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
 :::
 
-## Learning objectives
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Systems Biology, Pharmacology and Toxicology activity" src="../activities/systems-pharm-network/index.html?seed=4200">
 
-By the end of this session, you should be able to:
-
-- Explain why a coordinated multigene signature is more informative than a single marker
-- Describe how preprocessing and distance choices shape a clustering result
-- Distinguish cell-composition change from cell-state change in a bulk measurement
-- Recognize when a dose-response signal may reflect nonspecific cytotoxicity
-- Explain why replicate count and variability determine what a study can detect
-- Describe what a principal component axis is actually summarizing
-
-## Why sequencing, and why now? {.smaller}
-
-- Sequencing turns biological and chemical exposure into measurable, genome-wide signals
-- The same underlying data can support very different questions depending on **design choices**
-- Today's session is organized around eight hands-on activities, each built around one such choice
-
-::: {.notes}
-Brief framing slide — keep it short, the activities carry the teaching load.
+</iframe>
 :::
 
-## A note on format (placeholder video) {.smaller}
-
-<video class="video-placeholder" controls preload="none" poster="../assets/placeholder-previews/gene-pathway-interpretation.svg">
-  <source src="" type="video/mp4">
-  Your browser does not support embedded video.
-</video>
-
-<p class="video-transcript-note">Placeholder video slide — replace the <code>&lt;source&gt;</code> with a real
-file or embed URL. Captions/transcript should be added alongside the real recording; this slot demonstrates
-where a short explainer clip or captioned microscopy video would go. If the video fails to load, the poster
-image above remains as a static fallback.</p>
-
-::: {.notes}
-Swap this for a real local MP4 or an institutional/YouTube embed — see README.md "How to embed a video."
+::: notes
+Have students turn on "systems approach" alone first — network grows, but both organs still look identical. Then turn on "pharmacology approach" too — same drug, same receptor, but each organ now highlights a different downstream pathway. That's the punchline: neither approach alone explains organ-specific outcomes. Finally turn on "toxicology approach" — each organ gains an adverse endpoint (fatty liver; delayed wound healing) in yellow. With systems on you also see the genes behind the liver endpoint; with systems off you only see that the outcome happens, not why.
 :::
 
-## Signature identity is a pattern, not one gene
+<!-- ======================================================================
+     SECTION 2 — SYSTEMS AND SIGNATURES
+                 (activities: LO 2 = Omic Signatures, LO 3 = Mode of Action)
+     ====================================================================== -->
 
-- One marker gene can be misleading on its own
-- A coordinated multigene signature is much harder to fool
-- The similarity **metric** you choose can itself change the answer
+## TRANSCRIPTOMICS
 
-Try the activity below yourself once your instructor invites you to.
+<br>The emergence of **transcriptomics** was one of the primary drivers of systems approaches. <br>Today, "omics" - "Areas of biological study defined by the investigation of the [entire complement\*]{.underline} of a [specific type of biomolecule]{.underline}" has expanded well beyond the transcriptome.
 
-## Activity: Biological Signature Matcher
+::::: columns
+::: {.column width="66%"}
+- [**Gen**]{.underline}**omics:** DNA and genomic features
 
-::: {.activity-embed-controls}
-<button onclick="EmbedBridge.reloadIframe(this)">↻ Reset this activity</button>
-:::
-::: {.activity-embed}
-<iframe class="activity-iframe" loading="lazy" title="Biological Signature Matcher activity"
-  src="../activities/signature-matcher/index.html?seed=12345"></iframe>
-:::
+- [**Epigen**]{.underline}**omics:** Chromatin and other epigenetic features
 
-::: {.notes}
-Ask students to try "one marker only" mode first, then switch to multigene and compare confidence.
-Discuss: did every similarity metric agree on the best match?
-:::
+- [**Transcript**]{.underline}**omics:** RNA expression
 
-## Clustering reflects your choices, not just your samples
+- [**Prote**]{.underline}**omics:** Protein levels
 
-- Distance metric, linkage rule, and preprocessing all shape the result
-- "Freeze sample order" isolates *value changes* from *relationship changes*
-- The same raw data can tell more than one clustering story
+- [**Metab**]{.underline}**olomics:** Metabolite levels
 
-## Activity: Dynamic Heatmap & Hierarchical Clustering
-
-::: {.activity-embed-controls}
-<button onclick="EmbedBridge.reloadIframe(this)">↻ Reset this activity</button>
-:::
-::: {.activity-embed}
-<iframe class="activity-iframe" loading="lazy" title="Dynamic Heatmap and Hierarchical Clustering activity"
-  src="../activities/heatmap-clustering/index.html?seed=7001"></iframe>
+- ...
 :::
 
-::: {.notes}
-Have students toggle "Freeze sample order" on, add noise, and describe what changed vs. what stayed the same.
-Then unfreeze and switch linkage from average to single — does the grouping structure survive?
+::: {.column width="34%"}
+![Image from: https://rd-connect.eu/what-we-do/omics/](../assets/figures/Omics-figure-text-blob.png){fig-alt="A text blob that shows dozens of different omics including lipidomics, pharmacogenomics, phenomics, regulomics, and more." fig-align="center"}
+:::
+:::::
+
+::: slide-footnote
+*\*Note: it is almost never truly an entire complement. All technologies have biases.*
 :::
 
-## From gene list to pathway to mechanism
 
-- Individual genes participate in biological functions and mechanistic sequences
-- Some genes genuinely belong to more than one pathway — ambiguity isn't a bug
-- A mechanism is a *sequence*: exposure → initiating event → cellular response → tissue outcome
+## A BRIEF HISTORY
 
-## Activity: Pathway & Mechanism Construction
+<br>
 
-::: {.activity-embed-controls}
-<button onclick="EmbedBridge.reloadIframe(this)">↻ Reset this activity</button>
-:::
-::: {.activity-embed}
-<iframe class="activity-iframe" loading="lazy" title="Pathway and Mechanism Construction activity"
-  src="../activities/pathway-construction/index.html?seed=3141"></iframe>
-:::
+![Image from: <a href="https://doi.org/10.1007/978-3-030-77252-9_1" target="_blank" rel="noopener">da Silva Zandonadi, F. et al. (2021)</a>](../assets/figures/history-of-omics.png){fig-alt="A timeline figure showing the history of omics technologies."}
 
-::: {.notes}
-Point out the keyboard-alternative controls under each stage — useful to demo directly for accessibility.
-:::
+## SYSTEMS PHARMACOLOGY IN PRACTICE (LO 1) {.smaller}
 
-## Bulk measurements can hide two different stories
+::: practice-cards
+<button type="button" class="practice-card" onclick="Reveal.next()" aria-label="Signatures — continue to next slide">
 
-- A bulk sample mixes every cell together
-- The same apparent change can come from **more of a cell type** or **an angrier cell type**
-- Single-cell resolution is what actually tells these apart
+<img src="../assets/figures/signatures.png" alt=""/>
 
-## Activity: Bulk-Tissue Mixture Simulator
+</button>
 
-::: {.activity-embed-controls}
-<button onclick="EmbedBridge.reloadIframe(this)">↻ Reset this activity</button>
-:::
-::: {.activity-embed}
-<iframe class="activity-iframe" loading="lazy" title="Bulk-Tissue Mixture Simulator activity"
-  src="../activities/mixture-simulator/index.html?seed=9090"></iframe>
+<button type="button" class="practice-card" onclick="Reveal.next()" aria-label="Mechanisms — continue to next slide">
+
+<img src="../assets/figures/mechanisms.png" alt=""/>
+
+</button>
+
+<button type="button" class="practice-card" onclick="Reveal.next()" aria-label="Efficacy and safety — continue to next slide">
+
+<img src="../assets/figures/efficacy.png" alt=""/>
+
+</button>
 :::
 
-::: {.notes}
-Use the two preset buttons to produce two visually similar bulk profiles, then reveal the hidden
-explanation — composition changed in one, activation state changed in the other.
+## GENE EXPRESSION SIGNATURES
+
+<br> Gene expression signatures represent the overall pattern of transcript expression, or changes in expression, that represent that state of a *system*.
+
+- Diseases will each have distinct patterns of gene expression changes that represent a pathological condition.
+
+- Drugs, based on their mode-of-action, will also cause distinct patterns of gene expression changes
+
+  <br>The use of these signatures for understanding biology is largely founded on the *"central dogma"* of biology
+
+## THE <i>CENTRAL DOGMA</i> OF BIOLOGY
+
+## DIFFERENT DRUGS CAN SHARE SIGNATURES
+
+::::: columns
+:::: {.column width="33%"}
+Similarity in gene 'omic' signatures tend to reflect that the drugs have a common target. For example, we can see that many estrogenic compounds have shared groups of induced and repressed genes, but they are not always a perfect copy of each other.
+::::
+
+:::: {.column width="67%"}
+![veh - vehicle; E2 - 17-β-estradiol; EQ - S-Equol; IE - S-Equol + fulvestrant; HG - genistein; LG - genistein (high); IG - nM genistein + fulvestrant.](../assets/figures/Estrogen-like-signatures.png){fig-alt="Red-and-blue gene expression heatmap comparing control cells with ER-beta overexpressing cells at 4 and 24 hours. Columns are vehicle and several estrogenic treatments; rows are split into genes increased versus decreased by estradiol (E2). The estrogenic treatments show similar red/blue patterns to E2, unlike vehicle." fig-align="center"}
+::::
+:::::
+
+## SIGNATURES REVEAL TISSUE SPECIFICITY
+
+::::: columns
+:::: {.column width="33%"}
+Signatures can also reveal how different the gene regulatory network is between tissues, and how different tissues, cells, or organs may respond as shown in this example.
+
+::: slide-footnote
+<a href="https://doi.org/10.1186/s12864-025-11676-w" target="_blank" rel="noopener">Read publication</a>
+:::
+::::
+
+:::: {.column .tall-figure width="67%"}
+![](../assets/figures/DEX-1.png){fig-alt="Red-and-blue gene expression heatmap comparing effects of dexamethasone across tissues of male C57BL/6 mice." fig-align="center"}
+::::
+:::::
+
+## ACTIVITY: Understanding 'Omic Signatures (LO 2)
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
 :::
 
-## Dose, response, and a common pitfall
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Understanding &#39;Omic Signatures activity" src="../activities/omic-signatures/index.html?seed=2026">
 
-- A response seen only at very high concentrations may not be target-specific
-- Cytotoxic stress alone can produce a rising signal that looks like a real effect
-- The same underlying model can be monotonic, biphasic, adaptive, or cytotoxicity-driven
-
-## Activity: Dose-Response Laboratory
-
-::: {.activity-embed-controls}
-<button onclick="EmbedBridge.reloadIframe(this)">↻ Reset this activity</button>
-:::
-::: {.activity-embed}
-<iframe class="activity-iframe" loading="lazy" title="Dose-Response Laboratory activity"
-  src="../activities/dose-response/index.html?seed=5150"></iframe>
+</iframe>
 :::
 
-::: {.notes}
-Switch to "Cytotoxicity-driven" and ask students to describe, in their own words, why the rising
-curve there is misleading.
+::: notes
+Three-step wizard: (1) predict whether the unclustered heatmap shows real signatures, reveal via live hierarchical clustering — 8 pairs come out clean; (2) an unknown drug's signature is added, students predict which pair it belongs with, reveal shows the real Pearson correlation (never a perfect match); (3) a disease signature (inverted) is added, students predict which drug would treat it — reveal shows the most anti-correlated pair, introducing the connectivity-map idea that an inverse signature is itself informative.
 :::
 
-## Replicates, variability, and what you can detect
+## ACTIVITY: Mode of Action Discovery (LO 3)
 
-- Identical experimental designs still produce somewhat different results each run
-- Detecting a real effect depends jointly on replicate count, variability, and effect size
-- Multiple-testing correction changes how many "hits" survive
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
 
-## Activity: Experimental Design & Statistical Power
+↻ Reset this activity
 
-::: {.activity-embed-controls}
-<button onclick="EmbedBridge.reloadIframe(this)">↻ Reset this activity</button>
-:::
-::: {.activity-embed}
-<iframe class="activity-iframe" loading="lazy" title="Experimental Design and Statistical Power activity"
-  src="../activities/experimental-design/index.html?seed=2024"></iframe>
+</button>
 :::
 
-::: {.notes}
-Start everyone at n=4 (the default) — most students will detect very few true positives. Then raise n
-and watch power and true-positive count rise together. Click Reseed a few times at fixed settings to
-show run-to-run variability.
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Mode of Action Discovery activity" src="../activities/mode-of-action/index.html?seed=2026">
+
+</iframe>
 :::
 
-## Dimensionality reduction reflects the data you feed it
-
-- A principal component is a summary of *whatever variation is present in the included genes*
-- A strong technical (batch) effect can dominate a weaker true biological effect
-- Removing or adding genes can change what an axis appears to represent
-
-## Activity: PCA / Dimensionality Reduction Explorer
-
-::: {.activity-embed-controls}
-<button onclick="EmbedBridge.reloadIframe(this)">↻ Reset this activity</button>
-:::
-::: {.activity-embed}
-<iframe class="activity-iframe" loading="lazy" title="PCA and Dimensionality Reduction Explorer activity"
-  src="../activities/pca-explorer/index.html?seed=8002"></iframe>
+::: notes
+Same 16-chemical reference set as the previous activity, but chemicals are shown as neutral numbers (not names) so students can't guess pairing from labels. They pick 2 they think share a mode of action, reveal triggers real clustering to check the pick, then zooms into the genes actually driving that similarity and runs a real Fisher's exact test against three candidate pathways (placeholder names — swap for real ones later) to show over-representation is a testable claim, not just a resemblance.
 :::
 
-::: {.notes}
-By default, batch dominates PC1 — check the loadings panel together. Then exclude the three
-"batch-sensitive" genes and watch PC1 flip to reflect treatment instead.
-:::
+<!-- ======================================================================
+     SECTION 3 — MAPPING GENES TO MECHANISMS + DOSE-RESPONSE MODELING
+                 (activity: LO 4 — functional annotation + dose-response)
 
-## Location carries information a bulk sample throws away
-
-- Homogenizing a tissue discards where each signal came from
-- Capture-area (spot) size trades resolution for averaging
-- A large enough capture area starts to look like a bulk measurement again
-
-## Activity: Spatial Transcriptomics Explorer
-
-::: {.activity-embed-controls}
-<button onclick="EmbedBridge.reloadIframe(this)">↻ Reset this activity</button>
-:::
-::: {.activity-embed}
-<iframe class="activity-iframe" loading="lazy" title="Spatial Transcriptomics Explorer activity"
-  src="../activities/spatial-explorer/index.html?seed=9003"></iframe>
-:::
-
-::: {.notes}
-Click a single point on the true map, note the value, then increase the capture-area slider and
-watch the captured view blur that same location into its neighbors.
-:::
-
-## Putting it together {.smaller}
-
-- Every activity today was one lens on the same underlying idea: **design and analysis choices shape
-  what sequencing data can tell you**
-- The [Activity Gallery](../activities/index.html) has these same activities available any time,
-  plus previews of several more (pathway interpretation, biomarker panels, network exploration,
-  method selection, pipeline assembly, and more)
-- Two small reusable building blocks — a **prediction/commitment** widget and a **before/after
-  reveal** — appeared inside several activities today; they're also available as standalone demos
-
-::: {.notes}
-Wrap-up slide — point students at the gallery for after-class review.
-:::
+     Not written yet. The outline of what's still needed is at the top of
+     lectures/_parking-lot.qmd, along with the original demo slides
+     (Pathway & Mechanism Construction, Dose-Response Laboratory, etc.)
+     that you can copy back in as a starting point.
+     ====================================================================== -->
 
 ## About this material
 

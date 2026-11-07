@@ -159,4 +159,34 @@ function erfInv(x) {
   return result;
 }
 
-window.StatsUtils = { erf, normalCDF, incompleteBeta, tTwoSidedP, welchTTest, benjaminiHochberg, estimatePower, logGamma };
+function logChoose(n, k) {
+  if (k < 0 || k > n) return -Infinity;
+  return logGamma(n + 1) - logGamma(k + 1) - logGamma(n - k + 1);
+}
+
+/**
+ * One-tailed (over-representation) Fisher's exact test on a 2x2 contingency table:
+ *                in pathway   not in pathway
+ *   in gene list      a             b
+ *   not in list        c             d
+ * Returns the exact probability of overlap this large or larger by chance,
+ * via the hypergeometric distribution — the standard test for "does my gene
+ * list overlap a known pathway more than expected." Check: a=8, b=4, c=7,
+ * d=81 (12-gene list, 15-gene pathway, 100 genes total) -> p ~= 1.3e-5.
+ */
+function fishersExactTest(a, b, c, d) {
+  const n = a + b + c + d;
+  const K = a + c;
+  const draws = a + b;
+  const maxK = Math.min(K, draws);
+  let pValue = 0;
+  for (let k = a; k <= maxK; k++) {
+    pValue += Math.exp(logChoose(K, k) + logChoose(n - K, draws - k) - logChoose(n, draws));
+  }
+  return MathUtils.clamp(pValue, 0, 1);
+}
+
+window.StatsUtils = {
+  erf, normalCDF, incompleteBeta, tTwoSidedP, welchTTest, benjaminiHochberg,
+  estimatePower, logGamma, fishersExactTest
+};

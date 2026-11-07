@@ -1,0 +1,69 @@
+.moa-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.moa-chip {
+  min-width: 44px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  font-weight: 600;
+  cursor: pointer;
+}
+.moa-chip--selected {
+  border-color: #a3291e;
+  background: var(--color-danger-bg);
+  color: #a3291e;
+}
+.moa-chip:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.moa-heatmap {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  display: block;
+  margin: var(--space-3) 0;
+}
+
+.moa-zoom-heatmap {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  display: block;
+  margin: var(--space-3) 0;
+}
+
+.moa-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.moa-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.moa-fisher-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-3) 0;
+  font-size: var(--font-size-sm);
+}
+.moa-fisher-table th,
+.moa-fisher-table td {
+  border: 1px solid var(--color-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+}
+.moa-fisher-row--true {
+  background: var(--color-success-bg);
+  font-weight: 600;
+}
