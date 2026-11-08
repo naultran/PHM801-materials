@@ -12,6 +12,12 @@
  * Hepatocytes dominate the average, so a screen run on bulk data would pick the
  * wrong drug. Which letter (A or B) is the right one changes with the seed.
  *
+ * The question names the disease driver (immune cells) outright, so the task is
+ * pattern matching: find the drug that is the mirror image of the immune-cell
+ * signature. The feedback then branches on what the student chose: the
+ * hepatocyte-matching drug is exactly what a bulk screen would have picked, so
+ * that wrong answer is explained as "right if you only had bulk data".
+ *
  * Depends on: prng.js, math-utils.js, similarity.js, svg-utils.js,
  * prediction-component.js, activity-shell.js.
  */
@@ -65,7 +71,7 @@ if (typeof module !== "undefined") module.exports = { buildScenario, pearson };
 
 /* ---------- rendering ---------- */
 
-const CELL_W = 74, ROW_H = 11, GAP = 14, TOP = 40, LEFT = 4;
+const CELL_W = 74, ROW_H = 11, GAP = 14, TOP = 50, LEFT = 4;
 
 function diverging(t) {
   t = MathUtils.clamp(t, -1, 1);
@@ -84,6 +90,7 @@ function drawHeatmap(columns, maxAbs) {
   placed.forEach((c) => {
     svg.appendChild(SvgUtils.svgEl("text", { x: c.x + CELL_W / 2, y: 14, "text-anchor": "middle", class: "css-col-label" }, [c.label]));
     if (c.sub) svg.appendChild(SvgUtils.svgEl("text", { x: c.x + CELL_W / 2, y: 27, "text-anchor": "middle", class: "css-col-sub" }, [c.sub]));
+    if (c.sub2) svg.appendChild(SvgUtils.svgEl("text", { x: c.x + CELL_W / 2, y: 38, "text-anchor": "middle", class: c.driver ? "css-col-sub css-col-driver" : "css-col-sub" }, [c.sub2]));
     c.values.forEach((v, gi) => {
       svg.appendChild(SvgUtils.svgEl("rect", { x: c.x, y: TOP + gi * ROW_H, width: CELL_W, height: ROW_H - 1, fill: diverging(v / maxAbs) }));
     });
@@ -103,8 +110,9 @@ ActivityShell.init({
   title: "Screening Drugs by Cell-Specific Signature",
   defaultSeed: 2029,
   instructions:
-    "This is an inflammatory liver disease. Single-cell data show how the disease changes gene expression in each cell " +
-    "type. Two candidate drugs are shown beside them. Pick the drug to test, then see how a screen on bulk data would have judged them.",
+    "This liver disease is driven by inflammation, so the immune cells are the cells you need to fix. Single-cell data show the disease " +
+    "signature in each cell type, and two candidate drugs are shown beside them. Find the drug that is the mirror image of the immune-cell " +
+    "signature (orange where the disease is blue, blue where it is orange), then check your answer.",
 
   render(data, { rng, container }) {
     const sc = buildScenario(rng);
@@ -115,24 +123,24 @@ ActivityShell.init({
     const left = el("section", { class: "aw-panel" });
     left.appendChild(el("h3", {}, "Disease signatures from single-cell data"));
     left.appendChild(el("p", { class: "aw-note" },
-      "Each row is a gene (30 total). Orange = turned up, blue = turned down. The first two columns are the disease signature in each cell type; the last two are what each candidate drug does to the same genes."));
+      "Each row is the same gene (30 total). Orange = turned up, blue = turned down. Columns 1–2 are the disease signature (diseased vs. healthy) in each cell type. Columns 3–4 are what each candidate drug does to those same genes."));
     const heatMount = el("div", {});
     left.appendChild(heatMount);
 
     const right = el("section", { class: "aw-panel css-right" });
-    right.appendChild(el("h3", {}, "Which drug would you test?"));
+    right.appendChild(el("h3", {}, "Which drug reverses the disease?"));
     right.appendChild(el("p", { class: "aw-note" },
-      "Hepatocytes are about 85% of the cells and immune cells about 15%. The disease is driven by inflammation. A good candidate reverses the disease signature, so look for the drug that looks like the mirror image of it."));
+      "This disease is driven by the immune cells. A drug that reverses a signature looks like its mirror image: blue where the disease is orange, and orange where the disease is blue. Compare each drug with the immune-cell column."));
     const predictMount = el("div", {});
     right.appendChild(predictMount);
     const widget = PredictionComponent.createPredictionWidget(predictMount, {
-      prompt: "Which drug would you consider testing to treat this inflammatory disease?",
+      prompt: "Which drug is the mirror image of the immune-cell disease signature?",
       inputType: "select",
       options: [{ id: "A", label: "Drug A" }, { id: "B", label: "Drug B" }],
       commitLabel: "Lock in answer"
     });
     const actions = el("div", { class: "aw-actions" });
-    const revealBtn = el("button", { type: "button" }, "Reveal — score the drugs");
+    const revealBtn = el("button", { type: "button" }, "Check my answer");
     actions.appendChild(revealBtn);
     right.appendChild(actions);
     const results = el("div", { class: "css-results", "aria-live": "polite" });
@@ -143,20 +151,20 @@ ActivityShell.init({
     function drawBase() {
       heatMount.innerHTML = "";
       heatMount.appendChild(drawHeatmap([
-        { label: "Hepatocytes", sub: "85% of cells", values: sc.hep },
-        { label: "Immune cells", sub: "15% of cells", values: sc.imm },
-        { label: "Drug A", sub: "candidate", values: sc.drugs.A.sig, gapBefore: true },
-        { label: "Drug B", sub: "candidate", values: sc.drugs.B.sig }
+        { label: "Hepatocytes", sub: "disease signature", sub2: "85% of cells", values: sc.hep },
+        { label: "Immune cells", sub: "disease signature", sub2: "15% · driver", driver: true, values: sc.imm },
+        { label: "Drug A", sub: "drug effect", values: sc.drugs.A.sig, gapBefore: true },
+        { label: "Drug B", sub: "drug effect", values: sc.drugs.B.sig }
       ], maxAbs));
     }
     function drawRevealed() {
       heatMount.innerHTML = "";
       heatMount.appendChild(drawHeatmap([
-        { label: "Hepatocytes", sub: "85% of cells", values: sc.hep },
-        { label: "Immune cells", sub: "15% of cells", values: sc.imm },
-        { label: "Bulk", sub: "averaged", values: sc.bulk },
-        { label: "Drug A", sub: "candidate", values: sc.drugs.A.sig, gapBefore: true },
-        { label: "Drug B", sub: "candidate", values: sc.drugs.B.sig }
+        { label: "Hepatocytes", sub: "disease signature", sub2: "85% of cells", values: sc.hep },
+        { label: "Immune cells", sub: "disease signature", sub2: "15% · driver", driver: true, values: sc.imm },
+        { label: "Bulk", sub: "disease signature", sub2: "averaged", values: sc.bulk },
+        { label: "Drug A", sub: "drug effect", values: sc.drugs.A.sig, gapBefore: true },
+        { label: "Drug B", sub: "drug effect", values: sc.drugs.B.sig }
       ], maxAbs));
     }
     drawBase();
@@ -168,7 +176,6 @@ ActivityShell.init({
       const rows = ["A", "B"].map((k) => ({
         k, hep: pearson(sc.drugs[k].sig, sc.hep), imm: pearson(sc.drugs[k].sig, sc.imm), bulk: pearson(sc.drugs[k].sig, sc.bulk)
       }));
-      const bestBulk = rows.reduce((a, b) => (a.bulk < b.bulk ? a : b)).k;
       const fmt = (v) => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(2);
       const cell = (v, strong) => `<td class="${strong ? "css-best" : ""}">${fmt(v)}</td>`;
       const minOf = (key) => Math.min(...rows.map((r) => r[key]));
@@ -179,18 +186,36 @@ ActivityShell.init({
         "</tbody>";
       results.innerHTML = "";
       results.appendChild(table);
+      const hepLetter = sc.correct === "A" ? "B" : "A";           // the hepatocyte-matching drug
+      const rowOf = (k) => rows.find((r) => r.k === k);
+      const picked = widget.getPrediction();
       const msg = el("p", { class: "css-takeaway" });
-      msg.innerHTML =
-        `Highlighted: the most negative (best reversing) drug in each column. <b>Drug ${sc.correct}</b> reverses the immune-cell signature, ` +
-        `which is what drives this inflammatory disease. A screen run on <b>bulk</b> data would have picked <b>Drug ${bestBulk}</b>, ` +
-        `because hepatocytes outnumber immune cells and dominate the average. Looking at each cell type separately changes the answer.`;
+      const bulkNote =
+        `<b>The bulk twist:</b> the bulk column is mostly hepatocytes (85% of the cells), so it looks like the hepatocyte signature. ` +
+        `Drug ${hepLetter} matches it best (r = ${fmt(rowOf(hepLetter).bulk)}), so a screen run on bulk data would have ranked Drug ${hepLetter} first and ` +
+        `missed the drug that targets the cells driving this disease.`;
+      if (picked === sc.correct) {
+        msg.innerHTML =
+          `<b>Drug ${sc.correct} is the mirror image of the immune-cell signature.</b> You matched the disease driver. ` + bulkNote +
+          ` Only the single-cell data let you see that.`;
+      } else if (picked === hepLetter) {
+        msg.innerHTML =
+          `<b>Drug ${hepLetter} is a mirror image, but of the wrong cells.</b> It reverses the <i>hepatocyte</i> signature (r = ${fmt(rowOf(hepLetter).hep)}) and barely touches the immune cells (r = ${fmt(rowOf(hepLetter).imm)}). ` +
+          `It would still be a sensible pick if you only had <b>bulk</b> data: the bulk signature is mostly hepatocytes (85% of the cells), so a bulk screen ranks Drug ${hepLetter} first (r = ${fmt(rowOf(hepLetter).bulk)}). ` +
+          `But this disease is driven by the immune cells, so the drug to test is <b>Drug ${sc.correct}</b> (r = ${fmt(rowOf(sc.correct).imm)}), which single-cell data reveal.`;
+      } else {
+        msg.innerHTML =
+          `No answer was locked in. <b>Drug ${sc.correct}</b> is the mirror image of the immune-cell signature (r = ${fmt(rowOf(sc.correct).imm)}). ` + bulkNote;
+      }
       results.appendChild(msg);
       widget.reveal(sc.correct, (predicted) => {
         const ok = predicted === sc.correct;
         return {
           status: ok ? "correct" : "incorrect",
           label: ok ? "Correct!" : "Not quite",
-          detail: `Drug ${sc.correct} is the inverse of the immune-cell signature (r = ${fmt(rows.find((r) => r.k === sc.correct).imm)}).`
+          detail: ok
+            ? `Drug ${sc.correct} reverses the immune-cell signature (r = ${fmt(rowOf(sc.correct).imm)}).`
+            : `Drug ${predicted} reverses the hepatocyte signature, but the immune cells drive this disease.`
         };
       });
       revealBtn.disabled = true;

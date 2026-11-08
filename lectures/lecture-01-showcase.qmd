@@ -38,22 +38,42 @@ format:
 
 ## WHAT IS SYSTEMS PHARMACOLOGY?
 
+::::: columns
+:::: {.column width="48%"}
 <br>Systems pharmacology is the integration of <b>systems biology</b> and <b>pharmacodynamics</b> used to investigate the interaction of drugs, biology, and disease.
 
 - <a href="https://irp.nih.gov/catalyst/19/6/systems-biology-as-defined-by-nih" target="_blank">"... ask five biomedical researchers to define systems biology, and you'll get 10 different answers... or maybe more."</a>
 - At its simplest, biology is examined at a larger scale looking at the overall network instead of individual parts.
+::::
 
-![](/assets/figures/GR-1.png){data-id="gr-image" fig-alt="Diagram of glucocorticoid signaling in a cell. Glucocorticoids enter the cell and bind GR-alpha, which is held in the cytoplasm by heat shock proteins (HSPs). The ligand-bound receptor moves into the nucleus, where it binds glucocorticoid response elements (GREs) to turn genes on (transactivation) or interacts with other transcription factors to turn genes off (transrepression)." fig-align="center" width="50%"}
+:::: {.column .tall-figure width="52%"}
+![](/assets/figures/GR-1.png){data-id="gr-image" fig-alt="Diagram of glucocorticoid signaling in a cell. Glucocorticoids enter the cell and bind GR-alpha, which is held in the cytoplasm by heat shock proteins (HSPs). The ligand-bound receptor moves into the nucleus, where it binds glucocorticoid response elements (GREs) to turn genes on (transactivation) or interacts with other transcription factors to turn genes off (transrepression)." fig-align="center"}
+::::
+:::::
+
+::: source-credit
+Source: <a href="https://www.ncbi.nlm.nih.gov/books/NBK279171/" target="_blank" rel="noopener">NCBI Bookshelf NBK279171</a>
+:::
 
 ## WHAT IS SYSTEMS PHARMACOLOGY?
 
+::::: columns
+:::: {.column width="48%"}
 <br>Systems pharmacology is the integration of <b>systems biology</b> and <b>pharmacodynamics</b> used to investigate the interaction of drugs, biology, and disease.
 
 - <a href="https://irp.nih.gov/catalyst/19/6/systems-biology-as-defined-by-nih" target="_blank">"... ask five biomedical researchers to define systems biology, and you'll get 10 different answers... or maybe more."</a>
 
 - At its simplest, biology is examined at a larger scale looking at the overall <b>network</b> instead of individual <b>parts</b>.
+::::
 
-![](/assets/figures/GR-2.png){data-id="gr-image" fig-alt="The same glucocorticoid signaling diagram with everything faded except one highlighted step labeled 'part': glucocorticoid binding to GR-alpha. This shows the single molecular event inside the larger network." fig-align="center" width="50%"}
+:::: {.column .tall-figure width="52%"}
+![](/assets/figures/GR-2.png){data-id="gr-image" fig-alt="The same glucocorticoid signaling diagram with everything faded except one highlighted step labeled 'part': glucocorticoid binding to GR-alpha. This shows the single molecular event inside the larger network." fig-align="center"}
+::::
+:::::
+
+::: source-credit
+Source: <a href="https://www.ncbi.nlm.nih.gov/books/NBK279171/" target="_blank" rel="noopener">NCBI Bookshelf NBK279171</a>
+:::
 
 ## WHY THE NETWORK MATTERS
 
@@ -68,6 +88,13 @@ format:
 <br>Tamoxifen is an <u>ERα antagonist in breast tissue</u>, but acts as a <u>partial agonist in bone and endometrium</u>. Because it acts through the same receptor everywhere, these are tissue-specific effects, not off-target ones, and they account for both some benefits and some risks when it is used to treat breast cancer. The cellular context (co-factors, transcriptional targets, etc...), or the <b>system</b>, is key to understanding safety.
 
 ![](/assets/figures/Tam-1.png){data-id="tam-image" fig-alt="Flow diagram of tamoxifen's tissue-specific actions, all through ER-alpha. It acts as an estradiol (E2) antagonist in the breast (breast cancer decreases) and premenopausal hypothalamus, but as an E2 agonist in the postmenopausal hypothalamus, liver (HDL up, LDL down, clotting factors up, thrombophilia), bone (bone turnover), and postmenopausal endometrium (polyp, hyperplasia, endometrial cancer, uterine sarcoma)." fig-align="center" width="50%"}
+
+::: credit-spacer
+:::
+
+::: source-credit
+Source: <a href="https://doi.org/10.4137/cpath.s487" target="_blank" rel="noopener">doi.org/10.4137/cpath.s487</a>
+:::
 
 ## HOW TO *"DO"* SYSTEMS PHARMACOLOGY
 
@@ -150,7 +177,7 @@ Source: <a href="https://rd-connect.eu/what-we-do/omics/" target="_blank" rel="n
 
 <br>
 
-![](../assets/figures/history-of-omics.png){fig-alt="A timeline figure showing the history of omics technologies."}
+![](../assets/figures/history-of-omics.png){fig-alt="A timeline figure showing the history of omics technologies." fig-align="center"}
 
 ::: credit-spacer
 :::
@@ -347,15 +374,26 @@ Twenty genes are ranked from most induced to most repressed, and each carries a 
 
 ## TRANSCRIPTOMIC APPROACH TO SAFETY AND EFFICACY {#s-dose-response}
 
+::::: columns
+:::: {.column width="33%"}
 <br>A signature tells you *what* changed at one dose. Efficacy and safety are questions of *how much drug* it takes.
+::::
 
-![](/assets/figures/acetamide-dr.png){data-id="acetamide-image" fig-alt="A heatmap of dose-response gene expression profiling of acetamide." fig-align="center" width="50%"}
+:::: {.column .tall-figure .figure-short width="67%"}
+![](/assets/figures/acetamide-dr.png){data-id="acetamide-image" fig-alt="A heatmap of dose-response gene expression profiling of acetamide." fig-align="center"}
+::::
+:::::
+
+::: source-credit
+Source: <a href="https://doi.org/10.1016/j.taap.2019.114872" target="_blank" rel="noopener">doi.org/10.1016/j.taap.2019.114872</a>
+:::
 
 ## IDENTIFYING A POINT OF DEPARTURE FROM GENE EXPRESSION
 
 <br>In safety and efficacy testing we typically rely on a measurement describing some level of <i>effect</i>. In toxicology we often call this the <b>point of departure</b>. In pharmacology this measurement is commonly the <b>minimum effective dose/concentration</b>. 
 
 - Use of gene expression profiling for chemicals and drugs are predominantly focused on safety rather than efficacy since we usually measure the efficacy through more targeted means (we know the expected therapeutic effect). 
+- Every gene has its own dose-response curve and therefore its own <b>benchmark dose (BMD)</b>. The most sensitive single gene is the noisiest summary. A more stable estimate is the <b>median BMD of the genes in a significantly enriched pathway</b>, which can also be tied to a mechanism.
 
 ## EFFICACY VERSUS SAFETY: THE WINDOW
 
@@ -370,13 +408,7 @@ Twenty genes are ranked from most induced to most repressed, and each carries a 
 PLACEHOLDER — figure: efficacy-pathway and toxicity-pathway curves with the window between them
 :::
 
-## ACTIVITY: Evaluating Efficacy and Safety (LO 4)
-
-
-<!-- PLACEHOLDER ACTIVITY: this embeds the original generic Dose-Response
-     Laboratory as a stand-in. The real LO 4 activity should use a pathway-level
-     dose-response dataset (efficacy pathway vs. toxicity pathway) and ask
-     students to find the dose window. Swap the iframe src when it exists. -->
+## ACTIVITY: From Gene Curves to a Dose (LO 4)
 
 ::: activity-embed-controls
 <button onclick="EmbedBridge.reloadIframe(this)">
@@ -387,13 +419,13 @@ PLACEHOLDER — figure: efficacy-pathway and toxicity-pathway curves with the wi
 :::
 
 ::: activity-embed
-<iframe class="activity-iframe" loading="lazy" title="Dose-Response Laboratory activity (stand-in for the LO 4 activity)" src="../activities/dose-response/index.html?seed=5150">
+<iframe class="activity-iframe" loading="lazy" title="From Gene Curves to a Dose activity" src="../activities/pathway-point-of-departure/index.html?seed=5150">
 
 </iframe>
 :::
 
 ::: notes
-PLACEHOLDER ACTIVITY. This is the generic Dose-Response Laboratory standing in until the real LO 4 activity is built. Switch to "Cytotoxicity-driven" and ask why the rising curve there is misleading. The finished version should have students read an efficacy-pathway curve and a toxicity-pathway curve from the same drug and decide whether a safe dose window exists.
+Three steps, one per slide-worth of ideas. Step 1: 80 genes, each with its own dose-response curve and its own benchmark dose (BMD), the dose where its curve crosses the response threshold; click the pathway chips to isolate each group. Step 2: the BMDs grouped by pathway, with a dose slider. At each dose the genes that have responded are tested for enrichment (same Fisher's exact test as the previous activity). Point out that the oxidative stress pathway is enriched first (it is small but every gene responds at low dose), that lipid biosynthesis only becomes enriched at higher doses, that a pathway can lose enrichment once many other genes respond, and that Cell cycle never becomes enriched even though it is a real pathway, because its few responders are scattered. Step 3: students choose the point of departure for the adverse effect (hepatic steatosis). The best answer is the median BMD of the lipid biosynthesis genes: the pathway is enriched, it is linked to the adverse outcome by mechanism, and the median does not depend on any one gene. The most sensitive gene is a single noisy estimate (often an unannotated gene), and the oxidative stress median is real but reflects an adaptive response, not harm. The reveal also shows the efficacy-to-adverse window and what the most-sensitive-gene shortcut would have concluded. Each seed changes the doses and the width of the window.
 :::
 
 ## PUTTING IT TOGETHER
@@ -403,7 +435,7 @@ PLACEHOLDER ACTIVITY. This is the generic Dose-Response Laboratory standing in u
 - **LO 1** — Systems, pharmacology, and toxicology approaches answer different questions about the same drug.
 - **LO 2** — A signature is a pattern across many genes, and similar patterns suggest similar biology. However, the biological context matters and the same drug can produce very distinct signatures in different contexts. 
 - **LO 3** — Genes driving a shared signature can be mapped to pathways to propose a mode of action or mechanism. 
-- **LO 4** — Dose-response modeling of those pathways lets you weigh efficacy against safety.
+- **LO 4** — Collapse gene-level dose-response curves into the median benchmark dose of an enriched, mechanism-linked pathway to weigh efficacy against safety.
 
 Next lecture: what changes when we measure **single cells** and **tissue space** instead of a whole-tissue average.
 

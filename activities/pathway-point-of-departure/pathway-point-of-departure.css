@@ -1,0 +1,63 @@
+.pp-svg { width: 100%; max-height: 300px; height: auto; display: block; }
+.pp-svg--rows { max-height: 290px; }
+.pp-ladder { max-height: 140px; margin-top: var(--space-3); }
+
+.pp-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-2) 0; }
+.pp-chip {
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  padding: 3px 12px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-text);
+}
+.pp-chip__n { font-weight: 400; color: var(--color-text-muted); }
+.pp-chip:hover, .pp-chip:focus-visible { border-color: var(--color-primary); }
+.pp-chip[aria-pressed="true"] { background: var(--color-bg-alt); border-color: var(--color-primary); box-shadow: inset 0 0 0 1px var(--color-primary); }
+
+.pp-toggle { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; }
+.pp-toggle input { width: 18px; height: 18px; accent-color: var(--color-primary); }
+
+.pp-readout, .pp-takeaway {
+  margin: var(--space-2) 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+}
+.pp-takeaway { margin-top: var(--space-3); }
+
+.pp-roles { list-style: none; margin: 0 0 var(--space-3); padding: 0; font-size: var(--font-size-sm); columns: 2; column-gap: var(--space-5); }
+.pp-roles li { padding: 1px 0; break-inside: avoid; }
+@media (max-width: 700px) { .pp-roles { columns: 1; } }
+
+.pp-table { width: 100%; margin-top: var(--space-3); }
+.pp-table th:first-child, .pp-table td:last-child { text-align: left; }
+.pp-best th, .pp-best td { background: var(--color-success-bg); font-weight: 700; color: var(--color-success); }
+
+
+/* Text and controls on the left, plot or results on the right. */
+.pp-split {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  column-gap: var(--space-4);
+  align-items: start;
+}
+.pp-split > .pp-left, .pp-split > .pp-right { min-width: 0; }
+@media (max-width: 860px) { .pp-split { display: block; } }
+.pp-roles { columns: 1; }
+.pp-right .pp-takeaway:first-child { margin-top: 0; }
+.pp-right .pp-table { margin-top: 0; }
+
+/* Inside a lecture slide the frame is only ~520px tall, so keep the plots compact. */
+body.is-embedded .pp-svg { max-height: 330px; }
+body.is-embedded .pp-ladder { max-height: 100px; margin-top: var(--space-2); }
+body.is-embedded .pp-split .aw-note { margin: var(--space-1) 0; }
+body.is-embedded .pp-takeaway { margin-top: var(--space-2); padding: 6px var(--space-3); }
+
+.pp-rolescard { padding: var(--space-3) var(--space-4); background: var(--color-bg-alt); border-radius: var(--radius); }
+.pp-rolescard h4 { margin: 0 0 var(--space-2); }
+.pp-rolescard .pp-roles { margin: 0; }
+.pp-right .pp-chips { margin-top: 0; }

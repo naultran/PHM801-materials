@@ -253,7 +253,7 @@ PLACEHOLDER — figure: compounds ranked by signature similarity in each cell ty
 :::
 
 ::: notes
-This repeats the inverse-signature idea from lecture 1, now with single-cell data. In an inflammatory liver disease, immune cells and hepatocytes change very differently. Two candidate drugs are shown: one is the mirror image of the hepatocyte signature, the other of the immune-cell signature. Because the disease is inflammatory, the drug that inversely matches the immune response is the right one to test. The reveal also builds the bulk signature (hepatocytes are ~85% of cells and dominate the average) and shows that a bulk screen would pick the other drug. Which letter is correct changes with the seed.
+This repeats the inverse-signature idea from lecture 1, now with single-cell data. In an inflammatory liver disease, immune cells and hepatocytes change very differently. Two candidate drugs are shown: one is the mirror image of the hepatocyte signature, the other of the immune-cell signature. The question states that the immune cells drive the disease, so the task is to find the drug that is the mirror image of the immune-cell column. After the check, the feedback depends on the answer. If students pick the hepatocyte drug, say that it is a sensible choice if you only had bulk data: the bulk column (hepatocytes ~85% of cells) looks like the hepatocyte signature, so a bulk screen ranks that drug first, but the disease is driven by the immune cells. If they pick the immune drug, they get the same bulk caveat as the take-away. Which letter is correct changes with the seed.
 :::
 
 <!-- ======================================================================

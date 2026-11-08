@@ -104,11 +104,11 @@ Rank 20 genes, predict which pathway is enriched, then compare over-representati
 ::: home-activity
 <p class="home-lo">LO 4</p>
 
-#### Dose-Response Laboratory {.home-activity-title}
+#### From Gene Curves to a Dose {.home-activity-title}
 
-Explore dose-response curves, including non-monotonic shapes and the false signal that cytotoxicity can create.
+Collapse 80 gene dose-response curves into a pathway-level point of departure, then weigh efficacy against safety.
 
-[Open activity →](activities/dose-response/index.html)
+[Open activity →](activities/pathway-point-of-departure/index.html)
 :::
 
 :::

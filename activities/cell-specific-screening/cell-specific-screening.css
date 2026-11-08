@@ -20,3 +20,4 @@
   border-radius: var(--radius);
   font-size: var(--font-size-sm);
 }
+.css-col-driver { fill: var(--color-success); font-weight: 700; }

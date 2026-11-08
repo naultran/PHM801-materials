@@ -273,6 +273,12 @@
   max-height: 560px;
 }
 
+/* Use with .tall-figure for a wide figure that must stay a little shorter
+   (e.g. the dose-response heatmap, whose credit sits under the text column). */
+.reveal .slides .column.tall-figure.figure-short img {
+  max-height: 520px;
+}
+
 /* A short statement centered both ways in the body of the slide (the heading
    stays at the top). Used for the "Declaring the use of AI" slide. */
 .reveal .slides .statement {
