@@ -17,8 +17,8 @@ function buildActivityHeader({ title, instructions, galleryHref }) {
 
   const homeLink = document.createElement("a");
   homeLink.className = "activity-header__home touch-target";
-  homeLink.href = galleryHref || "../index.html";
-  homeLink.textContent = "← Activity Gallery";
+  homeLink.href = galleryHref || "../../index.html#activities";
+  homeLink.textContent = "← Course home";
 
   topRow.appendChild(homeLink);
 
@@ -33,6 +33,18 @@ function buildActivityHeader({ title, instructions, galleryHref }) {
     instr.className = "activity-instructions";
     instr.textContent = instructions;
     header.appendChild(instr);
+
+    // Shown instead of the full header when the activity is embedded in a
+    // lecture slide, where vertical space is tight (see activity-shell.css).
+    const details = document.createElement("details");
+    details.className = "activity-instructions-details";
+    const summary = document.createElement("summary");
+    summary.textContent = "Instructions";
+    const body = document.createElement("p");
+    body.textContent = instructions;
+    details.appendChild(summary);
+    details.appendChild(body);
+    header.appendChild(details);
   }
 
   return { header };
@@ -137,6 +149,9 @@ async function initActivityShell(opts) {
     return;
   }
   root.innerHTML = "";
+
+  // Inside a lecture slide the iframe is short, so the page chrome is compacted.
+  if (window.EmbedBridge && EmbedBridge.isEmbedded()) document.body.classList.add("is-embedded");
 
   const controller = ModeManager.createSeedController({ defaultSeed });
   const { header } = buildActivityHeader({ title, instructions, galleryHref: opts.galleryHref });

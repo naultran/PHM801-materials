@@ -209,6 +209,34 @@
   outline: 3px solid #18453b;
   outline-offset: 2px;
 }
+/* Text-only card face, for a hub whose artwork hasn't been made yet (use
+   instead of the <img>; swap in an <img> later and delete the label). */
+.practice-card-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: 700;
+  color: #18453b;
+}
+
+/* Dashed "something goes here" box for slides that are drafted but still
+   need a figure, diagram, or real content. Search the .qmd for PLACEHOLDER
+   to find them all. */
+.placeholder-box {
+  border: 2px dashed #9ca3af;
+  border-radius: 12px;
+  background: #f4f6f8;
+  color: #4b5563;
+  font-size: 0.6em;
+  padding: 18px 24px;
+  margin-top: 0.8em;
+  text-align: center;
+}
 
 /* Quarto wraps a standalone image as <figure><p><img></p><figcaption></figure>.
    Reveal's own theme caps figure images at 95% width and centers them, but
@@ -243,6 +271,92 @@
   width: auto;
   max-width: 100%;
   max-height: 560px;
+}
+
+/* A short statement centered both ways in the body of the slide (the heading
+   stays at the top). Used for the "Declaring the use of AI" slide. */
+.reveal .slides .statement {
+  max-width: 940px;
+  margin: 165px auto 0;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+/* Reveal stretches a lone figure to fill the slide; an empty block after it
+   (which Reveal does count) keeps the stretched figure clear of the
+   absolutely-positioned .source-credit. Add `::: credit-spacer` + `:::` after
+   a stretched figure that also has a credit. */
+.reveal .slides .credit-spacer {
+  height: 64px;
+}
+
+/* Center-align a single paragraph or block. */
+.reveal .slides .text-center {
+  text-align: center;
+}
+
+/* One consistent way to credit a figure: a small line at the bottom-left of
+   the slide, linking to the original source in a new tab. Put it at the end of
+   the slide:
+       ::: source-credit
+       Source: <a href="https://..." target="_blank" rel="noopener">Author (Year)</a>
+       :::
+   It is positioned from the slide's bottom edge, but raised ~110px so it stays
+   inside the visible 16:9 frame and clear of the Home / Read-aloud toolbar that
+   floats at the screen's bottom-left corner. */
+.reveal .slides .source-credit {
+  position: absolute;
+  left: 28px;
+  bottom: 112px;
+  max-width: 60%;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.3;
+  color: #4b5563;
+  text-align: left;
+  z-index: 4;
+}
+.reveal .slides .source-credit a {
+  color: #18453b;
+  text-decoration: underline;
+}
+
+/* A light-yellow, black-bordered box that appears on click, centered over the
+   slide at 16:9 and half the slide's size (640 x 360). Use as a fragment:
+       ::: {.fragment .definition-popup}
+       ...
+       :::                                                                   */
+.reveal .slides .definition-popup {
+  position: absolute;
+  left: 50%;
+  top: 390px;
+  transform: translate(-50%, -50%);
+  width: 640px;
+  height: 360px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 22px 32px;
+  background: #fff8c5;
+  border: 3px solid #000000;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  color: #111111;
+  font-size: 0.78em;
+  line-height: 1.35;
+  text-align: left;
+  z-index: 30;
+}
+.reveal .slides .definition-popup h3 {
+  margin: 0;
+  font-size: 1.1em;
+  color: #111111;
+  text-transform: none;
+}
+.reveal .slides .definition-popup p {
+  margin: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

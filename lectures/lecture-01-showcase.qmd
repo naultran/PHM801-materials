@@ -17,9 +17,11 @@ format:
     include-after-body: ../_includes/reveal-embed-bridge.qmd
 ---
 
-## DECLARING USE OF AI
+## DECLARING THE USE OF AI
 
-<br>*All material and contents were developed and created by Rance Nault. Generative AI was used to convert traditional lecture slides into interactive lessons with the goal of enhancing the learning experience.*
+::: statement
+*All material and contents were developed and created by Rance Nault. Generative AI was used to convert traditional lecture slides into interactive lessons with the goal of enhancing the learning experience.*
+:::
 
 ## LEARNING OBJECTIVES
 
@@ -55,36 +57,36 @@ format:
 
 ## WHY THE NETWORK MATTERS
 
-<br>Simplification of mechanisms and target evaluations play a key role in drug development and safety testing, but biology is complex - drugs and responses are dependent on the biological context.
+<br>Simplification of mechanisms and target evaluations play a key role in drug development and safety testing, but biology is complex - <b>drugs and responses are dependent on the biological context.</b>
 
 - Are pathways independent from each other or will they cross-talk?
 
-- Do genetics cause differences in how the individual *parts* interact?
+- Does cellular context drive differences in how the individual *parts* interact?
 
-## WHY THE NETWORK MATTERS - TAMOXIFEN
+## WHY THE NETWORK MATTERS - TAMOXIFEN {.smaller}
 
-<br>Tamoxifen is an ERα antagonist in breast tissue, but acts as a partial agonist in bone and endometrium which accounts for some potential off-target effects when used to treat breast cancer. The cellular context (co-factors, transcriptional targets, etc...), or the <b>system</b>, is key to understanding safety.
+<br>Tamoxifen is an <u>ERα antagonist in breast tissue</u>, but acts as a <u>partial agonist in bone and endometrium</u>. Because it acts through the same receptor everywhere, these are tissue-specific effects, not off-target ones, and they account for both some benefits and some risks when it is used to treat breast cancer. The cellular context (co-factors, transcriptional targets, etc...), or the <b>system</b>, is key to understanding safety.
 
 ![](/assets/figures/Tam-1.png){data-id="tam-image" fig-alt="Flow diagram of tamoxifen's tissue-specific actions, all through ER-alpha. It acts as an estradiol (E2) antagonist in the breast (breast cancer decreases) and premenopausal hypothalamus, but as an E2 agonist in the postmenopausal hypothalamus, liver (HDL up, LDL down, clotting factors up, thrombophilia), bone (bone turnover), and postmenopausal endometrium (polyp, hyperplasia, endometrial cancer, uterine sarcoma)." fig-align="center" width="50%"}
 
 ## HOW TO *"DO"* SYSTEMS PHARMACOLOGY
 
-<br> Systems pharmacology is technology-driven. One of the major reasons it hasn't always been used as part of pharmacological research is that we didn't have the tools.
+<br> Systems pharmacology is technology-driven. One of the major reasons it hasn't always been used as part of pharmacological research is that we didn't have the tools yet.
 
-- How do we *measure* the changes in the network?
+- How do we measure the changes in the network?
 
-- How do we evaluate changes in the network? 
+- How do we predict and model changes in the network? 
 
 
 ## HOW TO *"DO"* SYSTEMS PHARMACOLOGY
 
 <br> Systems pharmacology is technology-driven. One of the major reasons it hasn't always been used as part of pharmacological research is that we didn't have the tools.
 
-- How do we *measure* the changes in the network? <b>"Omics"</b>
+- How do we measure the changes in the network? <b>"Omics"</b>
 
-- How do we evaluate changes in the network? <b>Computational & statistical modeling, machine learning, *artificial intelligence?*</b>
+- How do we predict and model changes in the network? <b>Computational & statistical modeling, machine learning, *artificial intelligence?*</b>
 
-  Working with these types of big data required novel strategies and perspectives
+  Working with these types of big data required novel strategies and perspectives.
 
 ## ACTIVITY: Systems Biology, Pharmacology, and Toxicology
 
@@ -113,7 +115,7 @@ Have students turn on "systems approach" alone first — network grows, but both
 
 ## TRANSCRIPTOMICS
 
-<br>The emergence of **transcriptomics** was one of the primary drivers of systems approaches. <br>Today, "omics" - "Areas of biological study defined by the investigation of the [entire complement\*]{.underline} of a [specific type of biomolecule]{.underline}" has expanded well beyond the transcriptome.
+<br>The emergence of **transcriptomics** can be considered one of the primary drivers of systems approaches. <br>Today, "omics" - "Areas of biological study defined by the investigation of the [entire complement\*]{.underline} of a [specific type of biomolecule]{.underline}" has expanded well beyond the transcriptome.
 
 ::::: columns
 ::: {.column width="66%"}
@@ -131,7 +133,7 @@ Have students turn on "systems approach" alone first — network grows, but both
 :::
 
 ::: {.column width="34%"}
-![Image from: https://rd-connect.eu/what-we-do/omics/](../assets/figures/Omics-figure-text-blob.png){fig-alt="A text blob that shows dozens of different omics including lipidomics, pharmacogenomics, phenomics, regulomics, and more." fig-align="center"}
+![](../assets/figures/Omics-figure-text-blob.png){fig-alt="A text blob that shows dozens of different omics including lipidomics, pharmacogenomics, phenomics, regulomics, and more." fig-align="center"}
 :::
 :::::
 
@@ -139,52 +141,81 @@ Have students turn on "systems approach" alone first — network grows, but both
 *\*Note: it is almost never truly an entire complement. All technologies have biases.*
 :::
 
+::: source-credit
+Source: <a href="https://rd-connect.eu/what-we-do/omics/" target="_blank" rel="noopener">RD-Connect</a>
+:::
 
-## A BRIEF HISTORY
+
+## A BRIEF HISTORY OF 'OMICS'
 
 <br>
 
-![Image from: <a href="https://doi.org/10.1007/978-3-030-77252-9_1" target="_blank" rel="noopener">da Silva Zandonadi, F. et al. (2021)</a>](../assets/figures/history-of-omics.png){fig-alt="A timeline figure showing the history of omics technologies."}
+![](../assets/figures/history-of-omics.png){fig-alt="A timeline figure showing the history of omics technologies."}
 
-## SYSTEMS PHARMACOLOGY IN PRACTICE (LO 1) {.smaller}
+::: credit-spacer
+:::
+
+::: source-credit
+Source: <a href="https://doi.org/10.1007/978-3-030-77252-9_1" target="_blank" rel="noopener">da Silva Zandonadi et al. (2021) Adv Exp Med Biol</a>
+:::
+
+## SYSTEMS PHARMACOLOGY IN PRACTICE
+
+<!-- Each card jumps to a slide by its id (the {#...} after a heading below).
+     Signatures and Mechanisms share the same destination on purpose: they are
+     taught together and share the LO 2 + LO 3 activities. To send Mechanisms
+     straight to the Mode of Action activity instead, change its target to
+     #/s-moa. Efficacy/safety goes to the dose-response block (LO 4). -->
 
 ::: practice-cards
-<button type="button" class="practice-card" onclick="Reveal.next()" aria-label="Signatures — continue to next slide">
+<button type="button" class="practice-card" onclick="location.hash='#/s-signatures'" aria-label="Signatures — go to gene expression signatures">
 
 <img src="../assets/figures/signatures.png" alt=""/>
 
 </button>
 
-<button type="button" class="practice-card" onclick="Reveal.next()" aria-label="Mechanisms — continue to next slide">
+<button type="button" class="practice-card" onclick="location.hash='#/s-signatures'" aria-label="Mechanisms — go to gene expression signatures and mode of action">
 
 <img src="../assets/figures/mechanisms.png" alt=""/>
 
 </button>
 
-<button type="button" class="practice-card" onclick="Reveal.next()" aria-label="Efficacy and safety — continue to next slide">
+<button type="button" class="practice-card" onclick="location.hash='#/s-dose-response'" aria-label="Efficacy and safety — go to dose-response modeling">
 
 <img src="../assets/figures/efficacy.png" alt=""/>
 
 </button>
 :::
 
-## GENE EXPRESSION SIGNATURES
+## GENE EXPRESSION SIGNATURES {#s-signatures}
 
-<br> Gene expression signatures represent the overall pattern of transcript expression, or changes in expression, that represent that state of a *system*.
+<br> Gene expression signatures represent the overall pattern of transcript expression, or changes in expression, that represent the state of a system.
 
-- Diseases will each have distinct patterns of gene expression changes that represent a pathological condition.
+- Diseases will commonly have <u>distinct patterns of gene expression changes</u> that represent a pathological condition.
 
-- Drugs, based on their mode-of-action, will also cause distinct patterns of gene expression changes
+- Drugs, based on their mode-of-action, will also cause <u>distinct patterns of gene expression changes</u>.
 
-  <br>The use of these signatures for understanding biology is largely founded on the *"central dogma"* of biology
+<br>
+
+::: text-center
+The use of these signatures for understanding biology is largely founded on the *"central dogma"* of biology
+:::
 
 ## THE <i>CENTRAL DOGMA</i> OF BIOLOGY
 
-## DIFFERENT DRUGS CAN SHARE SIGNATURES
+<br> The central dogma suggests that RNA is representative of the overall protein levels and downstream phenotypes. 
+
+![](https://personal.cityu.edu.hk/liangdai/post/central-dogma-translation-transcription/featured.jpg){.nostretch fig-alt="Diagram of the central dogma of molecular biology: DNA is transcribed into RNA, and RNA is translated into protein." fig-align="center" width="524px"}
+
+::: source-credit
+Source: <a href="https://personal.cityu.edu.hk/liangdai/post/central-dogma-translation-transcription/" target="_blank" rel="noopener">personal.cityu.edu.hk/liangdai</a>
+:::
+
+## DIFFERENT DRUGS, SIMILAR EXPRESSION SIGNATURES
 
 ::::: columns
 :::: {.column width="33%"}
-Similarity in gene 'omic' signatures tend to reflect that the drugs have a common target. For example, we can see that many estrogenic compounds have shared groups of induced and repressed genes, but they are not always a perfect copy of each other.
+Similarity in gene <i>'omic'</i> signatures tends to reflect that the drugs have a common target. For example, we can see that many estrogenic compounds have shared groups of induced and repressed genes, but they are not always a perfect copy of each other.
 ::::
 
 :::: {.column width="67%"}
@@ -192,21 +223,26 @@ Similarity in gene 'omic' signatures tend to reflect that the drugs have a commo
 ::::
 :::::
 
-## SIGNATURES REVEAL TISSUE SPECIFICITY
+::: source-credit
+Source: <a href="https://doi.org/10.1186/1471-2105-12-381" target="_blank" rel="noopener">Gower, Spira & Lenburg (2011) BMC Bioinformatics</a>
+:::
+
+## SAME DRUG, DIFFERENT SIGNATURES?
 
 ::::: columns
 :::: {.column width="33%"}
-Signatures can also reveal how different the gene regulatory network is between tissues, and how different tissues, cells, or organs may respond as shown in this example.
-
-::: slide-footnote
-<a href="https://doi.org/10.1186/s12864-025-11676-w" target="_blank" rel="noopener">Read publication</a>
-:::
+Conversely, signatures can also reveal how different gene regulatory networks that exist in different organs, tissues, or cells can lead to very different gene expression changes for the same drug.
 ::::
 
 :::: {.column .tall-figure width="67%"}
 ![](../assets/figures/DEX-1.png){fig-alt="Red-and-blue gene expression heatmap comparing effects of dexamethasone across tissues of male C57BL/6 mice." fig-align="center"}
 ::::
 :::::
+
+::: source-credit
+Source: <a href="https://doi.org/10.1186/s12864-025-11676-w" target="_blank" rel="noopener">Piechota et al. (2025) BMC Genomics</a>
+:::
+
 
 ## ACTIVITY: Understanding 'Omic Signatures (LO 2)
 
@@ -228,7 +264,7 @@ Signatures can also reveal how different the gene regulatory network is between 
 Three-step wizard: (1) predict whether the unclustered heatmap shows real signatures, reveal via live hierarchical clustering — 8 pairs come out clean; (2) an unknown drug's signature is added, students predict which pair it belongs with, reveal shows the real Pearson correlation (never a perfect match); (3) a disease signature (inverted) is added, students predict which drug would treat it — reveal shows the most anti-correlated pair, introducing the connectivity-map idea that an inverse signature is itself informative.
 :::
 
-## ACTIVITY: Mode of Action Discovery (LO 3)
+## ACTIVITY: Mode of Action Discovery (LO 3) {#s-moa}
 
 ::: activity-embed-controls
 <button onclick="EmbedBridge.reloadIframe(this)">
@@ -250,13 +286,126 @@ Same 16-chemical reference set as the previous activity, but chemicals are shown
 
 <!-- ======================================================================
      SECTION 3 — MAPPING GENES TO MECHANISMS + DOSE-RESPONSE MODELING
-                 (activity: LO 4 — functional annotation + dose-response)
+                 (activity: LO 4 — evaluate efficacy and safety)
 
-     Not written yet. The outline of what's still needed is at the top of
-     lectures/_parking-lot.qmd, along with the original demo slides
-     (Pathway & Mechanism Construction, Dose-Response Laboratory, etc.)
-     that you can copy back in as a starting point.
+     DRAFT PLACEHOLDERS. Every slide below is a first-pass outline: the text
+     is a starting point and each dashed box marks a figure still to be made.
+     Search this file for PLACEHOLDER to find them all.
+
+     The "Efficacy and safety" card on the hub slide jumps straight to the
+     dose-response half (#s-dose-response). The original demo slides and
+     activities you may want to borrow from are in lectures/_parking-lot.qmd.
      ====================================================================== -->
+
+## MAPPING GENES TO MECHANISMS {#s-annotation}
+
+<br>A signature is a list of genes. A *mechanism* or *mode of action* is a story about what those genes do together. **Functional annotation** connects the two by asking which biological functions or pathways are over-represented among the genes that changed.
+
+- Gene sets come from curated resources (e.g., Gene Ontology, Reactome, KEGG, MSigDB Hallmark)
+- A pathway "hit" is a hypothesis about mechanism, not proof of it
+
+<!-- PLACEHOLDER: figure — gene list → gene-set database → enriched pathway -->
+::: placeholder-box
+PLACEHOLDER — figure: a gene list is compared with a gene-set database to produce an enriched pathway
+:::
+
+::: {.fragment .definition-popup}
+### Mechanism vs. mode of action
+
+**Mechanism:** <b>How</b> the drug is acting at the biochemical level, such as binding, gene expression changes, etc...
+
+**Mode of action:** <b>What</b> the drug is doing at the broader level in the system or cells (e.g., anti-inflammatory).
+:::
+
+## OVER-REPRESENTATION OR RANKED?
+
+<br>Two common ways to test whether a pathway is enriched:
+
+- **Over-representation** (what you used in the Mode of Action activity): take the genes that passed a cutoff and ask whether a pathway has more of them than chance would give.
+- **Ranked methods (e.g., GSEA)**: use every measured gene, ordered by how much it changed, with no cutoff.
+- The **background** must be the genes you actually measured, and testing thousands of gene sets needs **multiple-testing correction**
+
+## ACTIVITY: Over-Representation or Ranked?
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Over-Representation or Ranked? activity" src="../activities/enrichment-methods/index.html?seed=3030">
+
+</iframe>
+:::
+
+::: notes
+Twenty genes are ranked from most induced to most repressed, and each carries a pathway tag (Path 1, 2 or 3). Students look at the ranking alone and lock in which pathway they think is enriched. The reveal then runs both methods on the same data. Over-representation uses only the boxed genes (top 4 and bottom 4) in a Fisher's exact test against the 20-gene background. The ranked method walks down the whole list: each pathway gene steps a running total up, each other gene steps it down, so an enriched pathway makes a "hockey stick" at one end. The permutation p-value compares that score with random gene sets of the same size. Every seed has exactly one truly enriched pathway; a new seed reshuffles which one it is and where its genes fall.
+:::
+
+## TRANSCRIPTOMIC APPROACH TO SAFETY AND EFFICACY {#s-dose-response}
+
+<br>A signature tells you *what* changed at one dose. Efficacy and safety are questions of *how much drug* it takes.
+
+![](/assets/figures/acetamide-dr.png){data-id="acetamide-image" fig-alt="A heatmap of dose-response gene expression profiling of acetamide." fig-align="center" width="50%"}
+
+## IDENTIFYING A POINT OF DEPARTURE FROM GENE EXPRESSION
+
+<br>In safety and efficacy testing we typically rely on a measurement describing some level of <i>effect</i>. In toxicology we often call this the <b>point of departure</b>. In pharmacology this measurement is commonly the <b>minimum effective dose/concentration</b>. 
+
+- Use of gene expression profiling for chemicals and drugs are predominantly focused on safety rather than efficacy since we usually measure the efficacy through more targeted means (we know the expected therapeutic effect). 
+
+## EFFICACY VERSUS SAFETY: THE WINDOW
+
+<br>Compare *where* two sets of pathways start to respond.
+
+- Pathways tied to the **intended effect** (efficacy) on one curve
+- Pathways tied to **adverse outcomes** (safety) on another
+- The gap between them is the margin you have to work with; if they overlap, the drug has no window
+
+<!-- PLACEHOLDER: figure — two pathway curves, efficacy left of toxicity, gap labelled -->
+::: placeholder-box
+PLACEHOLDER — figure: efficacy-pathway and toxicity-pathway curves with the window between them
+:::
+
+## ACTIVITY: Evaluating Efficacy and Safety (LO 4)
+
+
+<!-- PLACEHOLDER ACTIVITY: this embeds the original generic Dose-Response
+     Laboratory as a stand-in. The real LO 4 activity should use a pathway-level
+     dose-response dataset (efficacy pathway vs. toxicity pathway) and ask
+     students to find the dose window. Swap the iframe src when it exists. -->
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Dose-Response Laboratory activity (stand-in for the LO 4 activity)" src="../activities/dose-response/index.html?seed=5150">
+
+</iframe>
+:::
+
+::: notes
+PLACEHOLDER ACTIVITY. This is the generic Dose-Response Laboratory standing in until the real LO 4 activity is built. Switch to "Cytotoxicity-driven" and ask why the rising curve there is misleading. The finished version should have students read an efficacy-pathway curve and a toxicity-pathway curve from the same drug and decide whether a safe dose window exists.
+:::
+
+## PUTTING IT TOGETHER
+
+<br>Four objectives, four activities:
+
+- **LO 1** — Systems, pharmacology, and toxicology approaches answer different questions about the same drug.
+- **LO 2** — A signature is a pattern across many genes, and similar patterns suggest similar biology. However, the biological context matters and the same drug can produce very distinct signatures in different contexts. 
+- **LO 3** — Genes driving a shared signature can be mapped to pathways to propose a mode of action or mechanism. 
+- **LO 4** — Dose-response modeling of those pathways lets you weigh efficacy against safety.
+
+Next lecture: what changes when we measure **single cells** and **tissue space** instead of a whole-tissue average.
 
 ## About this material
 

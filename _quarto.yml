@@ -24,28 +24,29 @@ project:
     - "!TECHNICAL-LIMITS.md"
 
 website:
-  title: "Sequencing in Pharmacology & Toxicology"
-  description: "An interactive, browser-based lecture course template for teaching sequencing concepts in pharmacology and toxicology."
+  title: "PHM801 Systems Pharmacology"
+  description: "Interactive lectures and activities on systems pharmacology: transcriptomic, single-cell, and spatial approaches to understanding drug action and safety."
   site-url: "https://naultran.github.io/interactive-lecture-test/"
+  favicon: assets/favicon.svg
   navbar:
+    background: "#18453b"
+    foreground: "#ffffff"
     left:
       - href: index.qmd
         text: Home
       - href: lectures/lecture-01-showcase.qmd
-        text: Demonstration Lecture
-      - href: activities/index.html
-        text: Activity Gallery
-    right:
-      - icon: github
-        href: https://github.com/naultran/interactive-lecture-test
-        aria-label: GitHub repository
+        text: "Lecture 1: Transcriptomics"
+      - href: lectures/lecture-02-single-cell-spatial.qmd
+        text: "Lecture 2: Single-Cell & Spatial"
+      - href: index.qmd#activities
+        text: Activities
   page-footer:
-    center: "Course template for teaching pharmacology and toxicology through sequencing data."
+    center: "PHM801 · Michigan State University"
 
 format:
   html:
     theme: cosmo
-    css: [css/variables.css, css/base.css]
+    css: [css/variables.css, css/base.css, css/home.css]
     toc: false
     grid:
       body-width: 900px

@@ -1,0 +1,22 @@
+.css-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 390px) 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .css-layout { grid-template-columns: 1fr; }
+}
+.css-heatmap { width: 100%; max-width: 360px; height: auto; display: block; }
+.css-col-label { font-size: 11px; font-weight: 700; fill: var(--color-text); }
+.css-col-sub { font-size: 9px; fill: var(--color-text-muted); }
+.css-corr { width: 100%; margin-top: var(--space-3); }
+.css-corr th:first-child { text-align: left; }
+.css-best { background: var(--color-success-bg); font-weight: 700; color: var(--color-success); }
+.css-takeaway {
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+}

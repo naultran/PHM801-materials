@@ -1,0 +1,324 @@
+---
+title: "Systems Pharmacology II Single-Cell and Spatial"
+subtitle: "PHM801 - Fundamental Principles of Pharmacology and Toxicology"
+author: "Rance Nault"
+format:
+  revealjs:
+    theme: simple
+    css: ../css/reveal-overrides.css
+    slide-number: true
+    progress: true
+    controls: true
+    hash: true
+    center: false
+    transition: none
+    width: 1280
+    height: 720
+    include-after-body: ../_includes/reveal-embed-bridge.qmd
+---
+
+<!--
+  LECTURE 2 — DRAFT
+
+  Same shape as lecture 1: one section per learning objective, and each section
+  ends in one activity:
+
+      LO 1  Bulk or Mixed? Composition vs. State   (activities/composition-vs-state)
+      LO 2  Seeing Space in a Tissue Measurement   (activities/spatial-composition)
+      LO 3  Screening by Cell-Specific Signature   (activities/cell-specific-screening)
+      LO 4  Cell-Specific vs. Tissue-Level Dose-Response
+                                                   (activities/cell-specific-dose-response)
+
+  Search this file for PLACEHOLDER to find every figure box that still needs a
+  real image. Slide text is a first-pass outline, not final wording.
+
+  Timing estimate (~1 min per slide, 10 min for the first activity, 5 for each
+  other): 20 non-activity slides + 25 min of activities = about 45 min, which
+  leaves roughly 5 min of slack inside the 50-minute slot.
+-->
+
+## DECLARING THE USE OF AI
+
+::: statement
+*All material and contents were developed and created by Rance Nault. Generative AI was used to convert traditional lecture slides into interactive lessons with the goal of enhancing the learning experience.*
+:::
+
+## LEARNING OBJECTIVES
+
+<br>By the end of this lecture you should be able to:
+
+- Explain how cellular heterogeneity impacts measurements of drug responses.
+- Explain how tissue spatial organization impacts measurements of drug responses.
+- Use cell-specific molecular signatures to evaluate and screen pharmacological responses.
+- Compare cell-specific dose-response relationships to tissue-level measurements for evaluating drug efficacy and safety.
+
+<!-- ======================================================================
+     INTRO — RECAP + HUB
+     ====================================================================== -->
+
+## LOSING HETEROGENEITY IN THE AVERAGES
+
+<br>In the last lecture we examined signatures measured from a **whole piece of tissue** or measured in <i>bulk</i>. That number is an average over every cell and every location in the sample.
+
+- Different cell types respond to the same drug in different ways.
+- Cells sit in organized neighborhoods, and location changes their exposure and behavior.
+- An average can hide a strong response in a small group of cells.
+
+<!-- PLACEHOLDER: figure — a tissue with several cell types blended into one bulk readout -->
+::: placeholder-box
+PLACEHOLDER — figure: one tissue, many cell types, one averaged readout
+:::
+
+## ZOOMING IN: FOUR QUESTIONS
+
+<!-- PLACEHOLDER: card artwork. Each card is text-only for now; to match
+     lecture 1, make a picture for each and replace the label span with
+     <img src="../assets/figures/NAME.png" alt=""/>. Each card jumps to a slide
+     by id (the {#...} on a heading further down). -->
+
+::: practice-cards
+<button type="button" class="practice-card" onclick="location.hash='#/l2-heterogeneity'" aria-label="Cells — go to cellular heterogeneity">
+
+<span class="practice-card-label">Who is in the sample? (Cellular heterogeneity)</span>
+
+</button>
+
+<button type="button" class="practice-card" onclick="location.hash='#/l2-spatial'" aria-label="Space — go to spatial organization">
+
+<span class="practice-card-label">Where are they? (Spatial organization)</span>
+
+</button>
+
+<button type="button" class="practice-card" onclick="location.hash='#/l2-signatures'" aria-label="Signatures — go to cell-specific signatures">
+
+<span class="practice-card-label">What is each cell type doing? (Cell-specific signatures)</span>
+
+</button>
+
+<button type="button" class="practice-card" onclick="location.hash='#/l2-dose-response'" aria-label="Dose-response — go to cell-specific dose-response">
+
+<span class="practice-card-label">At what dose? (Cell-specific dose-response)</span>
+
+</button>
+:::
+
+<!-- ======================================================================
+     SECTION 1 — CELLULAR HETEROGENEITY            (activity: LO 1)
+     ====================================================================== -->
+
+## TISSUES ARE MIXTURES OF CELL TYPES {#l2-heterogeneity}
+
+<br>A bulk RNA-seq measurement is a **weighted average** of every cell in the sample, weighted by how many cells of each type there are and how much RNA each makes.
+
+- A liver sample contains hepatocytes, but also immune, endothelial, and stellate cells.
+- A change in the average does not tell you which cell type changed.
+
+<!-- PLACEHOLDER: figure — pie of cell types beside the bulk expression bar it produces -->
+::: placeholder-box
+PLACEHOLDER — figure: cell-type proportions feeding one bulk expression value
+:::
+
+## SAME BULK CHANGE, DIFFERENT STORIES
+
+<br>Two very different things can produce the same change in a bulk signature:
+
+- **Composition**: the drug changed *how many* cells of a type are present (for example, immune cells moved into the tissue)
+- **State**: the drug changed *what each cell does*, with the same number of cells
+
+<!-- PLACEHOLDER: figure — two tissues with the same bulk readout but different cell-level causes -->
+::: placeholder-box
+PLACEHOLDER — figure: same bulk readout, composition change versus state change
+:::
+
+## MEASURING CELLS ONE AT A TIME
+
+<br>Emerging technologies such as single-cell and single-nucleus RNA-seq measure expression separately in thousands of individual cells.
+
+<!-- PLACEHOLDER: figure — dissociation → single-cell sequencing → clusters (UMAP) -->
+::: placeholder-box
+PLACEHOLDER — figure: tissue → dissociated cells → clusters of cell types
+:::
+
+## ACTIVITY: Bulk or Mixed? (LO 1)
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Bulk or Mixed? Composition versus state activity" src="../activities/composition-vs-state/index.html?seed=2027">
+
+</iframe>
+:::
+
+::: notes
+A toy liver of 10 cells by 10 genes; bulk is the average of the cells. Step 1 (no lock-in): slide the number of immune cells and watch the bulk row. Immune genes rise and hepatocyte genes dilute. Step 2: keep 2 immune cells in 10 and turn up the immune genes inside each immune cell; only the immune genes move. Step 3: Story A (more immune cells) and Story B (same cells, matching increase in immune gene expression) give the same bulk signal for the immune genes, so bulk alone cannot tell composition from state. The only clue is the small dilution of the hepatocyte genes in Story A, which is lost in real-world variability. This is the first activity, so allow about 10 minutes.
+:::
+
+<!-- ======================================================================
+     SECTION 2 — SPATIAL ORGANIZATION              (activity: LO 2)
+     ====================================================================== -->
+
+## LOCATION CHANGES THE RESPONSE {#l2-spatial}
+
+<br>Cells in a tissue are arranged in organized neighborhoods, and cells of the same type can behave differently depending on where they are.
+
+- In the liver, cells near the central vein and cells near the portal vein express different sets of genes, including drug-metabolizing enzymes
+- Acetaminophen injury concentrates around the central vein, where those enzymes are highest
+
+<!-- PLACEHOLDER: figure — liver lobule showing zonation and the region of injury -->
+::: placeholder-box
+PLACEHOLDER — figure: liver lobule with the zones of enzyme expression and the zone of injury
+:::
+
+## MEASURING EXPRESSION IN SPACE
+
+<br>Spatial transcriptomics keeps track of where each measurement came from.
+
+- **Spot-based** methods capture a small area that can hold several cells, so a spot is a small mixture
+- **Imaging-based** methods read out genes at the level of single cells or molecules, often with a targeted gene panel
+- Resolution, number of genes, and cost trade off against each other
+
+<!-- PLACEHOLDER: figure — spot grid over a tissue versus single-cell resolution overlay -->
+::: placeholder-box
+PLACEHOLDER — figure: spot-based grid compared with single-cell-resolution imaging
+:::
+
+## ACTIVITY: Seeing Space in a Tissue (LO 2)
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Seeing space in a tissue measurement activity" src="../activities/spatial-composition/index.html?seed=2028">
+
+</iframe>
+:::
+
+::: notes
+A 20 by 20 piece of liver, one dot per cell (blue hepatocyte, red immune cell). Raise the percentage of immune cells; in "clustered" mode they form foci, as in inflammation. The same tissue is shown at single-cell resolution, as spot-based spatial data (change the spot size), and as one bulk value. Ask what the bulk number says compared with the busiest spot. Then switch to "scattered": the bulk number does not change, but the foci disappear. Bulk cannot see where the cells are.
+:::
+
+<!-- ======================================================================
+     SECTION 3 — CELL-SPECIFIC SIGNATURES          (activity: LO 3)
+     ====================================================================== -->
+
+## CELL-SPECIFIC SIGNATURES {#l2-signatures}
+
+<br>Once cells are separated, each cell type can be seen to have their <i>own</i> signatures.
+
+
+<!-- PLACEHOLDER: figure — heatmap of response signatures by cell type for one drug -->
+::: placeholder-box
+PLACEHOLDER — figure: Show my TCDD cell-specific responses
+:::
+
+
+## SCREENING WITH CELL-SPECIFIC SIGNATURES
+
+<br>The signature matching from bulk approaches still applies:
+
+- Compare a compound's response in the cell type of interest with known drugs.
+- Look for the effect in the intended cell type and for off-target effects in the others.
+- A tissue-level match can miss a response that only one cell type shows.
+
+<!-- PLACEHOLDER: figure — screen of compounds scored by cell-type-specific signature similarity -->
+::: placeholder-box
+PLACEHOLDER — figure: compounds ranked by signature similarity in each cell type
+:::
+
+## ACTIVITY: Screening by Cell Type (LO 3)
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Screening drugs by cell-specific signature activity" src="../activities/cell-specific-screening/index.html?seed=2029">
+
+</iframe>
+:::
+
+::: notes
+This repeats the inverse-signature idea from lecture 1, now with single-cell data. In an inflammatory liver disease, immune cells and hepatocytes change very differently. Two candidate drugs are shown: one is the mirror image of the hepatocyte signature, the other of the immune-cell signature. Because the disease is inflammatory, the drug that inversely matches the immune response is the right one to test. The reveal also builds the bulk signature (hepatocytes are ~85% of cells and dominate the average) and shows that a bulk screen would pick the other drug. Which letter is correct changes with the seed.
+:::
+
+<!-- ======================================================================
+     SECTION 4 — CELL-SPECIFIC DOSE-RESPONSE       (activity: LO 4)
+     ====================================================================== -->
+
+## TISSUE-LEVEL DOSE-RESPONSE CAN MISLEAD {#l2-dose-response}
+
+<br>If only a fraction of the cells respond, the tissue-level curve shows only a fraction of that response.
+
+- A strong response in a small group of cells looks weak in the average.
+- The apparent threshold shifts to higher doses, or the response drops below detection altogether.
+- A rare, sensitive cell type can be the real target of toxicity.
+
+<!-- PLACEHOLDER: figure — a sharp cell-type curve next to the flatter diluted tissue curve -->
+::: placeholder-box
+PLACEHOLDER — figure: a cell-type dose-response curve beside the diluted bulk curve
+:::
+
+## CELL- AND SPATIAL- DOSE RESPONSE MODELING
+
+<br>This is an actively evolving field and what was discussed is largely theoretical. Single-cell and spatial data poses unique challenges for dose-response modeling.
+
+- The data is very sparse leading to a lot of zeroes presenting some statistical challenges.
+- There is limited data to develop and test these methods. Single-cell methods are now more affordable (~10X bulk approaches) but spatial methods are note highly scalable today (~100 - 1000X bulk approaches). 
+
+<!-- PLACEHOLDER: figure — benchmark dose for each cell type versus the tissue-level value -->
+::: placeholder-box
+PLACEHOLDER — figure: benchmark dose per cell type and for the whole tissue
+:::
+
+
+## ACTIVITY: Cell vs. Tissue Dose-Response (LO 4)
+
+::: activity-embed-controls
+<button onclick="EmbedBridge.reloadIframe(this)">
+
+↻ Reset this activity
+
+</button>
+:::
+
+::: activity-embed
+<iframe class="activity-iframe" loading="lazy" title="Cell-specific versus tissue-level dose-response activity" src="../activities/cell-specific-dose-response/index.html?seed=2030">
+
+</iframe>
+:::
+
+::: notes
+Start with the bulk dose-response curve for Gene X and the dashed line at 10% response: one curve, one dose. Tick "Split into cell types" to reveal the four sigmoidal curves it is built from. The same 10% line now crosses at several doses: one cell type is far more sensitive than the bulk value suggests (a small population hidden by the average), and one barely responds in this dose range. The dose slider shows each curve's response at a chosen dose; at the bulk 10% dose, the most sensitive cell type is already well above 10%. A new seed changes which cell types are sensitive.
+:::
+
+<!-- ======================================================================
+     WRAP-UP
+     ====================================================================== -->
+
+## PUTTING IT TOGETHER
+
+<br>Four objectives, four activities:
+
+- **LO 1** — A tissue measurement averages over cell types, so composition and state changes can look alike.
+- **LO 2** — Location shapes the response, and capture area decides what you can see.
+- **LO 3** — Cell-specific signatures let you screen for the effect you want, in the cells you want.
+- **LO 4** — Cell-specific dose-response can reveal sensitivity that the tissue average hides.
+
+## About this material
+
+{{< include ../_includes/content-notice-lectures.qmd >}}

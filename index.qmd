@@ -1,45 +1,165 @@
 ---
-title: "Sequencing in Pharmacology & Toxicology"
-subtitle: "An interactive, browser-based lecture course"
-page-layout: article
+title: "Systems Pharmacology"
+subtitle: "PHM801 · Fundamental Principles of Pharmacology and Toxicology"
+author:
+  - name: Rance Nault
+    affiliation: Michigan State University
+pagetitle: "Home"
+title-block-banner: "#18453b"
+title-block-banner-color: "#ffffff"
+page-layout: full
+anchor-sections: false
 ---
 
-This course template demonstrates how a modern sequencing-focused pharmacology and
-toxicology lecture can be delivered entirely through an ordinary web browser — no
-software installation, no account, no computational runtime. Open a lecture link,
-follow along on the projected screen, and interact with the same activities on your
-own device when the instructor invites you to.
-
-::: {.callout-note appearance="simple"}
-**This is a demonstration template.** The scientific content, gene names, and datasets
-throughout this site are small and **fictional**, used only to illustrate the
-interactive mechanics. An instructor will replace them with authentic course material.
+::: home-intro
+Two interactive lectures on how ‘omic’ data reveal what a drug does to a biological system, and where that picture can be misleading. Open a lecture to follow along in class, or jump to any activity to practice on your own.
 :::
 
-## Lectures
+## Lectures {#lectures .home-heading}
 
-::: {.lecture-grid}
+::: home-lectures
 
-::: {.lecture-card}
-### [What Can Sequencing Tell Us in Pharmacology and Toxicology?](lectures/lecture-01-showcase.html)
-A complete demonstration lecture (~18 slides) alternating conventional teaching
-slides with hands-on interactive activities: signature matching, dynamic
-clustering, pathway construction, mixture simulation, dose-response modeling,
-experimental design, PCA, and spatial resolution.
+::: {.home-lecture .home-lecture--one}
+<p class="home-kicker">Lecture 1 · 50 minutes</p>
 
-[Open lecture →](lectures/lecture-01-showcase.html){.btn-lecture}
+### Systems Pharmacology I: Transcriptomics {.home-lecture-title}
+
+By the end of this lecture you should be able to:
+
+- Distinguish systems biology, systems pharmacology, and systems toxicology.
+- Interpret ‘omic’ signatures of disease states and drug responses.
+- Use ‘omic’ signatures to identify drug targets and mechanisms of action.
+- Evaluate drug efficacy and safety using systems pharmacology approaches.
+
+[Open Lecture 1 →](lectures/lecture-01-showcase.html){.home-btn}
+:::
+
+::: {.home-lecture .home-lecture--two}
+<p class="home-kicker">Lecture 2 · 50 minutes</p>
+
+### Systems Pharmacology II: Single-Cell and Spatial {.home-lecture-title}
+
+By the end of this lecture you should be able to:
+
+- Explain how cellular heterogeneity impacts measurements of drug responses.
+- Explain how tissue spatial organization impacts measurements of drug responses.
+- Use cell-specific molecular signatures to evaluate and screen pharmacological responses.
+- Compare cell-specific dose-response relationships to tissue-level measurements for evaluating drug efficacy and safety.
+
+[Open Lecture 2 →](lectures/lecture-02-single-cell-spatial.html){.home-btn}
 :::
 
 :::
 
-## Explore activities on their own
+## Activities {#activities .home-heading}
 
-Every interactive activity used in the lectures can also be opened directly, outside
-of any slide deck, from the [**Activity Gallery**](activities/index.html) — useful for
-self-study, review after class, or previewing an activity before building a lecture
-around it.
+::: home-intro
+Each lecture is built around hands-on activities, one for each learning objective. They also run on their own, so you can come back to them for review.
+:::
 
-## About this material
+### Lecture 1 · Transcriptomics {.home-group .home-group--one}
+
+::: home-activities
+
+::: home-activity
+<p class="home-lo">LO 1</p>
+
+#### Systems Biology, Pharmacology, and Toxicology {.home-activity-title}
+
+Switch the systems, pharmacology, and toxicology views on and off to see why one drug acting on one receptor leads to different outcomes in different organs.
+
+[Open activity →](activities/systems-pharm-network/index.html)
+:::
+
+::: home-activity
+<p class="home-lo">LO 2</p>
+
+#### Understanding ‘Omic Signatures {.home-activity-title}
+
+Predict, then reveal with real clustering: spot signatures, place an unknown drug, and match a disease signature to a candidate treatment.
+
+[Open activity →](activities/omic-signatures/index.html)
+:::
+
+::: home-activity
+<p class="home-lo">LO 3</p>
+
+#### Mode of Action Discovery {.home-activity-title}
+
+Pick two chemicals you think share a mode of action, check with clustering, then test the shared genes for pathway enrichment.
+
+[Open activity →](activities/mode-of-action/index.html)
+:::
+
+::: home-activity
+<p class="home-lo">LO 3</p>
+
+#### Over-Representation or Ranked? {.home-activity-title}
+
+Rank 20 genes, predict which pathway is enriched, then compare over-representation testing with a ranked method that uses the whole list.
+
+[Open activity →](activities/enrichment-methods/index.html)
+:::
+
+::: home-activity
+<p class="home-lo">LO 4</p>
+
+#### Dose-Response Laboratory {.home-activity-title}
+
+Explore dose-response curves, including non-monotonic shapes and the false signal that cytotoxicity can create.
+
+[Open activity →](activities/dose-response/index.html)
+:::
+
+:::
+
+### Lecture 2 · Single-Cell and Spatial {.home-group .home-group--two}
+
+::: home-activities
+
+::: {.home-activity .home-activity--two}
+<p class="home-lo">LO 1</p>
+
+#### Bulk or Mixed? Composition vs. State {.home-activity-title}
+
+Change the mix of cells, then what the cells are doing, and see why a bulk measurement cannot always tell the two apart.
+
+[Open activity →](activities/composition-vs-state/index.html)
+:::
+
+::: {.home-activity .home-activity--two}
+<p class="home-lo">LO 2</p>
+
+#### Seeing Space in a Tissue Measurement {.home-activity-title}
+
+Place immune cells in a tissue and compare what single-cell, spot-based, and bulk measurements each reveal.
+
+[Open activity →](activities/spatial-composition/index.html)
+:::
+
+::: {.home-activity .home-activity--two}
+<p class="home-lo">LO 3</p>
+
+#### Screening by Cell-Specific Signature {.home-activity-title}
+
+Choose a drug for an inflammatory disease using cell-specific signatures, then see how a bulk screen would have chosen differently.
+
+[Open activity →](activities/cell-specific-screening/index.html)
+:::
+
+::: {.home-activity .home-activity--two}
+<p class="home-lo">LO 4</p>
+
+#### Cell-Specific vs. Tissue-Level Dose-Response {.home-activity-title}
+
+Split a bulk dose-response curve into its cell types and see how one 10%-response dose becomes many.
+
+[Open activity →](activities/cell-specific-dose-response/index.html)
+:::
+
+:::
+
+## About this material {.home-heading}
 
 {{< include _includes/content-notice.qmd >}}
 

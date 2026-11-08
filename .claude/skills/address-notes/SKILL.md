@@ -32,7 +32,7 @@ The note can appear anywhere within a slide's content (right after the heading, 
 4. **Confirm the repo's current conventions before editing — don't rely on memory of them.** Read a neighboring slide of the same "kind" in the same file (e.g. another activity-embed slide, or another auto-animate pair) to see the current concrete markup, since patterns in this project evolve over time. Things worth checking this way:
    - Interactive activity embeds (`::: activity-embed` + `<iframe>`, wired through `js/activity-shell.js` and `js/embed-bridge.js`, `::: activity-embed-controls` reset button)
    - Auto-animate slide pairs (`{auto-animate="true"}` on two *adjacent* slide headings; elements meant to morph between them share a `data-id`)
-   - Where a brand-new activity's data would live (`data/<slug>.json`) and how it gets registered in the gallery (`activities/index.html`'s `CORE_ACTIVITIES` list)
+   - Where a brand-new activity's data would live (`data/<slug>.json`) and how it gets listed on the course home (a `home-activity` card in the Activities section of `index.qmd`; `activities/index.html` is only a redirect now). Figure credits use the `::: source-credit` helper described in README.md "Slide helpers"
    - Speaker notes (`::: notes ... :::`) and slide-level attributes (`{.smaller}`, etc.)
 
    `README.md` and `INTERACTIVITY-GUIDE.md` at the repo root document these conventions in prose — check them if a note asks for something you haven't seen a concrete example of yet in the deck itself (e.g. the first time a note asks for a brand-new activity rather than a tweak to an existing one).

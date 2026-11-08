@@ -1,0 +1,84 @@
+/**
+ * Small layout pieces shared by the course's newer activities (enrichment-methods,
+ * composition-vs-state, spatial-composition, cell-specific-screening,
+ * cell-specific-dose-response). Each activity still has its own .css for anything
+ * specific to it. Uses the tokens in variables.css.
+ */
+
+.aw-steps {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.aw-step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-border);
+}
+.aw-step-dot--current { background: var(--color-primary); }
+.aw-step-dot--done { background: var(--color-success); }
+
+.aw-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  min-width: 0;
+}
+.aw-panel h3,
+.aw-panel h4 {
+  margin: 0 0 var(--space-2);
+}
+
+.aw-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: var(--space-2) 0;
+}
+
+.aw-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-3) 0;
+}
+.aw-actions button,
+.aw-btn {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  padding: var(--space-2) var(--space-3);
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-text);
+}
+.aw-actions button:hover:not(:disabled),
+.aw-actions button:focus-visible,
+.aw-btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+.aw-actions button:disabled { opacity: 0.55; cursor: default; }
+
+.aw-table {
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+.aw-table th,
+.aw-table td {
+  border: 1px solid var(--color-border);
+  padding: 3px 8px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.aw-table th { background: var(--color-bg-alt); }
+
+.aw-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: -1px;
+}

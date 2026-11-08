@@ -1,0 +1,33 @@
+.sc-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+  margin-bottom: var(--space-3);
+}
+@media (max-width: 860px) {
+  .sc-controls { grid-template-columns: 1fr; }
+}
+.sc-controls .control-row,
+.sc-controls fieldset { margin: 0; }
+.sc-radio { display: block; margin: 2px 0; cursor: pointer; }
+
+.sc-panels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+@media (max-width: 860px) {
+  .sc-panels { grid-template-columns: 1fr; }
+}
+.sc-panel { text-align: center; }
+.sc-panel .aw-note { margin: 0 0 var(--space-2); min-height: 2.2em; font-size: 0.85rem; }
+.sc-svg { width: 100%; max-width: 175px; height: auto; display: block; margin: 0 auto; }
+.sc-legend { font-size: 0.85rem; color: var(--color-text-muted); margin: var(--space-2) 0 0; }
+.sc-readout {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+}

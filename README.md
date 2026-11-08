@@ -1,12 +1,25 @@
-# Sequencing in Pharmacology & Toxicology — Interactive Lecture Course
+# PHM801 Systems Pharmacology — Interactive Lectures
 
-A fully static, browser-based Quarto + Reveal.js course website demonstrating
-interactive teaching activities for sequencing concepts in pharmacology and
-toxicology. It deploys to GitHub Pages with **no backend, no database, and no
-student accounts** — students open a URL and interact immediately.
+A fully static, browser-based Quarto + Reveal.js course site: two 50-minute lectures
+(Systems Pharmacology I: Transcriptomics; II: Single-Cell and Spatial), each built around
+one hands-on activity per learning objective. It deploys to GitHub Pages with **no backend,
+no database, and no student accounts** — students open a URL and interact immediately.
 
-All example genes, samples, and datasets in this template are small and
-**fictional**, used only to demonstrate the interaction mechanics.
+The activities use small **synthetic** datasets (generated in the browser or stored under
+[`data/`](data/)) so that each one isolates a single idea. Real gene names appear only where
+the biology is being taught (for example dexamethasone and the glucocorticoid receptor).
+
+**What's where**
+
+| Path | What it is |
+|---|---|
+| `index.qmd` | Course home: the two lectures, then every activity |
+| `lectures/lecture-01-showcase.qmd` | Lecture 1 (the file name is historical) |
+| `lectures/lecture-02-single-cell-spatial.qmd` | Lecture 2 |
+| `lectures/_parking-lot.qmd` | Retired slides and demo activities, not published |
+| `activities/<slug>/` | One folder per activity (page, script, styles) |
+| `data/` | Replaceable content for activities that use a data file |
+| `.claude/skills/address-notes/` | The `/address-notes` workflow (see "Slide helpers") |
 
 For a deeper reference, see also:
 
@@ -33,8 +46,8 @@ each step links to the detailed how-to further down.
    [`lectures/lecture-01-showcase.qmd`](lectures/lecture-01-showcase.qmd) — swap the framing
    text, objectives, and notes around each activity to match your real content, or start a
    fresh deck from the template (see [§4](#4-how-to-duplicate-the-lecture-template)).
-3. **Update the homepage.** Edit [`index.qmd`](index.qmd) — course title, description, and the
-   list of lectures.
+3. **Update the homepage.** Edit [`index.qmd`](index.qmd) — course title, the two lecture
+   cards, and the activity cards (one `home-activity` block per activity).
 4. **Check attribution.** The "Content and Development Notice" is required wording — see
    `js/content-notice.js`. Update the author name only if authorship actually changes;
    otherwise leave it as-is.
@@ -83,8 +96,9 @@ Output goes to `_site/` (gitignored — this is what GitHub Pages actually serve
 
 1. Copy `lectures/lecture-02-template.qmd` to `lectures/lecture-0N-your-topic.qmd`.
 2. Edit the YAML title/subtitle at the top.
-3. Add it to the site navigation in `_quarto.yml` (`website.navbar.left`) and/or link it from
-   `index.qmd`'s lecture list.
+3. Add it to the site navigation in `_quarto.yml` (`website.navbar.left`) and add a lecture
+   card to `index.qmd`. A file whose name starts with an underscore (like `_parking-lot.qmd`)
+   is not built, which is a handy way to keep a draft off the live site.
 4. `quarto preview` to check it.
 
 ## 4. How to duplicate the lecture template
@@ -135,12 +149,41 @@ To **build a brand-new activity**, follow the pattern of any existing one under 
   needs (see the `<script>` order in an existing activity), then its own `<slug>.js`
 - `activities/<slug>/<slug>.js` — calls `ActivityShell.init({ title, dataUrl, defaultSeed,
   instructions, render(data, {seed, rng, container, controller}) {...} })`
-- `data/<slug>.json` — the activity's replaceable scientific content
-- Add a card for it to `activities/index.html` (the gallery)
+- `data/<slug>.json` — the activity's replaceable scientific content (optional; some
+  activities generate their data from the seed instead)
+- Add a card for it in the **Activities** section of `index.qmd` (copy an existing
+  `home-activity` block)
+
+When an activity runs inside a lecture slide it automatically switches to a compact layout
+(`body.is-embedded`): the back link, title and long instructions are hidden, and the
+instructions move into a collapsed "Instructions" toggle. Keep the most important part of the
+interface in the first ~500px so it is visible without scrolling inside the frame.
 
 `activity-shell.js` gives you the header, seed controls, and a "Reset activity" button
 automatically — your `render()` function only needs to build the activity's own UI inside the
 `container` it's given.
+
+### Slide helpers
+
+Small building blocks defined in `css/reveal-overrides.css`; use them with fenced divs:
+
+| Markup | Result |
+|---|---|
+| `::: statement` … `:::` | A short statement centered horizontally and vertically (the "Declaring the use of AI" slide) |
+| `::: text-center` … `:::` | Center-align one block of text |
+| `::: source-credit` … `:::` | **The one way to credit a figure**: a small line at the bottom-left of the slide. Put a link inside with `target="_blank" rel="noopener"` so it opens in a new tab. Put it last on the slide. |
+| `::: credit-spacer` … `:::` | Put right after a stretched (full-slide) figure that also has a `source-credit`, so the figure doesn't run under the credit |
+| `::: {.fragment .definition-popup}` … `:::` | A light-yellow, black-bordered box (16:9, half the slide) that appears on click, centered over the slide |
+| `::: placeholder-box` … `:::` | A dashed "figure goes here" box. Search the `.qmd` for `PLACEHOLDER` to find them all |
+| `::: slide-footnote` … `:::` | A small caveat line that flows after the slide content |
+
+**Leaving yourself notes.** Type `<note-for-reformat>what you want changed</note-for-reformat>`
+anywhere on a slide while drafting, then run `/address-notes` and Claude will carry each one
+out (and remove the marker), or tell you what it still needs from you.
+
+**Slide size.** Decks are 1280 × 720 (16:9). The green masthead adds 78px above that, so the
+usable bottom edge is about 750px from the top of a slide; content below that is clipped on a
+16:9 screen.
 
 ## 7. How to replace fictional example data
 

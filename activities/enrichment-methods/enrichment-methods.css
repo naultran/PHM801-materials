@@ -1,0 +1,94 @@
+.em-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .em-layout { grid-template-columns: 1fr; }
+}
+
+.em-list { display: flex; flex-direction: column; gap: 5px; }
+.em-list-panel h3 { font-size: 1.05rem; }
+.em-list-panel .aw-note { margin: 0 0 6px; }
+.em-box {
+  position: relative;
+  border: 2px solid #a3291e;
+  border-radius: 6px;
+  padding: 2px 4px;
+  background: #fffaf9;
+}
+.em-box::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 6px;
+  top: -9px;
+  background: #fff;
+  color: #a3291e;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 4px;
+}
+.em-mid { padding: 0 6px; }
+
+.em-row {
+  display: grid;
+  grid-template-columns: 22px 38px 1fr 46px 58px;
+  align-items: center;
+  gap: 6px;
+  height: 19px;
+  font-size: 12.5px;
+}
+.em-rank { color: var(--color-text-muted); text-align: right; font-variant-numeric: tabular-nums; }
+.em-gene { font-weight: 700; }
+.em-bar { position: relative; height: 10px; background: var(--color-bg-alt); border-radius: 2px; }
+.em-bar::before { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: #9ca3af; }
+.em-bar i { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
+.em-fc { text-align: right; font-variant-numeric: tabular-nums; }
+.em-chip {
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  padding: 1px 0;
+  border-radius: 999px;
+}
+.em-chip--none { background: transparent; color: #9ca3af; font-weight: 400; }
+
+.em-right { min-height: 220px; }
+
+.em-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+@media (max-width: 1000px) {
+  .em-cards { grid-template-columns: 1fr; }
+}
+.em-card {
+  border: 1px solid var(--color-border);
+  border-top-width: 5px;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  min-width: 0;
+}
+.em-card h4 { margin: 0 0 4px; font-size: 1.05rem; }
+.em-method {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 8px 0 4px;
+}
+.em-2x2 { width: 100%; font-size: 13px; }
+.em-pline { font-size: 13px; margin: 6px 0 0; }
+.em-gsea-svg { width: 100%; height: auto; display: block; }
+.em-takeaway {
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+}

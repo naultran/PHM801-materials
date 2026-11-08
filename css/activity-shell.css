@@ -167,3 +167,38 @@ body {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
+
+/* ---- Compact chrome when an activity is embedded in a lecture slide ----
+   The slide already shows the activity's title and a Reset button, and the
+   iframe is short, so drop the back link, title and long instructions (kept
+   in a collapsed "Instructions" toggle) and tighten the spacing. Standalone
+   activity pages are unaffected. */
+.activity-instructions-details { display: none; }
+
+body.is-embedded #activity-root {
+  padding: var(--space-2) var(--space-4) var(--space-4);
+}
+body.is-embedded .activity-header__top,
+body.is-embedded .activity-header h1,
+body.is-embedded .activity-instructions {
+  display: none;
+}
+body.is-embedded .activity-instructions-details {
+  display: block;
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+body.is-embedded .activity-instructions-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  width: max-content;
+}
+body.is-embedded .activity-instructions-details p {
+  margin: var(--space-1) 0 0;
+  max-width: 80ch;
+}
+body.is-embedded .activity-controls-bar {
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+}

@@ -1,0 +1,150 @@
+/**
+ * Course home page (index.qmd). MSU green + lime accent, matching the lecture
+ * slides' masthead. Cards are plain divs; every link inside is a normal anchor.
+ */
+
+:root {
+  --home-green: #18453b;
+  --home-lime: #67c521;
+  --home-ink: #17202a;
+  --home-muted: #4b5563;
+  --home-line: #d6dde3;
+}
+
+.home-intro {
+  max-width: 760px;
+  margin: 1.5rem auto 0.5rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--home-muted);
+}
+
+h2.home-heading {
+  max-width: 1180px;
+  margin: 2.5rem auto 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 3px solid var(--home-lime);
+  color: var(--home-green);
+  font-weight: 700;
+}
+
+/* ---- lectures ---- */
+.home-lectures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.75rem;
+  max-width: 1180px;
+  margin: 1.5rem auto 0;
+}
+.home-lecture {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--home-line);
+  border-top: 7px solid var(--home-green);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem 1.75rem;
+  box-shadow: 0 2px 10px rgba(16, 37, 57, 0.07);
+}
+.home-lecture--two { border-top-color: var(--home-lime); }
+.home-kicker {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--home-muted);
+}
+.home-lecture h3.home-lecture-title {
+  margin: 0 0 0.9rem;
+  font-size: 1.55rem;
+  line-height: 1.25;
+  color: var(--home-green);
+}
+.home-lecture p,
+.home-lecture li {
+  color: var(--home-ink);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+.home-lecture ul { padding-left: 1.2rem; margin-bottom: 1.4rem; }
+.home-lecture .home-btn { margin-top: auto; }
+
+a.home-btn {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.6rem 1.3rem;
+  background: var(--home-green);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 8px;
+  border: 2px solid var(--home-green);
+}
+a.home-btn:hover,
+a.home-btn:focus-visible {
+  background: #fff;
+  color: var(--home-green);
+}
+
+/* ---- activities ---- */
+h3.home-group {
+  max-width: 1180px;
+  margin: 2rem auto 0.75rem;
+  font-size: 1.25rem;
+  color: var(--home-ink);
+}
+.home-activities {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.1rem;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.home-activity {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--home-line);
+  border-left: 6px solid var(--home-green);
+  border-radius: 10px;
+  padding: 1rem 1.2rem 1.1rem;
+}
+.home-activity--two { border-left-color: var(--home-lime); }
+.home-lo {
+  margin: 0 0 0.2rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--home-muted);
+}
+.home-activity h4.home-activity-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  color: var(--home-green);
+}
+.home-activity p {
+  margin: 0 0 0.75rem;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  color: var(--home-ink);
+}
+.home-activity p:last-child { margin: auto 0 0; }
+.home-activity a {
+  font-weight: 700;
+  color: var(--home-green);
+}
+
+/* About / notice block aligned with the rest */
+.home-heading ~ .content-notice,
+#content-notice-mount {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#website-read-aloud-mount {
+  max-width: 1180px;
+  margin: 1rem auto 3rem;
+}
