@@ -149,8 +149,8 @@ Cells in a tissue are arranged in organized neighborhoods, and cells of the same
 :::: {.column .tall-figure width="67%"}
 
 ```{=html}
-<video class="zonation-video" controls preload="metadata" aria-label="Animation of liver zonation: gene expression changes across the liver lobule from the portal vein to the central vein.">
-<source src="../assets/figures/control-zonation.mp4" type="video/mp4">
+<video class="zonation-video" data-autoplay muted loop playsinline controls preload="auto" aria-label="Animation of liver zonation: gene expression changes across the liver lobule from the portal vein to the central vein.">
+<source src="../assets/figures/Zonation1.mp4" type="video/mp4">
 Your browser cannot play this video.
 </video>
 ```
