@@ -14,6 +14,7 @@ format:
     transition: none
     width: 1280
     height: 720
+    include-in-header: ../_includes/noindex.html
     include-after-body: ../_includes/reveal-embed-bridge.qmd
 ---
 
@@ -43,11 +44,12 @@ format:
 <br>Systems pharmacology is the integration of <b>systems biology</b> and <b>pharmacodynamics</b> used to investigate the interaction of drugs, biology, and disease.
 
 - <a href="https://irp.nih.gov/catalyst/19/6/systems-biology-as-defined-by-nih" target="_blank">"... ask five biomedical researchers to define systems biology, and you'll get 10 different answers... or maybe more."</a>
-- At its simplest, biology is examined at a larger scale looking at the overall network instead of individual parts.
+
+- At its simplest, biology is examined at a larger scale looking at the overall <b>network</b> instead of individual <b>parts</b>.
 ::::
 
 :::: {.column .tall-figure width="52%"}
-![](/assets/figures/GR-1.png){data-id="gr-image" fig-alt="Diagram of glucocorticoid signaling in a cell. Glucocorticoids enter the cell and bind GR-alpha, which is held in the cytoplasm by heat shock proteins (HSPs). The ligand-bound receptor moves into the nucleus, where it binds glucocorticoid response elements (GREs) to turn genes on (transactivation) or interacts with other transcription factors to turn genes off (transrepression)." fig-align="center"}
+![](../assets/figures/GR-1.png){data-id="gr-image" fig-alt="Diagram of glucocorticoid signaling in a cell. Glucocorticoids enter the cell and bind GR-alpha, which is held in the cytoplasm by heat shock proteins (HSPs). The ligand-bound receptor moves into the nucleus, where it binds glucocorticoid response elements (GREs) to turn genes on (transactivation) or interacts with other transcription factors to turn genes off (transrepression)." fig-align="center"}
 ::::
 :::::
 
@@ -67,7 +69,7 @@ Source: <a href="https://www.ncbi.nlm.nih.gov/books/NBK279171/" target="_blank" 
 ::::
 
 :::: {.column .tall-figure width="52%"}
-![](/assets/figures/GR-2.png){data-id="gr-image" fig-alt="The same glucocorticoid signaling diagram with everything faded except one highlighted step labeled 'part': glucocorticoid binding to GR-alpha. This shows the single molecular event inside the larger network." fig-align="center"}
+![](../assets/figures/GR-2.png){data-id="gr-image" fig-alt="The same glucocorticoid signaling diagram with everything faded except one highlighted step labeled 'part': glucocorticoid binding to GR-alpha. This shows the single molecular event inside the larger network." fig-align="center"}
 ::::
 :::::
 
@@ -83,20 +85,20 @@ Source: <a href="https://www.ncbi.nlm.nih.gov/books/NBK279171/" target="_blank" 
 
 - Does cellular context drive differences in how the individual *parts* interact?
 
-## WHY THE NETWORK MATTERS - TAMOXIFEN
+## WHY THE NETWORK MATTERS: TAMOXIFEN
 
 ::::: columns
 :::: {.column width="33%"}
-<br>Tamoxifen is an <u>ERα antagonist in breast tissue</u>, but acts as a <u>partial agonist in bone and endometrium</u>. Because it acts through the same receptor everywhere, these are tissue-specific effects and they account for both benefits and risks when it is used to treat breast cancer. 
+<br>Tamoxifen is an <u>ERα antagonist in breast tissue</u>, but acts as a <u>partial agonist in bone and endometrium</u>. Because it acts through the same receptor everywhere, these are tissue-specific effects and they account for both benefits and risks when it is used to treat breast cancer.
 ::::
 
 :::: {.column .tall-figure .figure-short width="67%"}
-![](/assets/figures/Tam-1.png){data-id="tam-image" fig-alt="Flow diagram of tamoxifen's tissue-specific actions, all through ER-alpha. It acts as an estradiol (E2) antagonist in the breast (breast cancer decreases) and premenopausal hypothalamus, but as an E2 agonist in the postmenopausal hypothalamus, liver (HDL up, LDL down, clotting factors up, thrombophilia), bone (bone turnover), and postmenopausal endometrium (polyp, hyperplasia, endometrial cancer, uterine sarcoma)." fig-align="center"}
+![](../assets/figures/Tam-1.png){data-id="tam-image" fig-alt="Flow diagram of tamoxifen's tissue-specific actions, all through ER-alpha. It acts as an estradiol (E2) antagonist in the breast (breast cancer decreases) and premenopausal hypothalamus, but as an E2 agonist in the postmenopausal hypothalamus, liver (HDL up, LDL down, clotting factors up, thrombophilia), bone (bone turnover), and postmenopausal endometrium (polyp, hyperplasia, endometrial cancer, uterine sarcoma)." fig-align="center"}
 ::::
 :::::
 
 ::: source-credit
-Source: <a href="https://doi.org/10.4137/cpath.s487" target="_blank" rel="noopener">doi.org/10.4137/cpath.s487</a>
+Source: <a href="https://doi.org/10.4137/cpath.s487" target="_blank" rel="noopener">Nasu et al. (2008) Clin Med Pathol</a>
 :::
 
 ## HOW TO *"DO"* SYSTEMS PHARMACOLOGY
@@ -118,7 +120,7 @@ Source: <a href="https://doi.org/10.4137/cpath.s487" target="_blank" rel="noopen
 
   Working with these types of big data required novel strategies and perspectives.
 
-## ACTIVITY: Systems Biology, Pharmacology, and Toxicology
+## ACTIVITY: Systems Biology, Pharmacology, and Toxicology (LO 1)
 
 ::: activity-embed-controls
 <button onclick="EmbedBridge.reloadIframe(this)">
@@ -322,13 +324,10 @@ Ten compounds, 48 genes, hierarchically clustered on both axes. The colored bar 
      SECTION 3 — MAPPING GENES TO MECHANISMS + DOSE-RESPONSE MODELING
                  (activity: LO 4 — evaluate efficacy and safety)
 
-     DRAFT PLACEHOLDERS. Every slide below is a first-pass outline: the text
-     is a starting point and each dashed box marks a figure still to be made.
-     Search this file for PLACEHOLDER to find them all.
-
      The "Efficacy and safety" card on the hub slide jumps straight to the
-     dose-response half (#s-dose-response). The original demo slides and
-     activities you may want to borrow from are in lectures/_parking-lot.qmd.
+     dose-response half (#s-dose-response). Any dashed box marks a figure still
+     to be added: search this file for PLACEHOLDER to find them. Retired slides
+     and demo activities are in lectures/_parking-lot.qmd.
      ====================================================================== -->
 
 ## MAPPING GENES TO MECHANISMS {#s-annotation}
@@ -354,7 +353,7 @@ Ten compounds, 48 genes, hierarchically clustered on both axes. The colored bar 
 - **Ranked methods (e.g., GSEA)**: use every measured gene, ordered by how much it changed, with no cutoff.
 - The **background** must be the genes you actually measured, and testing thousands of gene sets needs **multiple-testing correction**
 
-## ACTIVITY: Over-Representation or Ranked?
+## ACTIVITY: Over-Representation or Ranked? (LO 3)
 
 ::: activity-embed-controls
 <button onclick="EmbedBridge.reloadIframe(this)">
@@ -382,12 +381,12 @@ Twenty genes are ranked from most induced to most repressed, and each carries a 
 ::::
 
 :::: {.column .tall-figure .figure-short width="67%"}
-![](/assets/figures/acetamide-dr.png){data-id="acetamide-image" fig-alt="A heatmap of dose-response gene expression profiling of acetamide." fig-align="center"}
+![](../assets/figures/acetamide-dr.png){data-id="acetamide-image" fig-alt="A heatmap of dose-response gene expression profiling of acetamide." fig-align="center"}
 ::::
 :::::
 
 ::: source-credit
-Source: <a href="https://doi.org/10.1016/j.taap.2019.114872" target="_blank" rel="noopener">doi.org/10.1016/j.taap.2019.114872</a>
+Source: <a href="https://doi.org/10.1016/j.taap.2019.114872" target="_blank" rel="noopener">Nault et al. (2020) Toxicol Appl Pharmacol</a>
 :::
 
 ::: back-to-hub
@@ -442,11 +441,11 @@ PLACEHOLDER — figure: a real example, point of departure estimated by several 
 
 ## PUTTING IT TOGETHER
 
-<br>Four objectives, four activities:
+<br>Four objectives:
 
 - **LO 1** — Systems, pharmacology, and toxicology approaches answer different questions about the same drug.
-- **LO 2** — A signature is a pattern across many genes, and similar patterns suggest similar biology. However, the biological context matters and the same drug can produce very distinct signatures in different contexts. 
-- **LO 3** — Genes driving a shared signature can be mapped to pathways to propose a mode of action or mechanism. 
+- **LO 2** — A signature is a pattern across many genes, and similar patterns suggest similar biology. However, the biological context matters and the same drug can produce very distinct signatures in different contexts.
+- **LO 3** — Genes driving a shared signature can be mapped to pathways to propose a mode of action or mechanism.
 - **LO 4** — Thousands of gene dose-response curves can be collapsed into one point of departure; the definition changes the number, but most reasonable choices land in a similar range.
 
 Next lecture: what changes when we measure **single cells** and **tissue space** instead of a whole-tissue average.

@@ -129,19 +129,80 @@
   color: #ffffff;
 }
 
-.video-placeholder {
+/* Student notes: the toolbar button and the panel that opens above it. */
+.lecture-notes-btn {
+  color: #18453b;
+}
+.lecture-notes-btn.has-note::after {
+  content: " •";
+  color: #b45309;
+}
+.student-notes {
+  position: fixed;
+  left: 12px;
+  bottom: 64px;
+  z-index: 41;
+  width: min(380px, calc(100vw - 24px));
+  box-sizing: border-box;
+  padding: 12px 14px;
+  background: #ffffff;
+  color: #1f2937;
+  border: 1.5px solid #18453b;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  font-size: 15px;
+  text-align: left;
+}
+.student-notes[hidden] {
+  display: none;
+}
+.student-notes__title {
+  margin: 0 0 8px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.student-notes__text {
   display: block;
   width: 100%;
-  /* Reveal's own theme sets video { max-width: 95% } — same specificity as a
-     plain class selector, so it wins on source order alone unless this is
-     !important. At 95% width, a 16:9 poster on a 16:9 slide renders almost
-     as tall as the whole slide, leaving no room for the heading/caption —
-     hence the max-height cap too, not just max-width. */
-  max-width: 640px !important;
-  border: 1px solid #c7cdd4;
-  border-radius: 8px;
-  margin: 0 auto;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 8px;
+  border: 1px solid #9ca3af;
+  border-radius: 6px;
+  resize: vertical;
 }
+.student-notes__status {
+  margin: 6px 0 8px;
+  font-size: 13px;
+  color: #4b5563;
+}
+.student-notes__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.student-notes__actions button {
+  font: inherit;
+  font-size: 14px;
+  padding: 5px 10px;
+  background: #ffffff;
+  color: #18453b;
+  border: 1.5px solid #18453b;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.student-notes__actions button:hover,
+.student-notes__actions button:focus-visible {
+  background: #18453b;
+  color: #ffffff;
+}
+@media print {
+  .lecture-toolbar,
+  .student-notes {
+    display: none !important;
+  }
+}
+
 .video-transcript-note {
   font-size: 0.55em;
   color: #4b5563;

@@ -1,0 +1,45 @@
+Copyright (c) 2026 Rance Nault. All rights reserved.
+
+This repository and the website built from it ("the Material") include the lecture
+slides, speaker notes, learning objectives, activities, interactive software, synthetic
+datasets, text, and design for the course PHM801 Systems Pharmacology. They are the
+original work of Rance Nault, except for the third-party figures described below.
+
+PERMITTED USE
+
+Students enrolled in the course, and other people who open the published website, may
+view and use the Material in their web browser for their own personal learning.
+
+NOT PERMITTED WITHOUT WRITTEN PERMISSION
+
+Without the prior written permission of the copyright holder, you may not:
+
+  - use the Material, or any part of it, in your own teaching, courses, workshops,
+    presentations, or training, whether free or paid;
+  - copy, reproduce, host, mirror, publish, or redistribute the Material or any part of it;
+  - modify, adapt, translate, or create derivative works from the Material;
+  - sell, sublicense, or otherwise commercialize the Material;
+  - remove or alter this notice, the Content and Development Notice, or any source credit.
+
+To request permission, contact the copyright holder through the GitHub profile that
+hosts this repository.
+
+THIRD-PARTY MATERIAL
+
+Some slides reproduce figures created by others, each credited on its slide. That
+material is not covered by this license and remains the property of its respective
+owners and publishers, who set the terms for its reuse. Nothing here grants you any
+right to it.
+
+GITHUB
+
+This repository is hosted on GitHub. GitHub's Terms of Service allow other GitHub users
+to view the repository and to fork it within GitHub. That is a term of GitHub's service,
+not a license from the copyright holder, and it does not permit any use listed above as
+not permitted.
+
+NO WARRANTY
+
+The Material is provided "as is", without warranty of any kind. The activities use
+synthetic data for teaching and are not intended for research, clinical, or regulatory
+decisions.

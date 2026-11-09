@@ -107,7 +107,7 @@ function el(tagName, attrs, text) {
 
 ActivityShell.init({
   rootId: "activity-root",
-  title: "Screening Drugs by Cell-Specific Signature",
+  title: "Screening by Cell-Specific Signature",
   defaultSeed: 2029,
   instructions:
     "This liver disease is driven by inflammation, so the immune cells are the cells you need to fix. Single-cell data show the disease " +

@@ -31,7 +31,7 @@ By the end of this lecture you should be able to:
 - Use ‘omic’ signatures to identify drug targets and mechanisms of action.
 - Evaluate drug efficacy and safety using systems pharmacology approaches.
 
-[Open Lecture 1 →](lectures/lecture-01-showcase.html){.home-btn}
+[Open Lecture 1 →](lectures/lecture-01-systems-pharm.html){.home-btn}
 :::
 
 ::: {.home-lecture .home-lecture--two}
@@ -46,7 +46,7 @@ By the end of this lecture you should be able to:
 - Use cell-specific molecular signatures to evaluate and screen pharmacological responses.
 - Compare cell-specific dose-response relationships to tissue-level measurements for evaluating drug efficacy and safety.
 
-[Open Lecture 2 →](lectures/lecture-02-single-cell-spatial.html){.home-btn}
+[Open Lecture 2 →](lectures/lecture-02-transcriptomics.html){.home-btn}
 :::
 
 :::

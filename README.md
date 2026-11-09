@@ -1,74 +1,56 @@
 # PHM801 Systems Pharmacology — Interactive Lectures
 
-A fully static, browser-based Quarto + Reveal.js course site: two 50-minute lectures
-(Systems Pharmacology I: Transcriptomics; II: Single-Cell and Spatial), each built around
-one hands-on activity per learning objective. It deploys to GitHub Pages with **no backend,
-no database, and no student accounts** — students open a URL and interact immediately.
+Two interactive lectures for PHM801 (Fundamental Principles of Pharmacology and Toxicology) at
+Michigan State University:
+
+- **Lecture 1 — Systems Pharmacology I: Transcriptomics**
+- **Lecture 2 — Systems Pharmacology II: Single-Cell and Spatial**
+
+Each lecture is a Quarto + Reveal.js slide deck with one hands-on activity per learning
+objective. The whole course is a static website that deploys to GitHub Pages with **no backend,
+no database, and no student accounts**: students open a URL and interact immediately. The
+activities also run on their own from the course home page, for review.
 
 The activities use small **synthetic** datasets (generated in the browser or stored under
-[`data/`](data/)) so that each one isolates a single idea. Real gene names appear only where
-the biology is being taught (for example dexamethasone and the glucocorticoid receptor).
+[`data/`](data/)) so each one isolates a single idea. Real gene names appear only where the
+biology is being taught (for example dexamethasone and the glucocorticoid receptor).
 
-**What's where**
+## What's where
 
 | Path | What it is |
 |---|---|
 | `index.qmd` | Course home: the two lectures, then every activity |
-| `lectures/lecture-01-showcase.qmd` | Lecture 1 (the file name is historical) |
-| `lectures/lecture-02-single-cell-spatial.qmd` | Lecture 2 |
-| `lectures/_parking-lot.qmd` | Retired slides and demo activities, not published |
+| `lectures/lecture-01-systems-pharm.qmd` | Lecture 1 |
+| `lectures/lecture-02-transcriptomics.qmd` | Lecture 2 |
+| `lectures/lecture-02-template.qmd` | Blank lecture to copy when adding a new one (not published) |
 | `activities/<slug>/` | One folder per activity (page, script, styles) |
-| `data/` | Replaceable content for activities that use a data file |
+| `data/` | Content for the two activities that read a data file |
+| `js/`, `css/` | Shared scripts and styles (activity shell, math/stats helpers, design tokens) |
+| `assets/figures/` | Slide figures and the zonation video |
+| `_includes/` | Shared partials (attribution notice, embed bridge) |
+| `.github/workflows/publish.yml` | Builds and deploys the site on every push to `main` |
 | `.claude/skills/address-notes/` | The `/address-notes` workflow (see "Slide helpers") |
 
-For a deeper reference, see also:
+More detail:
 
-- [`INTERACTIVITY-GUIDE.md`](INTERACTIVITY-GUIDE.md) — for every activity: the teaching question, what
-  students manipulate, which files hold data vs. behavior, and how to replace it
-- [`TECHNICAL-LIMITS.md`](TECHNICAL-LIMITS.md) — what's practical (and what isn't) in a static,
-  no-backend browser lecture, and the specific simplifications made in this template
+- [`INTERACTIVITY-GUIDE.md`](INTERACTIVITY-GUIDE.md): for every activity, the teaching question,
+  what students manipulate, and which files to edit.
+- [`TECHNICAL-LIMITS.md`](TECHNICAL-LIMITS.md): what is practical in a static, no-backend
+  lecture site, and how the activities are scaled to fit.
 
-> **Note:** this `README.md`, `INTERACTIVITY-GUIDE.md`, and `TECHNICAL-LIMITS.md` only exist
-> here in the repository (excluded from the build via the `render:` list in `_quarto.yml`) —
-> they are deliberately kept off the published GitHub Pages site so students only ever see
-> course content. Read them on GitHub, or in your editor.
+> `README.md`, `INTERACTIVITY-GUIDE.md` and `TECHNICAL-LIMITS.md` are excluded from the build
+> (see the `render:` list in `_quarto.yml`), so students only ever see course content.
 
-## Quick start: making a revision
-
-This is the fastest path from "cloned the repo" to "this is our course." Do these in order;
-each step links to the detailed how-to further down.
-
-1. **Turn the fictional example data into real course content.** Every activity's science
-   lives in one editable JSON file under [`data/`](data/) — nothing else needs to change for a
-   basic content swap. See [§7](#7-how-to-replace-fictional-example-data) and
-   `INTERACTIVITY-GUIDE.md` for each file's exact schema.
-2. **Rewrite the lecture around your new data.** Edit
-   [`lectures/lecture-01-showcase.qmd`](lectures/lecture-01-showcase.qmd) — swap the framing
-   text, objectives, and notes around each activity to match your real content, or start a
-   fresh deck from the template (see [§4](#4-how-to-duplicate-the-lecture-template)).
-3. **Update the homepage.** Edit [`index.qmd`](index.qmd) — course title, the two lecture
-   cards, and the activity cards (one `home-activity` block per activity).
-4. **Check attribution.** The "Content and Development Notice" is required wording — see
-   `js/content-notice.js`. Update the author name only if authorship actually changes;
-   otherwise leave it as-is.
-5. **Preview, then deploy.** `quarto preview` to check your changes locally
-   ([§2](#2-how-to-preview-the-course-locally)), then push to `main` to deploy
-   ([§11](#11-how-to-deploy-to-github-pages)).
-
-## 1. How to install Quarto
+## 1. Install Quarto
 
 ```bash
 winget install --id Posit.Quarto -e
 ```
 
-(macOS: `brew install quarto`; Linux/manual: download from
-[quarto.org/docs/get-started](https://quarto.org/docs/get-started/).) Confirm with:
+(macOS: `brew install quarto`; Linux or manual: [quarto.org/docs/get-started](https://quarto.org/docs/get-started/).)
+Confirm with `quarto --version`.
 
-```bash
-quarto --version
-```
-
-## 2. How to preview the course locally
+## 2. Preview the course locally
 
 From the repository root:
 
@@ -76,41 +58,22 @@ From the repository root:
 quarto preview
 ```
 
-This starts a local server (typically `http://localhost:4848`) and opens the site in your
-browser. Editing a `.qmd`, `.json`, `.js`, or `.css` file triggers an automatic reload.
-
-> **Important:** always use `quarto preview` (or `quarto render` + any static file server) —
-> never open an activity's `index.html` directly from disk (a `file://` URL). Browsers block
-> the local `fetch()` calls that load each activity's JSON data under `file://`. See
-> `TECHNICAL-LIMITS.md`.
-
-To produce the final static site without a live server:
+This starts a local server (typically `http://localhost:4848`). Editing a `.qmd`, `.js` or
+`.css` file reloads the page. To build the final static site without a server:
 
 ```bash
 quarto render
 ```
 
-Output goes to `_site/` (gitignored — this is what GitHub Pages actually serves).
+Output goes to `_site/` (gitignored; this is what GitHub Pages serves).
 
-## 3. How to add a lecture
+> Always use `quarto preview` (or `quarto render` plus any static file server). Never open an
+> activity's `index.html` directly from disk (a `file://` URL): browsers block the `fetch()` call
+> that loads an activity's data file.
 
-1. Copy `lectures/lecture-02-template.qmd` to `lectures/lecture-0N-your-topic.qmd`.
-2. Edit the YAML title/subtitle at the top.
-3. Add it to the site navigation in `_quarto.yml` (`website.navbar.left`) and add a lecture
-   card to `index.qmd`. A file whose name starts with an underscore (like `_parking-lot.qmd`)
-   is not built, which is a handy way to keep a draft off the live site.
-4. `quarto preview` to check it.
+## 3. Editing a lecture
 
-## 4. How to duplicate the lecture template
-
-`lectures/lecture-02-template.qmd` *is* the reusable blank template — it already has the
-correct front matter, the embed-bridge include, a worked example of a conventional slide and
-an activity-embed slide (heavily commented), and the required closing attribution slide. Just
-copy it (see above) rather than starting a `.qmd` from scratch.
-
-## 5. How to add a conventional slide
-
-In any lecture `.qmd`, a `##` heading starts a new slide:
+A `##` heading starts a new slide:
 
 ```markdown
 ## Your slide title
@@ -119,16 +82,13 @@ In any lecture `.qmd`, a `##` heading starts a new slide:
 - Another bullet point
 
 ::: {.notes}
-Speaker notes — visible only in the speaker view (press "s" during the presentation).
+Speaker notes, visible only in the speaker view (press "s" during the presentation).
 :::
 ```
 
-Keep slides short (a handful of bullets) — the interactive activities carry the depth.
+Keep slides short; the activities carry the depth.
 
-## 6. How to add an interactive activity
-
-To **embed an existing activity** in a lecture slide, copy this pattern (see any slide in
-`lecture-01-showcase.qmd`):
+### Embedding an activity
 
 ```markdown
 ::: {.activity-embed-controls}
@@ -140,179 +100,170 @@ To **embed an existing activity** in a lecture slide, copy this pattern (see any
 :::
 ```
 
-`seed` is any integer (optional — reproducible, same seed always produces the same starting
-scenario; omit it for a fresh random scenario on every load).
+`seed` is any integer. The same seed always gives the same starting scenario; leave it out for
+a fresh random scenario on every load.
 
-To **build a brand-new activity**, follow the pattern of any existing one under `activities/`:
-
-- `activities/<slug>/index.html` — links `css/*.css`, loads the shared `js/*.js` files it
-  needs (see the `<script>` order in an existing activity), then its own `<slug>.js`
-- `activities/<slug>/<slug>.js` — calls `ActivityShell.init({ title, dataUrl, defaultSeed,
-  instructions, render(data, {seed, rng, container, controller}) {...} })`
-- `data/<slug>.json` — the activity's replaceable scientific content (optional; some
-  activities generate their data from the seed instead)
-- Add a card for it in the **Activities** section of `index.qmd` (copy an existing
-  `home-activity` block)
-
-When an activity runs inside a lecture slide it automatically switches to a compact layout
-(`body.is-embedded`): the back link, title and long instructions are hidden, and the
-instructions move into a collapsed "Instructions" toggle. Keep the most important part of the
-interface in the first ~500px so it is visible without scrolling inside the frame.
-
-`activity-shell.js` gives you the header, seed controls, and a "Reset activity" button
-automatically — your `render()` function only needs to build the activity's own UI inside the
-`container` it's given.
+When an activity runs inside a slide it switches to a compact layout (`body.is-embedded`): the
+back link, title and long instructions are hidden, and the instructions move into a collapsed
+"Instructions" toggle. Keep the key part of the interface in the first ~500px so it is visible
+without scrolling inside the frame.
 
 ### Slide helpers
 
-Small building blocks defined in `css/reveal-overrides.css`; use them with fenced divs:
+Small building blocks from `css/reveal-overrides.css`, used with fenced divs:
 
 | Markup | Result |
 |---|---|
-| `::: statement` … `:::` | A short statement centered horizontally and vertically (the "Declaring the use of AI" slide) |
+| `::: statement` … `:::` | A short statement centered horizontally and vertically |
 | `::: text-center` … `:::` | Center-align one block of text |
-| `::: source-credit` … `:::` | **The one way to credit a figure**: a small line at the bottom-left of the slide. Put a link inside with `target="_blank" rel="noopener"` so it opens in a new tab. Put it last on the slide. |
-| `::: credit-spacer` … `:::` | Put right after a stretched (full-slide) figure that also has a `source-credit`, so the figure doesn't run under the credit |
-| `::: {.fragment .definition-popup}` … `:::` | A light-yellow, black-bordered box (16:9, half the slide) that appears on click, centered over the slide |
-| `::: placeholder-box` … `:::` | A dashed "figure goes here" box. Search the `.qmd` for `PLACEHOLDER` to find them all |
+| `::: source-credit` … `:::` | **The one way to credit a figure**: a small line at the bottom-left of the slide. Put a link inside with `target="_blank" rel="noopener"`, and put it last on the slide. |
+| `::: credit-spacer` … `:::` | Put right after a stretched figure that also has a `source-credit`, so the figure doesn't run under the credit |
+| `::: back-to-hub` … `:::` | A tiny "↩ Back to menu" link at the bottom right (`<a href="#/some-slide-id">`); used on the first slide of each hub branch |
+| `::: {.fragment .definition-popup}` … `:::` | A light-yellow, black-bordered box that appears on click |
+| `::: placeholder-box` … `:::` | A dashed "figure goes here" box. Search the `.qmd` files for `PLACEHOLDER` to find them all |
 | `::: slide-footnote` … `:::` | A small caveat line that flows after the slide content |
 
-**Leaving yourself notes.** Type `<note-for-reformat>what you want changed</note-for-reformat>`
-anywhere on a slide while drafting, then run `/address-notes` and Claude will carry each one
-out (and remove the marker), or tell you what it still needs from you.
+**Student notes.** Every lecture has a "✎ My notes" button (bottom left) that opens a note box for
+the current slide. Notes are saved in the student's own browser (nothing is sent anywhere), and
+"Download all my notes" saves them as a text file. The code is in `_includes/reveal-embed-bridge.qmd`
+(`initStudentNotes`).
 
-**Slide size.** Decks are 1280 × 720 (16:9). The green masthead adds 78px above that, so the
-usable bottom edge is about 750px from the top of a slide; content below that is clipped on a
-16:9 screen.
-
-## 7. How to replace fictional example data
-
-Every activity's scientific content lives in one JSON file under `data/`, completely separate
-from the JS that implements its visualization/interaction. Edit the JSON directly — gene
-names, sample labels, numeric values, pathway definitions — the activity code will pick up the
-new content automatically on next reload. See `INTERACTIVITY-GUIDE.md` for the exact schema
-of each `data/*.json` file.
-
-## 8. How to add an image
-
-Place the file under `assets/` (or `images/` for lecture-specific figures) and reference it
-with a relative path from the `.qmd` file, e.g.:
+A figure in a two-column slide:
 
 ```markdown
-![Alt text describing the figure](../images/my-figure.png)
+::::: columns
+:::: {.column width="33%"}
+Text goes here.
+::::
+
+:::: {.column .tall-figure width="67%"}
+![](../assets/figures/figure.png){fig-alt="Describe the figure for screen readers." fig-align="center"}
+::::
+:::::
 ```
 
-## 9. How to embed a video
+`.tall-figure` keeps a tall image inside the slide; add `.figure-short` for a slightly shorter cap.
 
-See the "A note on format" slide in `lecture-01-showcase.qmd` for a working placeholder. For a
-**local file**: put the `.mp4` under `videos/` and set `<source src="../videos/your-file.mp4"
-type="video/mp4">`. For **YouTube/institutional embeds**, replace the `<video>` block with an
-`<iframe>` embed from the provider. Either way:
+**Slide size.** Decks are 1280 × 720 (16:9). The green masthead adds 78px above that, so the
+usable bottom edge is about 750px from the top of a slide; anything below is clipped.
 
-- Always include visible `controls`
-- Never `autoplay` with sound
-- Provide a `poster` attribute (a static fallback image) so something useful shows if the
-  video fails to load or the network is unavailable
-- Add captions (a `<track kind="captions">` for local files, or the platform's native
-  captioning) and/or a transcript
+**Hub slides.** The "Systems Pharmacology in Practice" (Lecture 1) and "Dissecting
+Heterogeneity" (Lecture 2) slides are rows of clickable cards. Each card jumps to a slide by its
+id (the `{#some-id}` after a heading).
 
-Large video files should not be committed directly to Git — use Git LFS, an institutional
-video host, or YouTube/Vimeo embeds instead.
+**Leaving yourself notes.** Type `<note-for-reformat>what you want changed</note-for-reformat>`
+anywhere on a slide while drafting, then run `/address-notes` and Claude carries each one out and
+removes the marker, or tells you what it still needs.
 
-## 10. How to change the theme
+### Images
 
-Colors, spacing, and font sizes are all CSS custom properties in `css/variables.css` — change
-a value there and it updates everywhere (website pages and every activity). The Reveal.js
-slide deck uses Quarto's built-in `simple` theme (set in each lecture's YAML front matter)
-plus small overrides in `css/reveal-overrides.css`; change `theme: simple` to any other
-[built-in Quarto revealjs theme name](https://quarto.org/docs/presentations/revealjs/themes.html)
-if you want a different starting point.
+Put figures under `assets/figures/` and reference them relatively from the `.qmd`
+(`../assets/figures/name.png`). Always give a figure `fig-alt` text (or `alt=""` if purely
+decorative). GitHub Pages is **case-sensitive**: match the file name's capitalisation exactly.
 
-## 11. How to deploy to GitHub Pages
+### Video
 
-1. Push this repository to GitHub (already configured to `origin` if you cloned it as-is).
-2. In the repository's **Settings → Pages**, set **Source** to **GitHub Actions**.
-3. Push to `main` — `.github/workflows/publish.yml` renders the site and deploys it
-   automatically. Check the **Actions** tab for progress.
-4. The deployed site will be at `https://<your-org-or-username>.github.io/<repo-name>/`.
-
-You can also trigger a deploy manually from the Actions tab (`workflow_dispatch`).
-
-## 12. How to restore an older lecture version with Git
+Put the file under `assets/figures/`. Browsers only play H.264 MP4 (`yuv420p`), so re-encode
+anything else, for example:
 
 ```bash
-git log --oneline -- lectures/lecture-01-showcase.qmd   # find the commit you want
-git show <commit-hash>:lectures/lecture-01-showcase.qmd > lectures/lecture-01-showcase.qmd
+ffmpeg -i in.mp4 -c:v libx264 -crf 26 -pix_fmt yuv420p -movflags +faststart -an out.mp4
 ```
 
-Or, to browse without changing anything yet:
+Inside a fenced-div column, wrap the `<video>` in a raw HTML block so Quarto does not swallow the
+closing fences:
+
+````markdown
+```{=html}
+<video class="zonation-video" data-autoplay muted loop playsinline controls preload="auto"
+       aria-label="What the video shows.">
+<source src="../assets/figures/video.mp4" type="video/mp4">
+</video>
+```
+````
+
+`data-autoplay` starts the video when its slide appears and pauses it when you leave (browsers
+only allow autoplay when `muted`). Keep the visible `controls`, and keep files small; a few MB
+is fine, tens of MB is not.
+
+## 4. Adding things
+
+**A lecture.** Copy `lectures/lecture-02-template.qmd` to `lectures/lecture-0N-your-topic.qmd`,
+edit the front matter, add it to `website.navbar.left` in `_quarto.yml`, and add a lecture card
+to `index.qmd`. A file whose name starts with an underscore is not built, which keeps a draft off
+the live site.
+
+**An activity.** Follow any existing folder under `activities/`:
+
+- `activities/<slug>/index.html`: links `css/*.css` and the shared `js/*.js` it needs (copy the
+  `<script>` order from an existing activity), then its own `<slug>.js`.
+- `activities/<slug>/<slug>.js`: calls `ActivityShell.init({ title, dataUrl?, defaultSeed,
+  instructions, render(data, { rng, container }) {...} })`. The shell provides the header, seed
+  controls and Reset button; `render()` only builds the activity's own interface.
+- `data/<slug>.json`: optional. Most activities generate their data from the seed instead.
+- Add a `home-activity` card to the **Activities** section of `index.qmd`.
+
+## 5. Theme
+
+Colors, spacing and font sizes are CSS custom properties in `css/variables.css`; change a value
+there and it updates everywhere. The slide decks use Quarto's built-in `simple` Reveal theme plus
+small overrides in `css/reveal-overrides.css`.
+
+## 6. Deploying to GitHub Pages
+
+1. In the repository's **Settings → Pages**, set **Source** to **GitHub Actions** (one time).
+2. Push to `main`. `.github/workflows/publish.yml` renders the site and deploys it. Watch the
+   **Actions** tab for progress; you can also run it manually (`workflow_dispatch`).
+3. The site is at `https://<username>.github.io/<repository-name>/`. That address appears in
+   `site-url` in `_quarto.yml`; update it if the repository is renamed.
+
+**The site is unlisted, not private.** Every page has a `noindex` tag and `robots.txt` asks search
+engines to stay away, so it will not show up in a search, but anyone with the link can open it
+(GitHub Pages cannot password-protect a site). New lectures copied from the template inherit the tag;
+a new activity page needs `<meta name="robots" content="noindex, nofollow">` in its `<head>`.
+
+## 7. Using Git
+
+Restore an older version of a lecture:
 
 ```bash
-git show <commit-hash>:lectures/lecture-01-showcase.qmd | less
+git log --oneline --follow -- lectures/lecture-01-systems-pharm.qmd
+git show <commit-hash>:lectures/lecture-01-systems-pharm.qmd > lectures/lecture-01-systems-pharm.qmd
 ```
 
-## 13. How to create a new semester branch or tag
-
-For a lightweight snapshot of "what we taught this semester":
+Snapshot what you taught in a given semester:
 
 ```bash
 git tag fall-2026 -m "Fall 2026 offering"
 git push origin fall-2026
 ```
 
-For an actively-diverging semester copy (e.g. a different section with its own edits):
+## 8. Troubleshooting classroom problems
 
-```bash
-git checkout -b fall-2026-section-b
-git push -u origin fall-2026-section-b
-```
+**An activity shows a blank page or "could not load".** It was probably opened as a `file://`
+URL. Use the deployed site, `quarto preview`, or serve `_site/` with a static file server.
 
-## 14. Troubleshooting common classroom problems
+**An embedded activity looks tiny, clipped or oddly tall.** The frame resizes to its content
+shortly after the slide becomes active (a `postMessage` handshake in `js/embed-bridge.js`). Click
+the slide's "↻ Reset this activity" button or refresh the page.
 
-**An activity shows a blank page or "could not load" error.**
-Almost always means it was opened via `file://` instead of a served URL — see the warning in
-section 2. Use `quarto preview`, or serve `_site/` with any static file server.
+**Students see a different result than the projector.** By design: each browser tab is
+independent, and without a fixed `seed=` an activity starts from a random scenario. The lectures
+fix a seed on every embed so the projected scenario is reproducible.
 
-**A slide's embedded activity looks tiny, clipped, or oddly tall.**
-The iframe auto-resizes to its content shortly after the slide becomes active (this uses a
-`postMessage` handshake — see `js/embed-bridge.js`). If it looks wrong, click the slide's
-"↻ Reset this activity" button, or refresh the page.
+**The projector text is too small.** Zoom the browser (Ctrl/Cmd `+`), or raise `--font-size-base`
+in `css/variables.css`.
 
-**Students see a different result than the instructor's projected screen.**
-Expected and by design — each browser tab is completely independent, and unless a `seed=`
-query parameter is fixed, activities use a randomized starting scenario. To show everyone the
-exact same scenario, use a lecture-embed URL with an explicit `?seed=` value (already done
-throughout `lecture-01-showcase.qmd`).
+**The internet drops mid-class.** Everything keeps working except any externally hosted image
+(the "Central Dogma" figure is loaded from `personal.cityu.edu.hk`); the site makes no API calls.
 
-**One student's changes appear to affect another student, or the projector.**
-This should not be possible — every activity runs in its own iframe with no shared state and
-no network calls between browsers. If you see this, it's a bug — please file an issue.
+## License
 
-**The projector/classroom display looks too small to read.**
-`css/variables.css` sets a relatively large base font size already; if it's still too small
-for the room, temporarily increase `--font-size-base` there, or use your browser's zoom
-(Ctrl/Cmd `+`).
-
-**Internet drops mid-class.**
-Everything except embedded YouTube/institutional video continues to work — the entire site
-(HTML, CSS, JS, JSON data) is served locally from the same origin with no external API calls.
-
-## Repository layout
-
-```
-_quarto.yml, index.qmd                  Quarto website project
-_includes/                              shared partials (attribution notice, embed-bridge init)
-lectures/                                Reveal.js lecture decks (.qmd)
-activities/                              one self-contained folder per interactive activity
-data/                                    fictional datasets, one JSON file per activity
-js/                                      shared JS (math, stats, UI shell, components)
-css/                                     shared stylesheet (design tokens + components)
-assets/                                  static images/previews
-.github/workflows/                       GitHub Pages deploy workflow
-```
+Copyright (c) 2026 Rance Nault. **All rights reserved.** Students may use the site for their own
+learning; nobody may use, copy, adapt or redistribute the material in their own teaching without
+written permission. Third-party figures keep their own licences. See [`LICENSE`](LICENSE).
 
 ## Content and Development Notice
 
 Do not remove the "Content and Development Notice" shown on the homepage and on each lecture's
-closing slide — see `js/content-notice.js` for the single source of that required wording.
-
+closing slide. The wording lives in one place, `js/content-notice.js`.

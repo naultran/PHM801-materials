@@ -14,6 +14,7 @@ format:
     transition: none
     width: 1280
     height: 720
+    include-in-header: ../_includes/noindex.html
     include-after-body: ../_includes/reveal-embed-bridge.qmd
 ---
 
@@ -198,7 +199,7 @@ A 20 by 20 piece of liver, one dot per cell (blue hepatocyte, red immune cell). 
 
 ::::: columns
 :::: {.column width="33%"}
-Once cells are separated, each cell type can be seen to have their <i>own</i> patterns of gene expression.
+Once cells are separated, each cell type can be seen to have its <i>own</i> pattern of gene expression.
 ::::
 
 :::: {.column .tall-figure width="67%"}
@@ -255,12 +256,12 @@ This repeats the inverse-signature idea from lecture 1, now with single-cell dat
 <a href="#/l2-hub">↩ Back to menu</a>
 :::
 
-## CELL- AND SPATIAL- DOSE RESPONSE MODELING
+## CELL- AND SPATIAL-LEVEL DOSE-RESPONSE MODELING
 
-<br>This is an actively evolving field and what was discussed is largely theoretical. Single-cell and spatial data poses unique challenges for dose-response modeling.
+<br>This is an actively evolving field, and much of what we have discussed is still largely theoretical. Single-cell and spatial data pose unique challenges for dose-response modeling.
 
-- The data is very sparse leading to a lot of zeroes presenting some statistical challenges.
-- There is limited data to develop and test these methods. Single-cell methods are now more affordable (~10X bulk approaches) but spatial methods are note highly scalable today (~100 - 1000X bulk approaches). 
+- The data are very sparse, with many zeroes, which creates statistical challenges.
+- There is limited data to develop and test these methods. Single-cell methods are now more affordable (~10X the cost of bulk approaches), but spatial methods are not yet highly scalable (~100–1000X the cost of bulk approaches).
 
 ## ACTIVITY: Cell vs. Tissue Dose-Response (LO 4)
 

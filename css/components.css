@@ -99,25 +99,3 @@ table.data-table th {
 .prediction-widget[data-committed="true"] input {
   opacity: 0.7;
 }
-
-/* ---- Before/After Reveal component ---- */
-
-.before-after {
-  margin-bottom: var(--space-5);
-}
-.before-after__content {
-  transition: opacity var(--transition-base) ease;
-}
-.before-after__content--swapping {
-  opacity: 0;
-}
-.before-after__reveal-btn {
-  margin-top: var(--space-3);
-  background: var(--color-accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius);
-  padding: var(--space-2) var(--space-4);
-  font-weight: 700;
-  cursor: pointer;
-}

@@ -18,6 +18,7 @@
       EmbedBridge.parentInit();
       initReadAloud();
       initCaptionFit();
+      initStudentNotes();
     } else if (tries > 100) {
       clearInterval(iv);
     }
@@ -47,6 +48,94 @@
         cap.style.marginRight = "auto";
       }).observe(img);
     });
+  }
+
+  // ---- Student notes -------------------------------------------------------
+  // A "My notes" panel for the slide the student is on. Notes are saved in this
+  // browser only (localStorage): nothing is sent anywhere, so the site still
+  // collects nothing. They survive reloads on the same device and browser, but
+  // not a different device, a private window, or cleared site data. "Download"
+  // saves every note, in slide order, as a text file the student keeps.
+  function initStudentNotes() {
+    var KEY = "phm801-notes:" + location.pathname;
+    var store = {}, canSave = true;
+    try { store = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { canSave = false; store = {}; }
+    var SAVED = "Saved on this device only.";
+    var NOSAVE = "This browser is not letting the page save notes. Use Download to keep them.";
+    function persist() {
+      try { localStorage.setItem(KEY, JSON.stringify(store)); canSave = true; } catch (e) { canSave = false; }
+      status.textContent = canSave ? SAVED : NOSAVE;
+    }
+    function slideId(s) { return s.id || ("slide-" + Array.prototype.indexOf.call(s.parentNode.children, s)); }
+    function slideTitle(s) { var h = s.querySelector("h1, h2"); return h ? h.textContent.replace(/\s+/g, " ").trim() : "Slide"; }
+
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "lecture-notes-btn";
+    btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", "student-notes-panel");
+    btn.textContent = "✎ My notes";
+
+    var panel = document.createElement("section");
+    panel.id = "student-notes-panel"; panel.className = "student-notes"; panel.hidden = true;
+    panel.setAttribute("aria-label", "My notes");
+    var head = document.createElement("p"); head.className = "student-notes__title";
+    var area = document.createElement("textarea");
+    area.className = "student-notes__text"; area.rows = 7;
+    area.setAttribute("aria-label", "Your notes for this slide");
+    area.placeholder = "Type your notes for this slide here.";
+    var status = document.createElement("p"); status.className = "student-notes__status";
+    var row = document.createElement("div"); row.className = "student-notes__actions";
+    var dl = document.createElement("button"); dl.type = "button"; dl.textContent = "Download all my notes";
+    var clr = document.createElement("button"); clr.type = "button"; clr.textContent = "Delete all my notes";
+    var close = document.createElement("button"); close.type = "button"; close.textContent = "Close";
+    row.append(dl, clr, close);
+    panel.append(head, area, status, row);
+    document.body.appendChild(panel);
+    document.querySelector(".lecture-toolbar").appendChild(btn);
+
+    var current = null;
+    function mark() { btn.classList.toggle("has-note", !!(current && store[current])); }
+    function show() {
+      var s = Reveal.getCurrentSlide(); if (!s) return;
+      current = slideId(s);
+      head.textContent = "Notes: " + slideTitle(s);
+      area.value = store[current] || "";
+      status.textContent = canSave ? SAVED : NOSAVE;
+      mark();
+    }
+    area.addEventListener("input", function () {
+      if (!current) return;
+      if (area.value.trim()) store[current] = area.value; else delete store[current];
+      persist(); mark();
+    });
+    btn.addEventListener("click", function () {
+      var open = panel.hidden; panel.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      if (open) { show(); area.focus(); }
+    });
+    close.addEventListener("click", function () { panel.hidden = true; btn.setAttribute("aria-expanded", "false"); btn.focus(); });
+    panel.addEventListener("keydown", function (e) { if (e.key === "Escape") { e.stopPropagation(); close.click(); } });
+    Reveal.on("slidechanged", show);
+    dl.addEventListener("click", function () {
+      var out = [document.title, "My notes", ""];
+      var any = false;
+      Reveal.getSlides().forEach(function (s) {
+        var n = store[slideId(s)];
+        if (n && n.trim()) { any = true; out.push("## " + slideTitle(s), n.trim(), ""); }
+      });
+      if (!any) { status.textContent = "You have not written any notes yet."; return; }
+      var name = (location.pathname.split("/").pop() || "lecture").replace(/\.html$/, "");
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([out.join("\n")], { type: "text/plain" }));
+      a.download = "phm801-notes-" + name + ".txt";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    });
+    clr.addEventListener("click", function () {
+      if (!Object.keys(store).length) { status.textContent = "There are no notes to delete."; return; }
+      if (!window.confirm("Delete every note you have written for this lecture? This cannot be undone.")) return;
+      store = {}; persist(); show();
+    });
+    show();
   }
 
   function getSlideText(section) {

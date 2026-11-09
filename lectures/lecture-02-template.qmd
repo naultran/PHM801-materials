@@ -14,6 +14,7 @@ format:
     transition: none
     width: 1280
     height: 720
+    include-in-header: ../_includes/noindex.html
     include-after-body: ../_includes/reveal-embed-bridge.qmd
 ---
 
@@ -53,7 +54,7 @@ presentation to open the speaker view.
 ## Example: an activity-embed slide
 
 <!--
-  This is the exact pattern used throughout lecture-01-showcase.qmd. To embed
+  This is the exact pattern used throughout lecture-01-systems-pharm.qmd. To embed
   a real activity:
     1. Pick an activity folder under activities/<slug>/
     2. Set src to "../activities/<slug>/index.html"
@@ -68,7 +69,7 @@ presentation to open the speaker view.
 :::
 ::: {.activity-embed}
 <iframe class="activity-iframe" loading="lazy" title="REPLACE ME: activity title"
-  src="../activities/signature-matcher/index.html?seed=12345"></iframe>
+  src="../activities/omic-signatures/index.html?seed=2026"></iframe>
 :::
 
 ::: {.notes}
@@ -78,9 +79,9 @@ them once they've tried it themselves?
 
 ## Example: embedding an image
 
-<!-- Place image files under images/ or assets/ and reference them with a relative path. -->
+<!-- Place image files under assets/figures/ and reference them with a relative path. -->
 
-<!-- ![Alt text describing the figure](../images/example-figure.png) -->
+<!-- ![Alt text describing the figure](../assets/figures/example-figure.png) -->
 
 Replace this slide with a real figure, or delete it if you don't need one yet.
 

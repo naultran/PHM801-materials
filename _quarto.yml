@@ -12,6 +12,7 @@ project:
     - "js/**"
     - "css/**"
     - "assets/**"
+    - "robots.txt"
   # Instructor/maintainer documentation is intentionally kept OUT of the
   # published GitHub Pages site — it's meant to be read as plain Markdown in
   # the repository (GitHub renders it natively), not as a page students land
@@ -19,6 +20,8 @@ project:
   render:
     - "*.qmd"
     - "lectures/*.qmd"
+    # The blank lecture template is for copying, not for students to land on.
+    - "!lectures/lecture-02-template.qmd"
     - "!README.md"
     - "!INTERACTIVITY-GUIDE.md"
     - "!TECHNICAL-LIMITS.md"
@@ -34,17 +37,20 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: lectures/lecture-01-showcase.qmd
+      - href: lectures/lecture-01-systems-pharm.qmd
         text: "Lecture 1: Transcriptomics"
-      - href: lectures/lecture-02-single-cell-spatial.qmd
+      - href: lectures/lecture-02-transcriptomics.qmd
         text: "Lecture 2: Single-Cell & Spatial"
       - href: index.qmd#activities
         text: Activities
   page-footer:
-    center: "PHM801 · Michigan State University"
+    center: "PHM801 · Michigan State University · © 2026 Rance Nault. All rights reserved."
 
 format:
+  # Unlisted: every page carries a noindex tag (see _includes/noindex.html; lectures and
+  # activity pages add it themselves) and robots.txt asks crawlers to stay out.
   html:
+    include-in-header: _includes/noindex.html
     theme: cosmo
     css: [css/variables.css, css/base.css, css/home.css]
     toc: false

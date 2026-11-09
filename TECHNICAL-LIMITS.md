@@ -1,110 +1,77 @@
 # Technical Limits
 
-What's practical to build in a fully static, GitHub-Pages-only, no-backend lecture site —
-and, specifically, what simplifications this template made and why. Read this before deciding
-how far to push the fictional examples toward real, large-scale data.
+What is practical to build in a fully static, GitHub-Pages-only, no-backend lecture site, and how
+the activities in this course are scaled to fit.
 
 ## The core constraint
 
-Everything here runs entirely in the student's browser. There is no server to precompute
-anything, no database, and no API to call. That means:
+Everything runs entirely in the student's browser. There is no server to precompute anything, no
+database and no API to call. That means:
 
-- All computation (similarity, clustering, PCA, statistics, simulation) happens client-side,
+- All computation (similarity, clustering, enrichment statistics, simulation) happens client-side,
   in JavaScript, on every interaction.
-- All data has to be small enough to both ship in the page load and recompute fast enough to
-  feel live (well under a second, ideally instant) on an ordinary student laptop.
-- `fetch()` of a local `data/*.json` file is blocked by the browser under a bare `file://` URL
-  (opened by double-clicking the HTML file). This is a browser security restriction, not a bug
-  in this site — always use `quarto preview`, or serve `_site/` with any static file server, or
-  the deployed GitHub Pages URL. See README.md section 2.
+- Data must be small enough to ship with the page and recompute fast enough to feel live (well
+  under a second, ideally instant) on an ordinary student laptop.
+- `fetch()` of a local `data/*.json` file is blocked under a bare `file://` URL (double-clicking
+  the HTML file). This is a browser security restriction, not a bug. Use `quarto preview`, serve
+  `_site/` with a static file server, or use the deployed GitHub Pages URL.
 
-## Straightforward and strongly supported (used throughout this template)
+## Straightforward and well supported (used throughout)
 
-Sliders, toggles, dropdowns, buttons, randomization with a seeded PRNG, immediate
-recalculation, dynamic SVG/Canvas plots, heatmaps with live row/column reordering,
-hierarchical clustering and dendrograms on small datasets (≤30×30 here), drag-and-drop with a
-full keyboard-operable alternative, puzzle-piece-style placement, seeded dose-response and
-statistical simulations, small PCA (≤~30 variables), spatial raster maps with Canvas,
-downloading a small JSON/PNG result to the student's own machine, and encoding small state in
-a URL query string (`?mode=`/`?seed=`).
+Sliders, toggles, dropdowns and checkboxes; randomisation with a seeded generator (the same
+`?seed=` always gives the same scenario); immediate recalculation; dynamic SVG and Canvas plots;
+heatmaps; hierarchical clustering and dendrograms on small matrices; Fisher's exact tests;
+bootstrap-style resampling on small datasets; and encoding small state in a URL query string.
 
-## Practical with care (used more cautiously here)
+## Practical with care
 
-Hundreds to a couple thousand plotted points; the Experimental Design activity's volcano plot
-comfortably handles its full 500-gene slider range but would need debouncing or a coarser
-redraw strategy well beyond that. Browser-based PCA via a Jacobi eigendecomposition is fine
-for a few dozen genes (this template caps at 12) but is the wrong tool for hundreds. Larger
-heatmaps than this template's (≤30×30) are possible with canvas instead of SVG rendering, at
-the cost of losing per-cell hover tooltips without extra work.
+A few hundred to a couple of thousand plotted points. The single-cell view in *Seeing Space*
+draws 400 cells × 10 genes to a Canvas, averaging cells per pixel column, which is instant;
+much larger heatmaps would need the same Canvas approach and lose per-cell hover tooltips.
 
-## Deliberately out of scope for this first-pass template
+## Deliberately out of scope
 
-- **Full transcriptome datasets** (tens of thousands of genes) or **large single-cell
-  datasets** (hundreds of thousands of cells) — this template intentionally uses 5–30 genes
-  and 5–30 samples per activity, following the "reduced fictional dataset" principle in the
-  original project brief.
-- **Computationally intensive UMAP** — deliberately not implemented (the PCA Explorer notes
-  this explicitly); UMAP's sensitivity to parameters and random initialization makes it easy
-  to over-interpret distances in a short classroom demo, and a from-scratch implementation
-  would be a poor use of client-side compute for the pedagogical payoff.
-- **Large-scale differential expression or a full pathway-enrichment database loaded into the
-  browser** — the Experimental Design activity simulates a bounded, illustrative gene universe
-  rather than testing against a real annotation database.
-- **Arbitrary code execution, long-running optimization, large file uploads** — none of these
-  fit a static-hosting model.
-- **Real-time collaborative student responses, secure access control, persistent accounts,
-  cross-device saved results, or grading integration** — explicitly excluded by design (see
-  "Saving and Sharing Student States" in the project brief); this template collects nothing
-  and transmits nothing.
+- **Full transcriptomes or real single-cell datasets** (tens of thousands of genes, hundreds of
+  thousands of cells). The activities use 10 to 100 genes and small synthetic cell counts so
+  each isolates one idea.
+- **UMAP and other compute-heavy embeddings.** Distances in a UMAP are easy to over-interpret in
+  a short demo, and a from-scratch implementation is a poor use of client-side compute.
+- **A real annotation database in the browser.** The enrichment activities test against small
+  invented gene sets, not Gene Ontology or Reactome.
+- **Arbitrary code execution, long-running optimisation, large file uploads.**
+- **Collaboration, accounts, grading or saved results across devices.** The site collects and
+  transmits nothing; each browser tab is independent.
 
-These heavier needs normally require precomputation, data reduction, a real backend, an
-institutional platform, a separate analysis notebook, or a dedicated application — not a
-static lecture site.
+These needs normally call for precomputation, a backend, an institutional platform, a separate
+analysis notebook or a dedicated application, not a static lecture site.
 
-## Specific simplifications made in this template (and why)
+## Simplifications made (and why)
 
-- **Experimental Design's "variability" slider** combines biological and technical noise into
-  one control, rather than two independently tunable sources. A fully separable two-source
-  noise model is realistic but adds a control most students won't yet have the background to
-  interpret independently; one combined slider keeps the panel teachable while still
-  demonstrating the core lesson (more variability → less power).
-- **Mixture Simulator's activation gain** applies uniformly to any cell type carrying a
-  flagged inflammatory/fibrotic gene, rather than requiring a separate per-cell-type gene list
-  in the data schema. This keeps `data/mixture-simulator.json` simpler to hand-edit without
-  changing the qualitative story, since baseline signatures already differ appropriately by
-  cell type.
-- **Spatial Explorer's grids are capped at 60×60 per gene** and are stored as plain nested
-  arrays in JSON (hand-editable, not procedurally generated at runtime) — this keeps the
-  activity fast, keeps the data instructor-editable without touching JavaScript, and avoids
-  suggesting false precision about real spatial coordinates.
-- **The t-distribution p-value** in Experimental Design uses a numerical incomplete-beta
-  continued-fraction approximation rather than a statistics library. It's accurate to
-  well beyond teaching-relevant precision (validated against textbook critical-value tables)
-  but should not be mistaken for publication-grade statistical software.
-- **PCA uses a classical Jacobi eigendecomposition**, not a numerical library — chosen because
-  it reliably recovers *all* eigenpairs of a small dense symmetric matrix in a compact,
-  auditable amount of code, which matters for a teaching tool where the implementation itself
-  is sometimes worth showing students.
-- **No external visualization or drag-and-drop library** (D3, Plotly, Observable Plot,
-  SortableJS, Interact.js, Cytoscape.js) is used anywhere in the eight core activities. At this
-  template's data scale, hand-rolled SVG/Canvas/Pointer-Events code is simpler to read, modify,
-  and keep dependency-free than adapting a general-purpose library's data model to this
-  project's specific keyboard-parity and reproducible-seeding requirements.
+- **Synthetic data.** Every activity is built so its single teaching point holds for every seed
+  (for example, exactly one truly enriched pathway; a drug that matches the immune signature but
+  not the bulk one). That means the data are tuned for teaching, not realistic noise.
+- **Statistics are hand-rolled.** Fisher's exact test, Pearson correlation, hierarchical
+  clustering and the benchmark-dose calculations are small, auditable implementations, accurate
+  for teaching but not a substitute for statistical software.
+- **No visualisation library.** There is no D3, Plotly or similar; hand-written SVG and Canvas is
+  simpler to read and keeps each activity dependency-free.
+- **Bulk is a weighted average.** Bulk signals are the average of cell values weighted by
+  how many cells of each type there are, ignoring differences in RNA content per cell.
 
-## Performance ballpark (what to expect on an ordinary laptop)
+## Performance ballpark (ordinary laptop)
 
-| Activity | Data scale used | Recompute cost |
+| Activity | Data scale | Recompute |
 |---|---|---|
-| Signature Matcher | 3 candidates × 8 genes | instant |
-| Heatmap & Clustering | 12 samples × 12 genes | instant |
-| Pathway Construction | ≤10 items/stage | instant |
-| Mixture Simulator | 4 cell types × 8 genes | instant |
-| Dose-Response Lab | 120 curve points + ≤80 replicate points | instant |
-| Experimental Design | up to 500 genes × Welch's t-test + BH-FDR | well under 100ms |
-| PCA Explorer | 16 samples × 12 genes | well under 100ms, animated over ~500ms |
-| Spatial Explorer | ≤60×60 grid × up to 4 genes | instant (Canvas) |
+| Systems Biology, Pharmacology, and Toxicology | 6 genes, 2 organs | instant |
+| Understanding 'Omic Signatures | 100 genes × 16 samples, clustered live | instant |
+| Mode of Action Discovery | 10 compounds × 48 genes, clustered on both axes | instant |
+| Over-Representation or Ranked? | 20 genes, permutation test | instant |
+| From Gene Curves to a Dose | 80 genes, ten point-of-departure methods | instant |
+| Bulk or Mixed? | 10 cells × 10 genes | instant |
+| Seeing Space in a Tissue Measurement | 400 cells × 10 genes (Canvas) | instant |
+| Screening by Cell-Specific Signature | 30 genes × 2 cell types, 2 drugs | instant |
+| Cell-Specific vs. Tissue-Level Dose-Response | up to 8 curves + bulk | instant |
 
-If you significantly scale up any dataset beyond these ranges, re-check recompute time before
-using it live in front of a class — a control that used to feel instant can start to feel
-laggy well before the browser actually struggles, which undermines the "immediate feedback"
-teaching mechanism these activities rely on.
+If you scale any dataset well past these ranges, re-check recompute time before using it live: a
+control can start to feel laggy long before the browser struggles, which undermines the "immediate
+feedback" these activities rely on.
