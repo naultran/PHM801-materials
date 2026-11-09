@@ -29,7 +29,7 @@ project:
 website:
   title: "PHM801 Systems Pharmacology"
   description: "Interactive lectures and activities on systems pharmacology: transcriptomic, single-cell, and spatial approaches to understanding drug action and safety."
-  site-url: "https://naultran.github.io/interactive-lecture-test/"
+  site-url: "https://naultran.github.io/PHM801-material/"
   favicon: assets/favicon.svg
   navbar:
     background: "#18453b"
