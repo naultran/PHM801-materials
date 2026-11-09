@@ -10,19 +10,19 @@
  *   Step 2  Group the BMDs by pathway and, as the dose rises, test which
  *           pathways are significantly over-represented among the responders
  *           (the same Fisher's exact test as the enrichment activity).
- *   Step 3  Choose a point of departure (PoD) for the adverse effect. The most
- *           sensitive gene is the least reliable summary; the first enriched
- *           pathway is an ADAPTIVE stress response; the right anchor is the
- *           median BMD of the enriched pathway that is mechanistically linked
- *           to the adverse outcome (lipid biosynthesis -> steatosis).
+ *   Step 3  Ten established ways to turn gene BMDs into a point of departure
+ *           (PoD), computed on this dataset and shown side by side (no
+ *           lock-in). They spread over orders of magnitude. The mechanism-
+ *           anchored estimate (median BMD of the enriched pathway linked to
+ *           the adverse outcome: lipid biosynthesis -> steatosis) is shown
+ *           against the efficacy dose to give the window.
  *
  * Every seed guarantees: the most sensitive gene is NOT in the efficacy or
  * adverse pathway; the adaptive pathway is enriched first; the efficacy and
  * adverse pathways are each enriched at some dose; the cell-cycle pathway
  * (a pathway label without coordinated response) is never enriched.
  *
- * Depends on: prng.js, math-utils.js, stats-utils.js, svg-utils.js,
- * prediction-component.js, activity-shell.js.
+ * Depends on: prng.js, math-utils.js, stats-utils.js, svg-utils.js, activity-shell.js.
  */
 
 const DOSE_MIN = 0.01, DOSE_MAX = 1000;   // µM
@@ -144,15 +144,35 @@ function drawScenario(rng) {
     pathwayBmds(genes, "lip").length >= 12;
   if (!ok) return null;
 
-  const lipBmds = pathwayBmds(genes, "lip");
-  const candidates = {
-    gene: { dose: minGene.bmd },
-    ox: { dose: med("ox") },
-    all: { dose: median(responding.map((g) => g.bmd)) },
-    lipMin: { dose: Math.min(...lipBmds) },
-    lip: { dose: med("lip") }
-  };
-  return { genes, minGene, first, candidates, efficacyPod: med("gr"), adversePod: med("lip"), ratio: med("lip") / med("gr") };
+  // Per-gene lower confidence limits (BMDL) and the ten PoD methods. Drawn
+  // after the scenario is accepted so they do not change which genes respond.
+  responding.forEach((g) => { g.bmdl = g.bmd * Math.pow(10, -rng.range(0.1, 0.4)); });
+  const allBmds = responding.map((g) => g.bmd);
+  const qualifying = ["gr", "ox", "lip"].filter((id) => first[id] !== null);   // enriched at some dose in Step 2
+  const pathMed = Object.fromEntries(qualifying.map((id) => [id, med(id)]));
+  const lowestPath = qualifying.reduce((x, y) => (pathMed[x] < pathMed[y] ? x : y));
+  const methods = buildMethods({ allBmds, responding, qualifying, pathMed, lowestPath, first, genes, rng });
+  return { genes, minGene, first, methods, qualifying, pathMed, efficacyPod: med("gr"), adversePod: med("lip"), ratio: med("lip") / med("gr") };
+}
+
+/** Ten established ways to define a point of departure from gene- and pathway-level BMDs. */
+function buildMethods({ allBmds, responding, qualifying, pathMed, lowestPath, first, genes, rng }) {
+  const pathVals = qualifying.map((id) => pathMed[id]);
+  // lower 95% bound of the lowest enriched pathway's median BMD, by bootstrapping its genes
+  const lowBmds = pathwayBmds(genes, lowestPath);
+  const boots = Array.from({ length: 500 }, () => median(lowBmds.map(() => lowBmds[rng.int(0, lowBmds.length)])));
+  return [
+    { n: 1, name: "25th percentile gene BMD", how: "25th percentile of the modeled gene BMDs", dose: quantile(allBmds, 0.25) },
+    { n: 2, name: "Median gene BMD", how: "50th percentile of the modeled gene BMDs", dose: median(allBmds) },
+    { n: 3, name: "10th percentile gene BMD", how: "Lower-tail estimate of transcriptional sensitivity", dose: quantile(allBmds, 0.10) },
+    { n: 4, name: "Lowest gene BMD", how: "Minimum gene BMD; highly sensitive to outliers", dose: Math.min(...allBmds) },
+    { n: 5, name: "Lowest enriched pathway BMD", how: "BMD of the most sensitive significantly enriched pathway", dose: Math.min(...pathVals) },
+    { n: 6, name: "Median pathway BMD", how: "Median of the BMDs of the qualifying enriched pathways", dose: median(pathVals) },
+    { n: 7, name: "25th percentile pathway BMD", how: "Lower quartile of the qualifying pathway BMDs", dose: quantile(pathVals, 0.25) },
+    { n: 8, name: "Most sensitive biological process", how: "Lowest-dose qualifying process or functional category (here: the dose where the first category becomes significantly enriched)", dose: Math.min(...qualifying.map((id) => first[id])) },
+    { n: 9, name: "Pathway BMDL", how: "Lower confidence bound of a pathway BMD (here: the lowest enriched pathway, bootstrapped)", dose: quantile(boots, 0.05) },
+    { n: 10, name: "Gene-level BMDL percentile", how: "A chosen percentile (here the 10th) of the gene BMD lower confidence limits", dose: quantile(responding.map((g) => g.bmdl), 0.10) }
+  ];
 }
 
 function buildScenario(rng) {
@@ -231,7 +251,7 @@ ActivityShell.init({
         bar.appendChild(back);
       }
       if (step < TOTAL_STEPS - 1) {
-        const next = el("button", { type: "button" }, step === 0 ? "Next: group the genes by pathway →" : "Next: choose a point of departure →");
+        const next = el("button", { type: "button" }, step === 0 ? "Next: group the genes by pathway →" : "Next: compare ways to define the PoD →");
         next.addEventListener("click", () => { step += 1; show(); });
         bar.appendChild(next);
       }
@@ -402,149 +422,65 @@ ActivityShell.init({
         "Things to try: which pathway is enriched first? Which comes next? A pathway can stop being enriched once many other genes respond, because enrichment is relative to everything else that has responded. Does Cell cycle ever become enriched?"));
     }
 
-    /* ---- Step 3: choose a point of departure ---- */
+    /* ---- Step 3: ten established ways to define the point of departure ---- */
     function buildStepThree() {
       const wrap = el("div", { class: "pp-split" });
       const left = el("div", { class: "pp-left" });
       const right = el("div", { class: "pp-right" });
       wrap.append(left, right);
-      left.appendChild(el("h3", {}, "Step 3 — Choose the point of departure"));
-      const roles = el("ul", { class: "pp-roles" });
-      roles.innerHTML =
-        PATHWAYS.filter((p) => p.id !== "bg").map((p) => `<li><span class="aw-swatch" style="background:${p.color}"></span><b>${p.label}</b> — ${p.role.toLowerCase()}</li>`).join("");
-      const rolesCard = el("div", { class: "pp-rolescard" });
-      rolesCard.appendChild(el("h4", {}, "What each pathway means for Drug X"));
-      rolesCard.appendChild(roles);
-      right.appendChild(rolesCard);
 
-      const mount = el("div", {});
-      left.appendChild(mount);
-      const options = rng.shuffle([
-        { id: "gene", label: "The most sensitive gene in the whole experiment" },
-        { id: "ox", label: "The median BMD of the oxidative stress genes" },
-        { id: "all", label: "The median BMD of all responding genes" },
-        { id: "lipMin", label: "The most sensitive gene in lipid biosynthesis" },
-        { id: "lip", label: "The median BMD of the lipid biosynthesis genes" }
-      ]);
-      const widget = PredictionComponent.createPredictionWidget(mount, {
-        prompt: "The adverse effect of Drug X is hepatic steatosis. Which value is the best point of departure for it?",
-        inputType: "select", options, commitLabel: "Lock in answer"
-      });
-      const actions = el("div", { class: "aw-actions" });
-      const checkBtn = el("button", { type: "button" }, "Check my answer");
-      actions.appendChild(checkBtn);
-      left.appendChild(actions);
-      const results = el("div", { class: "pp-results", "aria-live": "polite" });
-      right.appendChild(results);
+      const eff = sc.efficacyPod, adv = sc.adversePod;
+      const doses = sc.methods.map((m) => m.dose);
+      const spread = Math.max(...doses) / Math.min(...doses);
 
-      function check() {
-        const c = sc.candidates;
-        const lipRow = enrichmentAt(genes, sc.first.lip).rows.lip;   // where the pathway first becomes enriched
-        const names = {
-          gene: `Most sensitive gene (${sc.minGene.name})`,
-          ox: "Oxidative stress median",
-          all: "Median of all responding genes",
-          lipMin: "Most sensitive lipid gene",
-          lip: "Lipid biosynthesis median"
-        };
-        const verdict = {
-          gene: "single gene, not tied to the adverse effect",
-          ox: "enriched, but an adaptive response",
-          all: "mixes unrelated pathways",
-          lipMin: "right pathway, but one gene",
-          lip: "enriched and linked to the adverse effect"
-        };
-        const order = ["gene", "ox", "all", "lipMin", "lip"];
-        const table = el("table", { class: "aw-table pp-table" });
-        table.innerHTML =
-          "<thead><tr><th>Candidate point of departure</th><th>Dose (µM)</th><th>vs. lipid median</th><th>Why</th></tr></thead><tbody>" +
-          order.map((k) => `<tr class="${k === "lip" ? "pp-best" : ""}"><th>${names[k]}</th><td>${fmtDose(c[k].dose)}</td><td>${k === "lip" ? "—" : (c[k].dose < c.lip.dose ? fmtFold(c.lip.dose / c[k].dose) + " lower" : fmtFold(c[k].dose / c.lip.dose) + " higher")}</td><td>${verdict[k]}</td></tr>`).join("") +
-          "</tbody>";
-        rolesCard.hidden = true;
-        results.innerHTML = "";
-        results.appendChild(table);
+      left.appendChild(el("h3", {}, "Step 3 — Many ways to define the point of departure"));
+      left.appendChild(el("p", { class: "aw-note" },
+        "Researchers and regulators use many conventions to collapse thousands of gene BMDs into one number. Here are ten established approaches, all computed on Drug X’s data. " +
+        "None is universally right."));
+      const callout = el("div", { class: "pp-callout" });
+      callout.innerHTML =
+        `<p>The ten estimates span <b>${fmtFold(spread)}</b>, from <b>${fmtDose(Math.min(...doses))}</b> to <b>${fmtDose(Math.max(...doses))} µM</b>.</p>` +
+        `<p><b>Anchoring in mechanism.</b> Drug X’s adverse effect is hepatic steatosis, which is driven by lipid biosynthesis. The median BMD of that enriched pathway is <b>${fmtDose(adv)} µM</b>; ` +
+        `the median of the GR target genes (the intended effect) is <b>${fmtDose(eff)} µM</b>. The adverse effect starts about <b>${fmtFold(sc.ratio)}</b> above the dose that gives efficacy.</p>` +
+        `<p>Values in red sit below the efficacy dose. Gene-level and lowest-pathway estimates are protective screening values: they pick up sensitive or adaptive responses, so on their own they cannot say whether the <i>adverse</i> effect starts before or after the therapeutic dose. The mechanism-anchored estimate can.</p>`;
+      left.appendChild(callout);
 
-        const picked = widget.getPrediction();
-        const minIsBg = sc.minGene.path === "bg";
-        const geneWhat = minIsBg
-          ? `${sc.minGene.name}, a gene with no pathway partners that is most likely noise`
-          : `${sc.minGene.name}, part of the adaptive ${PATH[sc.minGene.path].label.toLowerCase()}`;
-        const explain = {
-          gene:
-            `The most sensitive gene is ${geneWhat}. It responds at ${fmtDose(c.gene.dose)} µM, ${fmtFold(c.lip.dose / c.gene.dose)} below the lipid pathway’s median. ` +
-            `With 80 curves, one gene will always be the extreme, and it need not be related to the adverse effect.`,
-          ox:
-            `The oxidative stress genes are a coordinated, significantly enriched response, so this one is real signal. But it is the cell’s <i>adaptive</i> response: ` +
-            `it switches on to protect the cell, well before any harm. Enrichment shows a pathway is coordinated; mechanism tells you whether it is linked to the adverse effect.`,
-          all:
-            `Pooling every responder mixes the efficacy, adaptive and adverse pathways with a few random genes, so the number cannot be tied to any mechanism.`,
-          lipMin:
-            `This is the right pathway, so it is mechanistically anchored. But it is one gene’s value, ${fmtFold(c.lip.dose / c.lipMin.dose)} below the pathway median, and the extreme of ` +
-            `${pathwayBmds(genes, "lip").length} noisy estimates is the least reproducible. It is defensible as a conservative bound, but the median is the more stable summary.`,
-          lip:
-            `Lipid biosynthesis becomes significantly enriched by ${fmtDose(sc.first.lip)} µM (${lipRow.a} of ${lipRow.n} genes responding, p ${fmtP(lipRow.p) === "<0.001" ? "" : "= "}${fmtP(lipRow.p)}), it is tied by mechanism to steatosis, ` +
-            `and the median BMD summarises ${pathwayBmds(genes, "lip").length} genes, so no single gene decides it.`
-        };
-        const msg = el("p", { class: "pp-takeaway" });
-        msg.innerHTML = picked
-          ? (picked === "lip" ? "<b>Right choice.</b> " : "<b>Not the best anchor.</b> ") + explain[picked] + (picked === "lip" ? "" : ` The better choice is the lipid biosynthesis median: ${explain.lip}`)
-          : `No answer was locked in. The best choice is the lipid biosynthesis median: ${explain.lip}`;
-        results.appendChild(msg);
+      right.appendChild(ladder());
+      const table = el("table", { class: "aw-table pp-table pp-methods" });
+      table.innerHTML =
+        "<thead><tr><th>#</th><th>Method</th><th>How the PoD is defined</th><th>Dose (µM)</th><th>× efficacy dose</th></tr></thead><tbody>" +
+        sc.methods.map((m) => {
+          const x = m.dose / eff;
+          return `<tr><td>${m.n}</td><th>${m.name}</th><td class="pp-how">${m.how}</td><td>${fmtDose(m.dose)}</td><td class="${x < 1 ? "pp-below" : ""}">${x < 10 ? x.toFixed(2) : x.toFixed(1)}×</td></tr>`;
+        }).join("") +
+        `<tr class="pp-best"><td>★</td><th>Mechanism-anchored</th><td class="pp-how">Median BMD of the enriched pathway linked to the adverse outcome (lipid biosynthesis)</td><td>${fmtDose(adv)}</td><td>${(adv / eff).toFixed(1)}×</td></tr>` +
+        "</tbody>";
+      right.appendChild(table);
 
-        // the window
-        const eff = sc.efficacyPod, adv = sc.adversePod, ratio = sc.ratio;
-        const naive = c.gene.dose / eff;
-        const verdictText = ratio >= 10 ? "a comfortable window" : ratio >= 3 ? "a modest window that deserves caution" : "a narrow window";
-        const win = el("p", { class: "pp-takeaway" });
-        win.innerHTML =
-          `<b>The window.</b> Efficacy point of departure (GR target median): <b>${fmtDose(eff)} µM</b>. Adverse point of departure (lipid median): <b>${fmtDose(adv)} µM</b>. ` +
-          `The adverse effect starts about <b>${fmtFold(ratio)}</b> above the dose that gives efficacy: ${verdictText}. ` +
-          (naive < 1
-            ? `If you had used the most sensitive gene instead, the “adverse” dose would sit ${fmtFold(1 / naive)} <i>below</i> the efficacy dose, and you would wrongly conclude there is no window at all.`
-            : `If you had used the most sensitive gene instead, you would estimate a margin of only ${fmtFold(naive)}, ${naive < ratio ? "understating" : "overstating"} the true ${fmtFold(ratio)}.`);
-        results.appendChild(win);
-        results.appendChild(ladder(names));
-
-        widget.reveal("lip", (predicted) => {
-          const ok = predicted === "lip";
-          return {
-            status: ok ? "correct" : "incorrect",
-            label: ok ? "Correct!" : "Not quite",
-            detail: ok ? "The enriched, mechanism-linked pathway median is the most defensible anchor." : "The best anchor is the median of the enriched pathway linked to the adverse effect."
-          };
-        });
-        checkBtn.disabled = true;
-      }
-      checkBtn.addEventListener("click", check);
-
-      /** A dose ladder: where each candidate sits on one log axis, with the window shaded. */
-      function ladder(names) {
-        const W = 740, H = 134, X0 = 30, X1 = 710, AX = 96;
+      /** All methods on one log axis, with the efficacy and adverse medians and the window between them. */
+      function ladder() {
+        const W = 740, H = 142, X0 = 24, X1 = 716, AX = 104;
         const xs = SvgUtils.logScale([DOSE_MIN, DOSE_MAX], [X0, X1]);
-        const svg = sv("svg", { viewBox: `0 0 ${W} ${H}`, class: "pp-svg pp-ladder", role: "img", "aria-label": "Candidate points of departure on one dose axis" });
+        const svg = sv("svg", { viewBox: `0 0 ${W} ${H}`, class: "pp-svg pp-ladder", role: "img", "aria-label": "The ten point-of-departure estimates on one dose axis, with the efficacy and adverse pathway medians" });
         SvgUtils.logTicks([DOSE_MIN, DOSE_MAX]).forEach((d) => {
-          svg.appendChild(sv("line", { x1: xs(d), x2: xs(d), y1: 10, y2: AX, stroke: "#eceff2" }));
+          svg.appendChild(sv("line", { x1: xs(d), x2: xs(d), y1: 8, y2: AX, stroke: "#eceff2" }));
           svg.appendChild(sv("text", { x: xs(d), y: AX + 14, "text-anchor": "middle", class: "svg-axis-label" }, [String(d)]));
         });
         svg.appendChild(sv("text", { x: (X0 + X1) / 2, y: H - 4, "text-anchor": "middle", class: "svg-axis-label" }, ["Dose (µM, log scale)"]));
-        svg.appendChild(sv("rect", { x: xs(sc.efficacyPod), y: 10, width: Math.max(2, xs(sc.adversePod) - xs(sc.efficacyPod)), height: AX - 10, fill: "#1b7a4b", opacity: 0.1 }));
-        const marks = [
-          { dose: sc.candidates.gene.dose, label: "Most sensitive gene", color: "#8a949e" },
-          { dose: sc.candidates.ox.dose, label: "Oxidative stress median", color: PATH.ox.color },
-          { dose: sc.efficacyPod, label: "Efficacy (GR) median", color: PATH.gr.color },
-          { dose: sc.adversePod, label: "Adverse (lipid) median", color: PATH.lip.color }
-        ].sort((a, b) => a.dose - b.dose);
-        marks.forEach((m, i) => {
-          const y = 24 + (i % 3) * 22;
-          svg.appendChild(sv("line", { x1: xs(m.dose), x2: xs(m.dose), y1: y, y2: AX, stroke: m.color, "stroke-width": 2 }));
-          svg.appendChild(sv("circle", { cx: xs(m.dose), cy: AX, r: 5, fill: m.color, stroke: "#fff", "stroke-width": 1.5 }));
-          const right = xs(m.dose) < W - 170;
-          svg.appendChild(sv("text", { x: xs(m.dose) + (right ? 6 : -6), y: y + 4, "text-anchor": right ? "start" : "end", "font-size": 11, "font-weight": 700, fill: "#17202a" }, [`${m.label} (${fmtDose(m.dose)})`]));
+        svg.appendChild(sv("rect", { x: xs(eff), y: 8, width: Math.max(2, xs(adv) - xs(eff)), height: AX - 8, fill: "#1b7a4b", opacity: 0.1 }));
+        [[eff, "Efficacy (GR median)", PATH.gr.color, "end"], [adv, "Adverse (lipid median)", PATH.lip.color, "start"]].forEach(([d, label, color, anchor]) => {
+          svg.appendChild(sv("line", { x1: xs(d), x2: xs(d), y1: 8, y2: AX, stroke: color, "stroke-width": 2 }));
+          svg.appendChild(sv("text", { x: xs(d) + (anchor === "start" ? 5 : -5), y: 18, "text-anchor": anchor, "font-size": 11, "font-weight": 700, fill: color }, [label]));
+        });
+        // numbered dots, staggered so close estimates stay readable
+        [...sc.methods].sort((p, q) => p.dose - q.dose).forEach((m, i) => {
+          const cy = 40 + (i % 3) * 22;
+          svg.appendChild(sv("circle", { cx: xs(m.dose), cy, r: 9, fill: "#17202a", stroke: "#fff", "stroke-width": 1.5 }));
+          svg.appendChild(sv("text", { x: xs(m.dose), y: cy + 3.5, "text-anchor": "middle", "font-size": 10, "font-weight": 700, fill: "#fff" }, [String(m.n)]));
         });
         return svg;
       }
-
-      return { wrap, reset() { widget.reset(); results.innerHTML = ""; rolesCard.hidden = false; checkBtn.disabled = false; } };
+      return { wrap };
     }
 
     function stepThree() {

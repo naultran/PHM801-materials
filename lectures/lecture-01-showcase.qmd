@@ -83,14 +83,17 @@ Source: <a href="https://www.ncbi.nlm.nih.gov/books/NBK279171/" target="_blank" 
 
 - Does cellular context drive differences in how the individual *parts* interact?
 
-## WHY THE NETWORK MATTERS - TAMOXIFEN {.smaller}
+## WHY THE NETWORK MATTERS - TAMOXIFEN
 
-<br>Tamoxifen is an <u>ERα antagonist in breast tissue</u>, but acts as a <u>partial agonist in bone and endometrium</u>. Because it acts through the same receptor everywhere, these are tissue-specific effects, not off-target ones, and they account for both some benefits and some risks when it is used to treat breast cancer. The cellular context (co-factors, transcriptional targets, etc...), or the <b>system</b>, is key to understanding safety.
+::::: columns
+:::: {.column width="33%"}
+<br>Tamoxifen is an <u>ERα antagonist in breast tissue</u>, but acts as a <u>partial agonist in bone and endometrium</u>. Because it acts through the same receptor everywhere, these are tissue-specific effects and they account for both benefits and risks when it is used to treat breast cancer. 
+::::
 
-![](/assets/figures/Tam-1.png){data-id="tam-image" fig-alt="Flow diagram of tamoxifen's tissue-specific actions, all through ER-alpha. It acts as an estradiol (E2) antagonist in the breast (breast cancer decreases) and premenopausal hypothalamus, but as an E2 agonist in the postmenopausal hypothalamus, liver (HDL up, LDL down, clotting factors up, thrombophilia), bone (bone turnover), and postmenopausal endometrium (polyp, hyperplasia, endometrial cancer, uterine sarcoma)." fig-align="center" width="50%"}
-
-::: credit-spacer
-:::
+:::: {.column .tall-figure .figure-short width="67%"}
+![](/assets/figures/Tam-1.png){data-id="tam-image" fig-alt="Flow diagram of tamoxifen's tissue-specific actions, all through ER-alpha. It acts as an estradiol (E2) antagonist in the breast (breast cancer decreases) and premenopausal hypothalamus, but as an E2 agonist in the postmenopausal hypothalamus, liver (HDL up, LDL down, clotting factors up, thrombophilia), bone (bone turnover), and postmenopausal endometrium (polyp, hyperplasia, endometrial cancer, uterine sarcoma)." fig-align="center"}
+::::
+:::::
 
 ::: source-credit
 Source: <a href="https://doi.org/10.4137/cpath.s487" target="_blank" rel="noopener">doi.org/10.4137/cpath.s487</a>
@@ -132,7 +135,7 @@ Source: <a href="https://doi.org/10.4137/cpath.s487" target="_blank" rel="noopen
 :::
 
 ::: notes
-Have students turn on "systems approach" alone first — network grows, but both organs still look identical. Then turn on "pharmacology approach" too — same drug, same receptor, but each organ now highlights a different downstream pathway. That's the punchline: neither approach alone explains organ-specific outcomes. Finally turn on "toxicology approach" — each organ gains an adverse endpoint (fatty liver; delayed wound healing) in yellow. With systems on you also see the genes behind the liver endpoint; with systems off you only see that the outcome happens, not why.
+Have students turn on "systems approach" alone first — network grows, but both organs still look identical. Then turn on "pharmacology approach" too — same drug, same receptor, but each organ now highlights a different downstream pathway. That's the punchline: neither approach alone explains organ-specific outcomes. Finally turn on "toxicology approach" — dexamethasone appears even if pharmacology is off (toxicology is about harm from the drug), and each organ gains an adverse endpoint (fatty liver; delayed wound healing) in yellow. With systems on you also see the genes behind the liver endpoint; with systems off you only see that the outcome happens, not why.
 :::
 
 <!-- ======================================================================
@@ -232,13 +235,13 @@ The use of these signatures for understanding biology is largely founded on the 
 
 <br> The central dogma suggests that RNA is representative of the overall protein levels and downstream phenotypes. 
 
-![](https://personal.cityu.edu.hk/liangdai/post/central-dogma-translation-transcription/featured.jpg){.nostretch fig-alt="Diagram of the central dogma of molecular biology: DNA is transcribed into RNA, and RNA is translated into protein." fig-align="center" width="524px"}
+![](https://personal.cityu.edu.hk/liangdai/post/central-dogma-translation-transcription/featured.jpg){.nostretch fig-alt="Diagram of the central dogma of molecular biology: DNA is transcribed into RNA, and RNA is translated into protein." fig-align="center" width="624px"}
 
 ::: source-credit
 Source: <a href="https://personal.cityu.edu.hk/liangdai/post/central-dogma-translation-transcription/" target="_blank" rel="noopener">personal.cityu.edu.hk/liangdai</a>
 :::
 
-## DIFFERENT DRUGS, SIMILAR EXPRESSION SIGNATURES
+## DIFFERENT DRUGS, SIMILAR SIGNATURES
 
 ::::: columns
 :::: {.column width="33%"}
@@ -288,7 +291,7 @@ Source: <a href="https://doi.org/10.1186/s12864-025-11676-w" target="_blank" rel
 :::
 
 ::: notes
-Three-step wizard: (1) predict whether the unclustered heatmap shows real signatures, reveal via live hierarchical clustering — 8 pairs come out clean; (2) an unknown drug's signature is added, students predict which pair it belongs with, reveal shows the real Pearson correlation (never a perfect match); (3) a disease signature (inverted) is added, students predict which drug would treat it — reveal shows the most anti-correlated pair, introducing the connectivity-map idea that an inverse signature is itself informative.
+Three-step wizard: (1) predict whether the unclustered heatmap shows real signatures, reveal via live hierarchical clustering — 8 pairs come out clean; (2) the 8 reference groups are read as diseases (two samples each) and one new patient sample is added; students predict which disease it is most similar to, reveal shows the real Pearson correlation (never a perfect match); (3) the 8 reference groups are read as diseases and a drug signature (the inverse of one of them) is added; students predict which disease the drug would most likely be effective against — reveal shows the most anti-correlated disease, introducing the connectivity-map idea that an inverse signature is itself informative.
 :::
 
 ## ACTIVITY: Mode of Action Discovery (LO 3) {#s-moa}
@@ -308,7 +311,7 @@ Three-step wizard: (1) predict whether the unclustered heatmap shows real signat
 :::
 
 ::: notes
-Same 16-chemical reference set as the previous activity, but chemicals are shown as neutral numbers (not names) so students can't guess pairing from labels. They pick 2 they think share a mode of action, reveal triggers real clustering to check the pick, then zooms into the genes actually driving that similarity and runs a real Fisher's exact test against three candidate pathways (placeholder names — swap for real ones later) to show over-representation is a testable claim, not just a resemblance.
+Ten compounds, 48 genes, hierarchically clustered on both axes. The colored bar beside the heatmap annotates each gene with the receptor it is a known target of (GR, ER, PPARα, AhR, PXR, or no annotation), so genes regulated by the same receptor appear as colored blocks. The two starred compounds are a pair; students decide which receptor they act through by looking at which block the pair switches on, compare with the other compounds, then lock in an answer. Click a receptor chip to highlight its genes. The reveal tests the genes changed in both compounds for over-representation of each receptor's target set (Fisher's exact test, as in the enrichment activity) and points out any cross-talk: some compounds weakly nudge a second receptor, so real signatures are never perfectly clean. A new seed changes which pair is starred, the compounds' numbers, the cross-talk and the noise.
 :::
 
 <!-- ======================================================================
@@ -328,13 +331,8 @@ Same 16-chemical reference set as the previous activity, but chemicals are shown
 
 <br>A signature is a list of genes. A *mechanism* or *mode of action* is a story about what those genes do together. **Functional annotation** connects the two by asking which biological functions or pathways are over-represented among the genes that changed.
 
-- Gene sets come from curated resources (e.g., Gene Ontology, Reactome, KEGG, MSigDB Hallmark)
-- A pathway "hit" is a hypothesis about mechanism, not proof of it
-
-<!-- PLACEHOLDER: figure — gene list → gene-set database → enriched pathway -->
-::: placeholder-box
-PLACEHOLDER — figure: a gene list is compared with a gene-set database to produce an enriched pathway
-:::
+- Gene sets come from curated resources (e.g., Gene Ontology, Reactome, KEGG, MSigDB Hallmark).
+- A pathway "hit" is a hypothesis about mechanism, not proof of it.
 
 ::: {.fragment .definition-popup}
 ### Mechanism vs. mode of action
@@ -393,20 +391,14 @@ Source: <a href="https://doi.org/10.1016/j.taap.2019.114872" target="_blank" rel
 <br>In safety and efficacy testing we typically rely on a measurement describing some level of <i>effect</i>. In toxicology we often call this the <b>point of departure</b>. In pharmacology this measurement is commonly the <b>minimum effective dose/concentration</b>. 
 
 - Use of gene expression profiling for chemicals and drugs are predominantly focused on safety rather than efficacy since we usually measure the efficacy through more targeted means (we know the expected therapeutic effect). 
-- Every gene has its own dose-response curve and therefore its own <b>benchmark dose (BMD)</b>. The most sensitive single gene is the noisiest summary. A more stable estimate is the <b>median BMD of the genes in a significantly enriched pathway</b>, which can also be tied to a mechanism.
 
-## EFFICACY VERSUS SAFETY: THE WINDOW
+## ONE CURVE IS EASY. THOUSANDS ARE NOT.
 
-<br>Compare *where* two sets of pathways start to respond.
+![](../assets/figures/one-vs-thousands.svg){.nostretch fig-alt="Left: a single dose-response curve with one benchmark dose marked. Right: a tangle of many dose-response curves, one for every gene, with many different benchmark doses." fig-align="center" width="780px"}
 
-- Pathways tied to the **intended effect** (efficacy) on one curve
-- Pathways tied to **adverse outcomes** (safety) on another
-- The gap between them is the margin you have to work with; if they overlap, the drug has no window
-
-<!-- PLACEHOLDER: figure — two pathway curves, efficacy left of toxicity, gap labelled -->
-::: placeholder-box
-PLACEHOLDER — figure: efficacy-pathway and toxicity-pathway curves with the window between them
-:::
+- **Which genes count?** Keep only curves that fit well and respond within the tested doses.
+- **How do we boil thousands of benchmark doses down to one?** The lowest gene? A percentile? A pathway?
+- **Which summary can we defend?** Group genes by pathway, test for enrichment, and anchor the estimate in mechanism.
 
 ## ACTIVITY: From Gene Curves to a Dose (LO 4)
 
@@ -425,7 +417,7 @@ PLACEHOLDER — figure: efficacy-pathway and toxicity-pathway curves with the wi
 :::
 
 ::: notes
-Three steps, one per slide-worth of ideas. Step 1: 80 genes, each with its own dose-response curve and its own benchmark dose (BMD), the dose where its curve crosses the response threshold; click the pathway chips to isolate each group. Step 2: the BMDs grouped by pathway, with a dose slider. At each dose the genes that have responded are tested for enrichment (same Fisher's exact test as the previous activity). Point out that the oxidative stress pathway is enriched first (it is small but every gene responds at low dose), that lipid biosynthesis only becomes enriched at higher doses, that a pathway can lose enrichment once many other genes respond, and that Cell cycle never becomes enriched even though it is a real pathway, because its few responders are scattered. Step 3: students choose the point of departure for the adverse effect (hepatic steatosis). The best answer is the median BMD of the lipid biosynthesis genes: the pathway is enriched, it is linked to the adverse outcome by mechanism, and the median does not depend on any one gene. The most sensitive gene is a single noisy estimate (often an unannotated gene), and the oxidative stress median is real but reflects an adaptive response, not harm. The reveal also shows the efficacy-to-adverse window and what the most-sensitive-gene shortcut would have concluded. Each seed changes the doses and the width of the window.
+Three steps. Step 1: 80 genes, each with its own dose-response curve and its own benchmark dose (BMD), the dose where its curve crosses the response threshold; click the pathway chips to isolate each group. Step 2: the BMDs grouped by pathway, with a dose slider. At each dose the genes that have responded are tested for enrichment (same Fisher's exact test as the previous activity). Point out that the oxidative stress pathway is enriched first (it is small but every gene responds at low dose), that lipid biosynthesis only becomes enriched at higher doses, that a pathway can lose enrichment once many other genes respond, and that Cell cycle never becomes enriched even though it is a real pathway, because its few responders are scattered. Step 3 has no question: it lists ten established ways to turn gene BMDs into a point of departure (percentiles of gene BMDs, the lowest gene, pathway-level medians and percentiles, the most sensitive process, and BMDL-based versions), computed on this dataset and plotted on one dose axis. They spread over one to three orders of magnitude. Discuss why: the lowest gene is an outlier or an adaptive response, gene-level percentiles ignore mechanism, and pathway-level estimates depend on which pathways qualify. The last row anchors the estimate in mechanism: the median BMD of the enriched pathway linked to the adverse outcome (lipid biosynthesis and steatosis), compared with the efficacy dose (GR targets) to give the window. Each seed changes the doses and the width of the window.
 :::
 
 ## PUTTING IT TOGETHER

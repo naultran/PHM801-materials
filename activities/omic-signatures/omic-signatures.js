@@ -23,14 +23,18 @@ function divergingColor(t) {
   t = MathUtils.clamp(t, -1, 1);
   const lerp = (c1, c2, s) => c1.map((v, i) => Math.round(v + (c2[i] - v) * s));
   const rgb = t < 0
-    ? lerp([27, 58, 92], [255, 255, 255], t + 1)
-    : lerp([255, 255, 255], [181, 101, 29], t);
+    ? lerp([33, 102, 172], [255, 255, 255], t + 1)
+    : lerp([255, 255, 255], [178, 24, 43], t);
   return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 }
 
 function columnVector(data, chemIndex) {
   return data.genes.map((g, gi) => data.matrix[gi][chemIndex]);
 }
+
+/** The eight reference groups are read as diseases (two samples each). */
+function diseaseLabel(pair) { return pair.label.replace(/^Pair/, "Disease"); }
+function sampleLabel(chem) { return chem.label.replace(/^Cpd/, "Sample"); }
 
 function pairAverageVector(data, pair) {
   const idxs = data.chemicals
@@ -110,8 +114,8 @@ ActivityShell.init({
   dataUrl: "../../data/omic-signatures.json",
   defaultSeed: 2026,
   instructions:
-    "Predict, then reveal. Each step adds one new signature to a fixed reference set of 16 chemicals (8 similar " +
-    "pairs) across 100 genes. You can randomize a step's new signature to try a different case, then continue " +
+    "Predict, then reveal. Each step adds one new signature to a fixed reference set of 16 disease samples (8 diseases, " +
+    "2 samples each) across 100 genes. You can randomize a step's new signature to try a different case, then continue " +
     "when you're ready for the next step.",
 
   render(data, { rng, container }) {
@@ -153,12 +157,12 @@ ActivityShell.init({
       }
       draw();
       description.textContent =
-        "16 chemicals (columns), 100 genes (rows, unlabeled). Column order is currently shuffled.";
+        "16 samples (columns), 100 genes (rows, unlabeled). Column order is currently shuffled.";
 
       const predictMount = document.createElement("div");
       stepMount.appendChild(predictMount);
       const widget = PredictionComponent.createPredictionWidget(predictMount, {
-        prompt: "Do you see evidence of chemical signatures — chemicals that behave similarly to each other — in this heatmap?",
+        prompt: "Do you see evidence of disease signatures — samples that behave similarly to each other — in this heatmap?",
         inputType: "select",
         options: [{ id: "yes", label: "Yes, I can see some groups" }, { id: "no", label: "Not really, it looks random" }],
         commitLabel: "Lock in answer"
@@ -187,7 +191,7 @@ ActivityShell.init({
         const D = Clustering.distanceMatrix(vectors, "correlation");
         const dendro = Clustering.dendrogramLayout(
           Clustering.agglomerativeCluster(D, "average"),
-          data.chemicals.map((c) => c.label)
+          data.chemicals.map((c) => sampleLabel(c))
         );
         order = dendro.leafOrder;
         draw();
@@ -195,12 +199,12 @@ ActivityShell.init({
           status: "correct",
           label: "Clustered",
           detail: "Whatever you predicted, here's what the data actually shows: hierarchical clustering pulls out " +
-            "8 tight pairs. Each pair shares a coordinated pattern across a small set of genes — everything else " +
+            "8 tight groups, one per disease (two samples each). Each disease shares a coordinated pattern across a small set of genes — everything else " +
             "is noise."
         }));
         description.textContent =
           "Reclustered: " + data.pairs.map((p) => {
-            const members = data.chemicals.filter((c) => c.pairId === p.id).map((c) => c.label);
+            const members = data.chemicals.filter((c) => c.pairId === p.id).map((c) => sampleLabel(c));
             return `${members.join(" + ")}`;
           }).join("; ") + ".";
         revealBtn.disabled = true;
@@ -210,7 +214,7 @@ ActivityShell.init({
     }
 
     function renderExtraSignatureStep(opts) {
-      const { stepNum, title, prompt, targetPairDefault, invert, revealLabel, isLast } = opts;
+      const { stepNum, title, prompt, targetPairDefault, invert, revealLabel, isLast, extraLabel = "?", pairLabel = diseaseLabel, intro } = opts;
       stepMount.innerHTML = "";
       const heading = document.createElement("h3");
       heading.textContent = title;
@@ -230,18 +234,18 @@ ActivityShell.init({
 
       function draw() {
         const cols = data.chemicals.map((c, i) => ({ vector: baseVectors[i] }));
-        cols.push({ vector: extraVec, extra: true, label: "?" });
+        cols.push({ vector: extraVec, extra: true, label: extraLabel });
         drawHeatmap(svg, data, cols);
       }
       draw();
-      description.textContent = `16 reference chemicals plus one new signature (outlined, rightmost column).`;
+      description.textContent = intro || `16 reference chemicals plus one new signature (outlined, rightmost column).`;
 
       const predictMount = document.createElement("div");
       stepMount.appendChild(predictMount);
       const widget = PredictionComponent.createPredictionWidget(predictMount, {
         prompt,
         inputType: "select",
-        options: data.pairs.map((p) => ({ id: p.id, label: p.label })),
+        options: data.pairs.map((p) => ({ id: p.id, label: pairLabel(p) })),
         commitLabel: "Lock in answer"
       });
 
@@ -279,14 +283,13 @@ ActivityShell.init({
         const best = invert ? ranked[ranked.length - 1] : ranked[0];
         const guessedPair = data.pairs.find((p) => p.id === widget.getPrediction());
         const correct = guessedPair && guessedPair.id === best.pair.id;
-        widget.reveal(best.pair.label, () => ({
+        widget.reveal(pairLabel(best.pair), () => ({
           status: correct ? "correct" : "incorrect",
           label: correct ? "Correct!" : "Not quite",
           detail: invert
-            ? `The most anti-correlated match is ${best.pair.label} (r = ${MathUtils.formatNumber(best.corr, 2)}) — ` +
-              `an inverse signature this strong is the kind of pattern that flags a candidate treatment. Notice ` +
-              `it's a strong negative correlation, not r = -1.00 — even a clear inverse match is never perfect.`
-            : `The closest match is ${best.pair.label} (r = ${MathUtils.formatNumber(best.corr, 2)}) — clearly ` +
+            ? `The drug's signature is most strongly inverse to ${pairLabel(best.pair)} (r = ${MathUtils.formatNumber(best.corr, 2)}): it pushes the same genes in the opposite direction to the disease, so ${pairLabel(best.pair)} is the disease it could most plausibly reverse. ` +
+              `Notice it's a strong negative correlation, not r = -1.00 — even a clear inverse match is never perfect, and a candidate still has to be tested.`
+            : `This sample is most similar to ${pairLabel(best.pair)} (r = ${MathUtils.formatNumber(best.corr, 2)}) — clearly ` +
               `related, but not r = 1.00. Similarity here is measured, not just "same vs. different."`
         }));
         revealBtn.disabled = true;
@@ -297,11 +300,13 @@ ActivityShell.init({
     function renderStep2() {
       renderExtraSignatureStep({
         stepNum: 2,
-        title: "Step 2 — Where does this unknown drug fall?",
-        prompt: "Which pair's signature does this unknown drug most resemble?",
+        title: "Step 2 — Which disease is this sample most similar to?",
+        prompt: "The new column is a sample from a patient. Which disease’s samples does it most resemble?",
+        intro: "Sixteen reference samples (two for each of eight diseases) plus one new sample (outlined, rightmost column).",
         targetPairDefault: step2TargetPair,
         invert: false,
-        revealLabel: "Reveal — where does it cluster?",
+        extraLabel: "Sample",
+        revealLabel: "Reveal — find the closest disease",
         isLast: false
       });
     }
@@ -309,11 +314,13 @@ ActivityShell.init({
     function renderStep3() {
       renderExtraSignatureStep({
         stepNum: 3,
-        title: "Step 3 — Which drug would you test for this disease?",
-        prompt: "This is a disease signature. Which pair's drug would you consider testing to treat it?",
+        title: "Step 3 — Which disease might this drug treat?",
+        prompt: "The new column is a drug's signature. Treat each of the 8 reference groups as a disease signature (disease vs. healthy). Which disease would this drug most likely be effective against?",
+        intro: "Eight disease signatures (the same reference columns, now read as disease vs. healthy) plus one new drug signature (outlined, rightmost column). A drug is most likely to help the disease it pushes in the opposite direction.",
         targetPairDefault: step3TargetPair,
         invert: true,
-        revealLabel: "Reveal — find the best candidate",
+        extraLabel: "Drug",
+                revealLabel: "Reveal — find the best match",
         isLast: true
       });
     }

@@ -10,7 +10,7 @@
  * adverse endpoints; only once systems + pharmacology are both on does the
  * organ-specific therapeutic path become visible.
  *
- * Toxicology adds (yellow, dashed): per organ, an adverse endpoint, plus —
+ * Toxicology adds (yellow, dashed): the drug node (if not already shown), per organ an adverse endpoint, plus —
  * when the systems view is also on — the genes behind it. Without the
  * systems view you see the endpoint but not the mechanism, mirroring how
  * classical toxicology observed outcomes before the genes were known.
@@ -36,7 +36,9 @@ function computeGraph(data, systemsOn, pharmOn, toxOn, organ) {
   const nodes = [{ id: "GR", label: data.receptor, x: GR_POS.x, y: GR_POS.y, kind: "receptor" }];
   const edges = [];
 
-  if (pharmOn) {
+  // The toxicology view is about harm from the drug, so the drug is shown
+  // whenever toxicology is on, even if the pharmacology approach is off.
+  if (pharmOn || toxOn) {
     nodes.push({ id: "drug", label: data.drug, x: DRUG_POS.x, y: DRUG_POS.y, kind: "drug" });
     edges.push({ from: "drug", to: "GR" });
   }
@@ -254,7 +256,7 @@ ActivityShell.init({
     container.appendChild(controls);
 
     const description = document.createElement("p");
-    description.className = "spn-description";
+    description.className = "spn-description sr-only";   // announced to screen readers, not drawn
     description.setAttribute("aria-live", "polite");
     container.appendChild(description);
 

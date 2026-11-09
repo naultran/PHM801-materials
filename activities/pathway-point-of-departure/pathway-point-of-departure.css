@@ -61,3 +61,14 @@ body.is-embedded .pp-takeaway { margin-top: var(--space-2); padding: 6px var(--s
 .pp-rolescard h4 { margin: 0 0 var(--space-2); }
 .pp-rolescard .pp-roles { margin: 0; }
 .pp-right .pp-chips { margin-top: 0; }
+
+/* Step 3: the ten methods */
+.pp-callout { padding: var(--space-3); background: var(--color-bg-alt); border-radius: var(--radius); font-size: var(--font-size-sm); }
+.pp-callout p { margin: 0 0 var(--space-2); }
+.pp-callout p:last-child { margin-bottom: 0; }
+.pp-methods { font-size: 13px; }
+.pp-methods th { text-align: left; }
+.pp-methods td.pp-how { text-align: left; color: var(--color-text-muted); font-size: 12px; }
+.pp-below { color: var(--color-danger); font-weight: 700; }
+.pp-methods .pp-best th, .pp-methods .pp-best td { background: var(--color-success-bg); color: var(--color-success); font-weight: 700; }
+body.is-embedded .pp-methods td, body.is-embedded .pp-methods th { padding: 1px 6px; }

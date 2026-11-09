@@ -76,7 +76,7 @@ Switch the systems, pharmacology, and toxicology views on and off to see why one
 
 #### Understanding ‘Omic Signatures {.home-activity-title}
 
-Predict, then reveal with real clustering: spot signatures, place an unknown drug, and match a disease signature to a candidate treatment.
+Predict, then reveal with real clustering: spot disease signatures, match a new sample to its closest disease, and match a drug to the disease it could treat.
 
 [Open activity →](activities/omic-signatures/index.html)
 :::
@@ -86,7 +86,7 @@ Predict, then reveal with real clustering: spot signatures, place an unknown dru
 
 #### Mode of Action Discovery {.home-activity-title}
 
-Pick two chemicals you think share a mode of action, check with clustering, then test the shared genes for pathway enrichment.
+Read a clustered heatmap with genes annotated by receptor target, decide which receptor a pair of compounds acts through, then check with an enrichment test.
 
 [Open activity →](activities/mode-of-action/index.html)
 :::

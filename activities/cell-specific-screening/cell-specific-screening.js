@@ -76,7 +76,7 @@ const CELL_W = 74, ROW_H = 11, GAP = 14, TOP = 50, LEFT = 4;
 function diverging(t) {
   t = MathUtils.clamp(t, -1, 1);
   const lerp = (c1, c2, s) => c1.map((x, i) => Math.round(x + (c2[i] - x) * s));
-  const rgb = t < 0 ? lerp([27, 58, 92], [255, 255, 255], t + 1) : lerp([255, 255, 255], [181, 101, 29], t);
+  const rgb = t < 0 ? lerp([33, 102, 172], [255, 255, 255], t + 1) : lerp([255, 255, 255], [178, 24, 43], t);
   return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 }
 
@@ -112,7 +112,7 @@ ActivityShell.init({
   instructions:
     "This liver disease is driven by inflammation, so the immune cells are the cells you need to fix. Single-cell data show the disease " +
     "signature in each cell type, and two candidate drugs are shown beside them. Find the drug that is the mirror image of the immune-cell " +
-    "signature (orange where the disease is blue, blue where it is orange), then check your answer.",
+    "signature (red where the disease is blue, blue where it is red), then check your answer.",
 
   render(data, { rng, container }) {
     const sc = buildScenario(rng);
@@ -123,14 +123,14 @@ ActivityShell.init({
     const left = el("section", { class: "aw-panel" });
     left.appendChild(el("h3", {}, "Disease signatures from single-cell data"));
     left.appendChild(el("p", { class: "aw-note" },
-      "Each row is the same gene (30 total). Orange = turned up, blue = turned down. Columns 1–2 are the disease signature (diseased vs. healthy) in each cell type. Columns 3–4 are what each candidate drug does to those same genes."));
+      "Each row is the same gene (30 total). Red = turned up (induced), white = no change, blue = turned down (repressed). Columns 1–2 are the disease signature (diseased vs. healthy) in each cell type. Columns 3–4 are what each candidate drug does to those same genes."));
     const heatMount = el("div", {});
     left.appendChild(heatMount);
 
     const right = el("section", { class: "aw-panel css-right" });
     right.appendChild(el("h3", {}, "Which drug reverses the disease?"));
     right.appendChild(el("p", { class: "aw-note" },
-      "This disease is driven by the immune cells. A drug that reverses a signature looks like its mirror image: blue where the disease is orange, and orange where the disease is blue. Compare each drug with the immune-cell column."));
+      "This disease is driven by the immune cells. A drug that reverses a signature looks like its mirror image: blue where the disease is red, and red where the disease is blue. Compare each drug with the immune-cell column."));
     const predictMount = el("div", {});
     right.appendChild(predictMount);
     const widget = PredictionComponent.createPredictionWidget(predictMount, {

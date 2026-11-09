@@ -73,7 +73,7 @@ function sequential(v) {
 function diverging(v) {
   const t = MathUtils.clamp(v / 2, -1, 1);
   const lerp = (c1, c2, s) => c1.map((x, i) => Math.round(x + (c2[i] - x) * s));
-  const rgb = t < 0 ? lerp([27, 58, 92], [255, 255, 255], t + 1) : lerp([255, 255, 255], [181, 101, 29], t);
+  const rgb = t < 0 ? lerp([33, 102, 172], [255, 255, 255], t + 1) : lerp([255, 255, 255], [178, 24, 43], t);
   return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 }
 

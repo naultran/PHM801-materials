@@ -1,5 +1,5 @@
 ---
-title: "Systems Pharmacology II Single-Cell and Spatial"
+title: "Systems Pharmacology II Single-Cell and Spatial Transcriptomics"
 subtitle: "PHM801 - Fundamental Principles of Pharmacology and Toxicology"
 author: "Rance Nault"
 format:
@@ -16,26 +16,6 @@ format:
     height: 720
     include-after-body: ../_includes/reveal-embed-bridge.qmd
 ---
-
-<!--
-  LECTURE 2 — DRAFT
-
-  Same shape as lecture 1: one section per learning objective, and each section
-  ends in one activity:
-
-      LO 1  Bulk or Mixed? Composition vs. State   (activities/composition-vs-state)
-      LO 2  Seeing Space in a Tissue Measurement   (activities/spatial-composition)
-      LO 3  Screening by Cell-Specific Signature   (activities/cell-specific-screening)
-      LO 4  Cell-Specific vs. Tissue-Level Dose-Response
-                                                   (activities/cell-specific-dose-response)
-
-  Search this file for PLACEHOLDER to find every figure box that still needs a
-  real image. Slide text is a first-pass outline, not final wording.
-
-  Timing estimate (~1 min per slide, 10 min for the first activity, 5 for each
-  other): 20 non-activity slides + 25 min of activities = about 45 min, which
-  leaves roughly 5 min of slack inside the 50-minute slot.
--->
 
 ## DECLARING THE USE OF AI
 
@@ -64,34 +44,29 @@ format:
 - Cells sit in organized neighborhoods, and location changes their exposure and behavior.
 - An average can hide a strong response in a small group of cells.
 
-<!-- PLACEHOLDER: figure — a tissue with several cell types blended into one bulk readout -->
-::: placeholder-box
-PLACEHOLDER — figure: one tissue, many cell types, one averaged readout
-:::
+## DISSECTING HETEROGENEITY
 
-## ZOOMING IN: FOUR QUESTIONS
-
-<!-- PLACEHOLDER: card artwork. Each card is text-only for now; to match
-     lecture 1, make a picture for each and replace the label span with
-     <img src="../assets/figures/NAME.png" alt=""/>. Each card jumps to a slide
-     by id (the {#...} on a heading further down). -->
+<!-- Cards, in order: who (cells), where (space), what (signatures), dose.
+     The dose-response card is still text-only: when its artwork exists, replace
+     its label span with <img src="../assets/figures/NAME.png" alt=""/>. Each
+     card jumps to a slide by id (the {#...} on a heading further down). -->
 
 ::: practice-cards
 <button type="button" class="practice-card" onclick="location.hash='#/l2-heterogeneity'" aria-label="Cells — go to cellular heterogeneity">
 
-<span class="practice-card-label">Who is in the sample? (Cellular heterogeneity)</span>
+<img src="../assets/figures/Who-cells.png" alt=""/>
 
 </button>
 
 <button type="button" class="practice-card" onclick="location.hash='#/l2-spatial'" aria-label="Space — go to spatial organization">
 
-<span class="practice-card-label">Where are they? (Spatial organization)</span>
+<img src="../assets/figures/Where-cells.png" alt=""/>
 
 </button>
 
 <button type="button" class="practice-card" onclick="location.hash='#/l2-signatures'" aria-label="Signatures — go to cell-specific signatures">
 
-<span class="practice-card-label">What is each cell type doing? (Cell-specific signatures)</span>
+<img src="../assets/figures/What-cells.png" alt=""/>
 
 </button>
 

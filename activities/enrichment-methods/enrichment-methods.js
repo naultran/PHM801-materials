@@ -231,7 +231,7 @@ ActivityShell.init({
       const half = (Math.abs(fc[rank]) / maxAbs) * 50;
       fill.style.width = half + "%";
       fill.style.left = fc[rank] >= 0 ? "50%" : (50 - half) + "%";
-      fill.style.background = fc[rank] >= 0 ? "#b5651d" : "#1b3a5c";
+      fill.style.background = fc[rank] >= 0 ? "#b2182b" : "#2166ac";
       bar.appendChild(fill);
       row.appendChild(bar);
       row.appendChild(el("span", { class: "em-fc" }, (fc[rank] > 0 ? "+" : "") + fc[rank].toFixed(2)));
