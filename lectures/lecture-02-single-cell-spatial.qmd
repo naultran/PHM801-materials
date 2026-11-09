@@ -44,7 +44,7 @@ format:
 - Cells sit in organized neighborhoods, and location changes their exposure and behavior.
 - An average can hide a strong response in a small group of cells.
 
-## DISSECTING HETEROGENEITY
+## DISSECTING HETEROGENEITY {#l2-hub}
 
 <!-- Cards, in order: who (cells), where (space), what (signatures), dose.
      The dose-response card is still text-only: when its artwork exists, replace
@@ -83,14 +83,13 @@ format:
 
 ## TISSUES ARE MIXTURES OF CELL TYPES {#l2-heterogeneity}
 
-<br>A bulk RNA-seq measurement is a **weighted average** of every cell in the sample, weighted by how many cells of each type there are and how much RNA each makes.
+<br>A bulk RNA-seq measurement is a **weighted average** of every cell in the sample, weighted by how many cells of each type there are and how much RNA each makes. For example:
 
 - A liver sample contains hepatocytes, but also immune, endothelial, and stellate cells.
 - A change in the average does not tell you which cell type changed.
 
-<!-- PLACEHOLDER: figure — pie of cell types beside the bulk expression bar it produces -->
-::: placeholder-box
-PLACEHOLDER — figure: cell-type proportions feeding one bulk expression value
+::: back-to-hub
+<a href="#/l2-hub">↩ Back to menu</a>
 :::
 
 ## SAME BULK CHANGE, DIFFERENT STORIES
@@ -100,18 +99,20 @@ PLACEHOLDER — figure: cell-type proportions feeding one bulk expression value
 - **Composition**: the drug changed *how many* cells of a type are present (for example, immune cells moved into the tissue)
 - **State**: the drug changed *what each cell does*, with the same number of cells
 
-<!-- PLACEHOLDER: figure — two tissues with the same bulk readout but different cell-level causes -->
-::: placeholder-box
-PLACEHOLDER — figure: same bulk readout, composition change versus state change
-:::
-
 ## MEASURING CELLS ONE AT A TIME
 
-<br>Emerging technologies such as single-cell and single-nucleus RNA-seq measure expression separately in thousands of individual cells.
+::::: columns
+:::: {.column width="25%"}
+Emerging technologies such as single-cell and single-nucleus RNA-seq measure expression separately in thousands of individual cells. Each column of the heatmap is one cell and each cluster is a cell type with its own marker genes.
+::::
 
-<!-- PLACEHOLDER: figure — dissociation → single-cell sequencing → clusters (UMAP) -->
-::: placeholder-box
-PLACEHOLDER — figure: tissue → dissociated cells → clusters of cell types
+:::: {.column .tall-figure width="75%"}
+![](../assets/figures/snrna-heatmap.png){fig-alt="Heatmap of single-nucleus RNA-seq data from liver. Columns are individual nuclei grouped into 18 numbered clusters (cell types); rows are marker genes. Each cluster lights up a different block of genes, for example hepatocyte genes in cluster 1 and immune genes in clusters 7 to 9." fig-align="center"}
+::::
+:::::
+
+::: source-credit
+Source: <a href="https://doi.org/10.3389/fphar.2023.1200114" target="_blank" rel="noopener">Li et al. (2023) Front. Pharmacol.</a>
 :::
 
 ## ACTIVITY: Bulk or Mixed? (LO 1)
@@ -140,14 +141,25 @@ A toy liver of 10 cells by 10 genes; bulk is the average of the cells. Step 1 (n
 
 ## LOCATION CHANGES THE RESPONSE {#l2-spatial}
 
-<br>Cells in a tissue are arranged in organized neighborhoods, and cells of the same type can behave differently depending on where they are.
+::::: columns
+:::: {.column width="33%"}
+Cells in a tissue are arranged in organized neighborhoods, and cells of the same type can behave differently depending on where they are. For example, in the liver, cells near the central vein and cells near the portal vein express different sets of genes.
+::::
 
-- In the liver, cells near the central vein and cells near the portal vein express different sets of genes, including drug-metabolizing enzymes
-- Acetaminophen injury concentrates around the central vein, where those enzymes are highest
+:::: {.column .tall-figure width="67%"}
 
-<!-- PLACEHOLDER: figure — liver lobule showing zonation and the region of injury -->
-::: placeholder-box
-PLACEHOLDER — figure: liver lobule with the zones of enzyme expression and the zone of injury
+```{=html}
+<video class="zonation-video" controls preload="metadata" aria-label="Animation of liver zonation: gene expression changes across the liver lobule from the portal vein to the central vein.">
+<source src="../assets/figures/control-zonation.mp4" type="video/mp4">
+Your browser cannot play this video.
+</video>
+```
+
+::::
+:::::
+
+::: back-to-hub
+<a href="#/l2-hub">↩ Back to menu</a>
 :::
 
 ## MEASURING EXPRESSION IN SPACE
@@ -157,11 +169,6 @@ PLACEHOLDER — figure: liver lobule with the zones of enzyme expression and the
 - **Spot-based** methods capture a small area that can hold several cells, so a spot is a small mixture
 - **Imaging-based** methods read out genes at the level of single cells or molecules, often with a targeted gene panel
 - Resolution, number of genes, and cost trade off against each other
-
-<!-- PLACEHOLDER: figure — spot grid over a tissue versus single-cell resolution overlay -->
-::: placeholder-box
-PLACEHOLDER — figure: spot-based grid compared with single-cell-resolution imaging
-:::
 
 ## ACTIVITY: Seeing Space in a Tissue (LO 2)
 
@@ -180,7 +187,7 @@ PLACEHOLDER — figure: spot-based grid compared with single-cell-resolution ima
 :::
 
 ::: notes
-A 20 by 20 piece of liver, one dot per cell (blue hepatocyte, red immune cell). Raise the percentage of immune cells; in "clustered" mode they form foci, as in inflammation. The same tissue is shown at single-cell resolution, as spot-based spatial data (change the spot size), and as one bulk value. Ask what the bulk number says compared with the busiest spot. Then switch to "scattered": the bulk number does not change, but the foci disappear. Bulk cannot see where the cells are.
+A 20 by 20 piece of liver, one dot per cell (blue hepatocyte, red immune cell). Raise the percentage of immune cells; in "clustered" mode they form foci, as in inflammation. Three views of the same tissue: the dot map (where the cells are), a compressed single-cell heatmap of 10 genes (rows are genes, each column is a cell, sorted by type with the immune cells first; the red-block of immune genes grows as you add immune cells), and the bulk column, which is all those cells averaged into one column of 10 genes. Ask what the immune genes look like in the heatmap compared with bulk: they are diluted. Then switch between clustered and scattered: the dots change, but the heatmap and the bulk column do not, because expression on its own does not say where the cells are.
 :::
 
 <!-- ======================================================================
@@ -189,14 +196,19 @@ A 20 by 20 piece of liver, one dot per cell (blue hepatocyte, red immune cell). 
 
 ## CELL-SPECIFIC SIGNATURES {#l2-signatures}
 
-<br>Once cells are separated, each cell type can be seen to have their <i>own</i> signatures.
+::::: columns
+:::: {.column width="33%"}
+Once cells are separated, each cell type can be seen to have their <i>own</i> patterns of gene expression.
+::::
 
+:::: {.column .tall-figure width="67%"}
+![](../assets/figures/cell-number-deg.png){fig-alt="Upset-style bar chart of the number of differentially expressed genes (DEGs) in each combination of liver cell types. The tallest bars are genes changed in a single cell type; far fewer genes are shared across all cell types. Circles mark shared, cell-specific, and distinct responses." fig-align="center"}
+::::
+:::::
 
-<!-- PLACEHOLDER: figure — heatmap of response signatures by cell type for one drug -->
-::: placeholder-box
-PLACEHOLDER — figure: Show my TCDD cell-specific responses
+::: back-to-hub
+<a href="#/l2-hub">↩ Back to menu</a>
 :::
-
 
 ## SCREENING WITH CELL-SPECIFIC SIGNATURES
 
@@ -206,10 +218,6 @@ PLACEHOLDER — figure: Show my TCDD cell-specific responses
 - Look for the effect in the intended cell type and for off-target effects in the others.
 - A tissue-level match can miss a response that only one cell type shows.
 
-<!-- PLACEHOLDER: figure — screen of compounds scored by cell-type-specific signature similarity -->
-::: placeholder-box
-PLACEHOLDER — figure: compounds ranked by signature similarity in each cell type
-:::
 
 ## ACTIVITY: Screening by Cell Type (LO 3)
 
@@ -243,9 +251,8 @@ This repeats the inverse-signature idea from lecture 1, now with single-cell dat
 - The apparent threshold shifts to higher doses, or the response drops below detection altogether.
 - A rare, sensitive cell type can be the real target of toxicity.
 
-<!-- PLACEHOLDER: figure — a sharp cell-type curve next to the flatter diluted tissue curve -->
-::: placeholder-box
-PLACEHOLDER — figure: a cell-type dose-response curve beside the diluted bulk curve
+::: back-to-hub
+<a href="#/l2-hub">↩ Back to menu</a>
 :::
 
 ## CELL- AND SPATIAL- DOSE RESPONSE MODELING
@@ -254,12 +261,6 @@ PLACEHOLDER — figure: a cell-type dose-response curve beside the diluted bulk 
 
 - The data is very sparse leading to a lot of zeroes presenting some statistical challenges.
 - There is limited data to develop and test these methods. Single-cell methods are now more affordable (~10X bulk approaches) but spatial methods are note highly scalable today (~100 - 1000X bulk approaches). 
-
-<!-- PLACEHOLDER: figure — benchmark dose for each cell type versus the tissue-level value -->
-::: placeholder-box
-PLACEHOLDER — figure: benchmark dose per cell type and for the whole tissue
-:::
-
 
 ## ACTIVITY: Cell vs. Tissue Dose-Response (LO 4)
 
@@ -278,7 +279,7 @@ PLACEHOLDER — figure: benchmark dose per cell type and for the whole tissue
 :::
 
 ::: notes
-Start with the bulk dose-response curve for Gene X and the dashed line at 10% response: one curve, one dose. Tick "Split into cell types" to reveal the four sigmoidal curves it is built from. The same 10% line now crosses at several doses: one cell type is far more sensitive than the bulk value suggests (a small population hidden by the average), and one barely responds in this dose range. The dose slider shows each curve's response at a chosen dose; at the bulk 10% dose, the most sensitive cell type is already well above 10%. A new seed changes which cell types are sensitive.
+Start with the bulk dose-response curve for Gene X and the dashed line at 10% response: one curve, one dose. Tick "Split into cell types" to reveal the four curves it is built from: one cell type is far more sensitive than the bulk value suggests (a small population hidden by the average), and one barely responds in this dose range. Untick it and tick "Split into regions" instead: the liver has a portal and a central region, and central hepatocytes are much more sensitive, so the tissue splits into two curves with two different 10% doses. Tick both to see a portal and a central curve for every cell type (eight curves, central ones dashed). The dose slider shows each curve's response at a chosen dose; at the bulk 10% dose, the most sensitive curve is already well above 10%. A new seed changes which cell types are sensitive.
 :::
 
 <!-- ======================================================================

@@ -3,32 +3,45 @@
  *
  * Gene X is induced by a drug. The tissue (bulk) dose-response curve is the
  * average of four cell types, weighted by how many cells of each type there
- * are. Tick "Split into cell types" to see the curves it is made of: every one
- * is a sigmoid, but their potencies differ by orders of magnitude. A dashed line
- * marks the 10% response: bulk gives ONE dose where it is crossed, the split
- * view gives one per cell type — some very sensitive, one that barely responds.
+ * are, and the tissue itself has two liver regions, portal and central. Every
+ * cell type responds a little differently in the two regions, and hepatocytes
+ * differ most (central hepatocytes are far more sensitive).
+ *
+ * Two independent tick boxes:
+ *   "Split into cell types"  - one curve per cell type (averaged over regions)
+ *   "Split into regions"     - one curve for the portal region, one for central
+ *   both ticked              - a portal and a central curve for each cell type
+ * A dashed line marks the 10% response. Bulk gives ONE dose where it is crossed;
+ * every split gives more, some far lower, and some never reached.
  *
  * Depends on: prng.js, math-utils.js, svg-utils.js, activity-shell.js.
  */
 
 const CELL_TYPES = [
-  { id: "hep", label: "Hepatocytes", weight: 0.60, color: "#0072b2" },
-  { id: "end", label: "Endothelial cells", weight: 0.15, color: "#009e73" },
-  { id: "imm", label: "Immune cells", weight: 0.10, color: "#d55e00" },
-  { id: "ste", label: "Stellate cells", weight: 0.15, color: "#cc79a7" }
+  { id: "hep", label: "Hepatocytes", weight: 0.60, color: "#0072b2", zoneFactor: [6, 12] },
+  { id: "end", label: "Endothelial cells", weight: 0.15, color: "#009e73", zoneFactor: [1.2, 2.0] },
+  { id: "imm", label: "Immune cells", weight: 0.10, color: "#d55e00", zoneFactor: [1.2, 2.0] },
+  { id: "ste", label: "Stellate cells", weight: 0.15, color: "#cc79a7", zoneFactor: [1.2, 2.0] }
 ];
-const EC50_POOL = [0.2, 2, 20, 20000];   // µM; the last is "barely responds" in range
+const REGION_COLOR = { portal: "#6a3d9a", central: "#b15928" };
+const EC50_POOL = [0.2, 2, 20, 20000];   // µM, portal; the last is "barely responds" in range
 const DOSE_MIN = 0.01, DOSE_MAX = 1000;  // µM
 const THRESHOLD = 0.10;                  // the 10% response line
+const DASH = "7 4";                      // central-region curves are dashed
 
 /** Hill curve scaled 0..1 */
 function hill(dose, ec50, slope) {
   return 1 / (1 + Math.pow(ec50 / dose, slope));
 }
 
-/** Dose that gives `level` of the maximum (analytic for a single Hill curve). */
-function doseAtLevel(ec50, slope, level) {
-  return ec50 * Math.pow(level / (1 - level), 1 / slope);
+/** Dose where an increasing curve `fn` first reaches `level`, by bisection on log10(dose). */
+function doseAtLevel(fn, level) {
+  let lo = Math.log10(DOSE_MIN) - 3, hi = Math.log10(DOSE_MAX) + 3;
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (fn(Math.pow(10, mid)) < level) lo = mid; else hi = mid;
+  }
+  return Math.pow(10, (lo + hi) / 2);
 }
 
 function buildScenario(rng) {
@@ -36,20 +49,34 @@ function buildScenario(rng) {
   // the point is that a sensitive MINORITY is hidden by the majority's average.
   let ec50s;
   do { ec50s = rng.shuffle(EC50_POOL); } while (ec50s[0] === EC50_POOL[0] || ec50s[0] === EC50_POOL[3]);
-  const cells = CELL_TYPES.map((c, i) => ({ ...c, ec50: ec50s[i], slope: rng.range(1.2, 2.2) }));
-  const bulk = (dose) => cells.reduce((s, c) => s + c.weight * hill(dose, c.ec50, c.slope), 0);
-  // 10% crossing of the bulk curve by bisection on log10(dose)
-  let lo = Math.log10(DOSE_MIN), hi = Math.log10(DOSE_MAX * 100);
-  for (let i = 0; i < 60; i++) {
-    const mid = (lo + hi) / 2;
-    if (bulk(Math.pow(10, mid)) < THRESHOLD) lo = mid; else hi = mid;
-  }
-  const bulkDose = Math.pow(10, (lo + hi) / 2);
-  cells.forEach((c) => { c.dose10 = doseAtLevel(c.ec50, c.slope, THRESHOLD); });
-  return { cells, bulk, bulkDose };
+  const cells = CELL_TYPES.map((c, i) => {
+    const factor = rng.range(c.zoneFactor[0], c.zoneFactor[1]);
+    return { ...c, ecPortal: ec50s[i], ecCentral: ec50s[i] / factor, slope: rng.range(1.2, 2.2) };
+  });
+  const zoneFn = (c, zone) => (d) => hill(d, zone === "portal" ? c.ecPortal : c.ecCentral, c.slope);
+  const avgFn = (c) => (d) => 0.5 * (zoneFn(c, "portal")(d) + zoneFn(c, "central")(d));
+  const regionFn = (zone) => (d) => cells.reduce((s, c) => s + c.weight * zoneFn(c, zone)(d), 0);
+  const bulk = (d) => 0.5 * (regionFn("portal")(d) + regionFn("central")(d));
+  return { cells, zoneFn, avgFn, regionFn, bulk, bulkDose: doseAtLevel(bulk, THRESHOLD) };
 }
 
-if (typeof module !== "undefined") module.exports = { buildScenario, hill };
+/** The curves to draw for a given combination of the two tick boxes (bulk is always added separately). */
+function makeSeries(sc, byCell, byRegion) {
+  let list = [];
+  if (byCell && byRegion) {
+    sc.cells.forEach((c) => ["portal", "central"].forEach((zone) => {
+      list.push({ key: `${c.id}-${zone}`, label: `${c.label} · ${zone}`, color: c.color, dash: zone === "central" ? DASH : null, fn: sc.zoneFn(c, zone) });
+    }));
+  } else if (byCell) {
+    list = sc.cells.map((c) => ({ key: c.id, label: c.label, color: c.color, dash: null, fn: sc.avgFn(c) }));
+  } else if (byRegion) {
+    list = ["portal", "central"].map((zone) => ({ key: zone, label: `${zone[0].toUpperCase()}${zone.slice(1)} region`, color: REGION_COLOR[zone], dash: zone === "central" ? DASH : null, fn: sc.regionFn(zone) }));
+  }
+  list.forEach((s) => { s.dose10 = doseAtLevel(s.fn, THRESHOLD); });
+  return list;
+}
+
+if (typeof module !== "undefined") module.exports = { buildScenario, makeSeries, hill, THRESHOLD, DOSE_MAX };
 
 /* ---------- rendering ---------- */
 
@@ -68,18 +95,19 @@ function fmtDose(d) {
 }
 
 function pct(v) { return `${(v * 100).toFixed(v < 0.1 ? 1 : 0)}%`; }
+function fmtFold(x) { return x >= 10 ? `${Math.round(x)}-fold` : `${x.toFixed(1)}-fold`; }
 
 ActivityShell.init({
   rootId: "activity-root",
   title: "Cell-Specific vs. Tissue-Level Dose-Response",
   defaultSeed: 2030,
   instructions:
-    "This is the dose-response of one gene (Gene X) measured in bulk tissue. Tick “Split into cell types” to see the " +
-    "cell-level curves it is built from. The dashed line marks the 10% response: how many doses does it cross, and what does that mean for safety?",
+    "This is the dose-response of one gene (Gene X) measured in bulk tissue. Tick “Split into cell types” to see the cell-level curves it is built from, " +
+    "“Split into regions” to see the portal and central regions of the liver, or both. The dashed horizontal line marks the 10% response: how many doses does it cross, and what does that mean for safety?",
 
   render(data, { rng, container }) {
     const sc = buildScenario(rng);
-    const state = { split: false, logDose: 0 };
+    const state = { cells: false, regions: false, logDose: 0 };
 
     const W = 640, H = 330, X0 = 56, X1 = 620, Y0 = 16, Y1 = 270;
     const xs = SvgUtils.logScale([DOSE_MIN, DOSE_MAX], [X0, X1]);
@@ -92,10 +120,16 @@ ActivityShell.init({
     container.appendChild(layout);
 
     const toggleRow = el("div", { class: "aw-actions" });
-    const toggleLabel = el("label", { class: "cd-toggle" });
-    const toggle = el("input", { type: "checkbox", id: "cd-split" });
-    toggleLabel.append(toggle, " Split into cell types");
-    toggleRow.appendChild(toggleLabel);
+    function toggle(id, text, onChange) {
+      const label = el("label", { class: "cd-toggle" });
+      const box = el("input", { type: "checkbox", id });
+      box.addEventListener("change", () => { onChange(box.checked); draw(); });
+      label.append(box, " " + text);
+      toggleRow.appendChild(label);
+      return box;
+    }
+    const cellBox = toggle("cd-split", "Split into cell types", (v) => { state.cells = v; });
+    const regionBox = toggle("cd-regions", "Split into regions (portal / central)", (v) => { state.regions = v; });
     plotPanel.append(el("h3", {}, "Gene X response to the drug"), toggleRow);
 
     const svg = SvgUtils.svgEl("svg", { viewBox: `0 0 ${W} ${H}`, class: "cd-svg", role: "img", "aria-label": "Dose-response curves for Gene X" });
@@ -119,7 +153,6 @@ ActivityShell.init({
 
     function draw() {
       SvgUtils.clearSVG(svg);
-      // gridlines + axes
       [0, 0.25, 0.5, 0.75, 1].forEach((t) => {
         svg.appendChild(SvgUtils.svgEl("line", { x1: X0, x2: X1, y1: ys(t), y2: ys(t), stroke: "#e5e7eb" }));
         svg.appendChild(SvgUtils.svgEl("text", { x: X0 - 8, y: ys(t) + 4, "text-anchor": "end", class: "svg-axis-label" }, [`${t * 100}%`]));
@@ -140,73 +173,71 @@ ActivityShell.init({
         svg.appendChild(SvgUtils.svgEl("polyline", { points: pts.join(" "), fill: "none", stroke: color, "stroke-width": width, "stroke-dasharray": dash || null }));
       };
 
-      // 10% line
       svg.appendChild(SvgUtils.svgEl("line", { x1: X0, x2: X1, y1: ys(THRESHOLD), y2: ys(THRESHOLD), stroke: "#a3291e", "stroke-width": 1.5, "stroke-dasharray": "6 4" }));
       svg.appendChild(SvgUtils.svgEl("text", { x: X1 - 4, y: ys(THRESHOLD) - 5, "text-anchor": "end", fill: "#a3291e", "font-size": 11, "font-weight": 700 }, ["10% response"]));
 
-      const mark = (dose, color, label) => {
+      const mark = (dose, color) => {
         if (dose < DOSE_MIN || dose > DOSE_MAX) return;
         svg.appendChild(SvgUtils.svgEl("line", { x1: xs(dose), x2: xs(dose), y1: ys(THRESHOLD), y2: Y1, stroke: color, "stroke-width": 1.2, "stroke-dasharray": "2 3" }));
         svg.appendChild(SvgUtils.svgEl("circle", { cx: xs(dose), cy: ys(THRESHOLD), r: 5, fill: color, stroke: "#fff", "stroke-width": 1.5 }));
       };
 
-      if (state.split) {
-        sc.cells.forEach((c) => {
-          curve((d) => hill(d, c.ec50, c.slope), c.color, 2);
-          mark(c.dose10, c.color);
-        });
-      }
-      curve(sc.bulk, "#17202a", 3.5, state.split ? "7 4" : null);
+      const series = makeSeries(sc, state.cells, state.regions);
+      series.forEach((s) => { curve(s.fn, s.color, 2, s.dash); mark(s.dose10, s.color); });
+      curve(sc.bulk, "#17202a", 3.5, null);
       mark(sc.bulkDose, "#17202a");
 
-      // selected-dose marker
       const dsel = Math.pow(10, state.logDose);
       svg.appendChild(SvgUtils.svgEl("line", { x1: xs(dsel), x2: xs(dsel), y1: Y0, y2: Y1, stroke: "#6b7280", "stroke-width": 1.5 }));
 
-      // legend
-      const legend = [{ label: "Bulk tissue", color: "#17202a" }].concat(state.split ? sc.cells.map((c) => ({ label: c.label, color: c.color })) : []);
+      // legend (two columns when there are many curves)
+      const legend = [{ label: "Bulk tissue", color: "#17202a", dash: null }].concat(series.map((s) => ({ label: s.label, color: s.color, dash: s.dash })));
+      const perCol = legend.length > 5 ? Math.ceil(legend.length / 2) : legend.length;
       legend.forEach((it, i) => {
-        svg.appendChild(SvgUtils.svgEl("rect", { x: X0 + 8, y: Y0 + 4 + i * 16, width: 12, height: 12, rx: 2, fill: it.color }));
-        svg.appendChild(SvgUtils.svgEl("text", { x: X0 + 26, y: Y0 + 14 + i * 16, "font-size": 11, fill: "#17202a" }, [it.label]));
+        const col = Math.floor(i / perCol), row = i % perCol;
+        const lx = X0 + 8 + col * 170, ly = Y0 + 4 + row * 16;
+        svg.appendChild(SvgUtils.svgEl("line", { x1: lx, x2: lx + 18, y1: ly + 6, y2: ly + 6, stroke: it.color, "stroke-width": 3, "stroke-dasharray": it.dash || null }));
+        svg.appendChild(SvgUtils.svgEl("text", { x: lx + 24, y: ly + 10, "font-size": 11, fill: "#17202a" }, [it.label]));
       });
 
       // table
-      const rows = state.split ? [...sc.cells].sort((a, b) => a.dose10 - b.dose10) : [];
+      const rows = [...series].sort((a, b) => a.dose10 - b.dose10);
       table.innerHTML =
         "<thead><tr><th>Measurement</th><th>Dose (µM)</th></tr></thead><tbody>" +
         `<tr class="cd-bulkrow"><th><span class="aw-swatch" style="background:#17202a"></span>Bulk tissue</th><td>${fmtDose(sc.bulkDose)}</td></tr>` +
-        rows.map((c) => `<tr><th><span class="aw-swatch" style="background:${c.color}"></span>${c.label}</th><td>${c.dose10 > DOSE_MAX ? `not reached (&gt; ${DOSE_MAX})` : fmtDose(c.dose10)}</td></tr>`).join("") +
+        rows.map((s) => `<tr><th><span class="aw-swatch" style="background:${s.color}"></span>${s.label}</th><td>${s.dose10 > DOSE_MAX ? `not reached (&gt; ${DOSE_MAX})` : fmtDose(s.dose10)}</td></tr>`).join("") +
         "</tbody>";
 
       // narrative
-      if (state.split) {
-        const reached = sc.cells.filter((c) => c.dose10 <= DOSE_MAX);
+      if (series.length) {
+        const reached = series.filter((s) => s.dose10 <= DOSE_MAX);
         const most = reached.reduce((a, b) => (a.dose10 < b.dose10 ? a : b));
         const fold = sc.bulkDose / most.dose10;
-        const yAtBulk = hill(sc.bulkDose, most.ec50, most.slope);
+        const yAtBulk = most.fn(sc.bulkDose);
+        const kind = state.cells && state.regions ? "cell-type and region curves" : state.cells ? "cell types" : "regions";
+        const missing = series.length - reached.length;
+        const plural = /cells|Hepatocytes/.test(most.label.split(" · ")[0]);
         readout.innerHTML =
-          `Bulk gives <b>one</b> number (${fmtDose(sc.bulkDose)} µM). Split by cell type, the same line is crossed at <b>${reached.length}</b> different doses, ` +
-          `and ${sc.cells.length - reached.length} cell type never reaches it. <b>${most.label}</b> respond about <b>${fold >= 10 ? Math.round(fold) : fold.toFixed(1)}-fold</b> more ` +
-          `sensitively than the bulk value suggests: at the bulk dose they are already at <b>${pct(yAtBulk)}</b> of their maximum.`;
+          `Bulk gives <b>one</b> number (${fmtDose(sc.bulkDose)} µM). Split into ${kind}, the same line is crossed at <b>${reached.length}</b> different doses` +
+          `${missing ? `, and ${missing} ${missing === 1 ? "curve never reaches" : "curves never reach"} it` : ""}. <b>${most.label}</b> respond${plural ? "" : "s"} about <b>${fmtFold(fold)}</b> more ` +
+          `sensitively than the bulk value suggests: at the bulk dose ${plural ? "they are" : "it is"} already at <b>${pct(yAtBulk)}</b> of ${plural ? "their" : "its"} maximum.`;
       } else {
-        readout.innerHTML = "Bulk tissue gives a single curve and a single number. Tick the box to see what it is hiding.";
+        readout.innerHTML = "Bulk tissue gives a single curve and a single number. Tick a box to see what it is hiding.";
       }
 
-      // readout at chosen dose
       doseVal.textContent = `${fmtDose(dsel)} µM`;
-      const lines = [`<li><span class="aw-swatch" style="background:#17202a"></span>Bulk tissue: <b>${pct(sc.bulk(dsel))}</b></li>`];
-      if (state.split) sc.cells.forEach((c) => lines.push(`<li><span class="aw-swatch" style="background:${c.color}"></span>${c.label}: <b>${pct(hill(dsel, c.ec50, c.slope))}</b></li>`));
+      const lines = [`<li><span class="aw-swatch" style="background:#17202a"></span>Bulk tissue: <b>${pct(sc.bulk(dsel))}</b></li>`]
+        .concat(series.map((s) => `<li><span class="aw-swatch" style="background:${s.color}"></span>${s.label}: <b>${pct(s.fn(dsel))}</b></li>`));
       atDose.innerHTML = `<h4>At ${fmtDose(dsel)} µM</h4><ul>${lines.join("")}</ul>`;
     }
 
-    toggle.addEventListener("change", () => { state.split = toggle.checked; draw(); });
     doseInput.addEventListener("input", () => { state.logDose = Number(doseInput.value); draw(); });
     draw();
 
     return {
       reset() {
-        state.split = false; state.logDose = 0;
-        toggle.checked = false; doseInput.value = 0;
+        state.cells = false; state.regions = false; state.logDose = 0;
+        cellBox.checked = false; regionBox.checked = false; doseInput.value = 0;
         draw();
       }
     };

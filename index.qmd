@@ -106,7 +106,7 @@ Rank 20 genes, predict which pathway is enriched, then compare over-representati
 
 #### From Gene Curves to a Dose {.home-activity-title}
 
-Collapse 80 gene dose-response curves into a pathway-level point of departure, then weigh efficacy against safety.
+Collapse 80 gene dose-response curves into a point of departure and compare ten established ways of defining it.
 
 [Open activity →](activities/pathway-point-of-departure/index.html)
 :::
@@ -132,7 +132,7 @@ Change the mix of cells, then what the cells are doing, and see why a bulk measu
 
 #### Seeing Space in a Tissue Measurement {.home-activity-title}
 
-Place immune cells in a tissue and compare what single-cell, spot-based, and bulk measurements each reveal.
+Place immune cells in a tissue, see what 10 genes look like in every cell, and watch them collapse into a single bulk column.
 
 [Open activity →](activities/spatial-composition/index.html)
 :::
@@ -152,7 +152,7 @@ Choose a drug for an inflammatory disease using cell-specific signatures, then s
 
 #### Cell-Specific vs. Tissue-Level Dose-Response {.home-activity-title}
 
-Split a bulk dose-response curve into its cell types and see how one 10%-response dose becomes many.
+Split a bulk dose-response curve into cell types, liver regions, or both, and see how one 10%-response dose becomes many.
 
 [Open activity →](activities/cell-specific-dose-response/index.html)
 :::

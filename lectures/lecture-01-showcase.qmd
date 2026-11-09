@@ -189,7 +189,7 @@ Source: <a href="https://rd-connect.eu/what-we-do/omics/" target="_blank" rel="n
 Source: <a href="https://doi.org/10.1007/978-3-030-77252-9_1" target="_blank" rel="noopener">da Silva Zandonadi et al. (2021) Adv Exp Med Biol</a>
 :::
 
-## SYSTEMS PHARMACOLOGY IN PRACTICE
+## SYSTEMS PHARMACOLOGY IN PRACTICE {#s-hub}
 
 <!-- Each card jumps to a slide by its id (the {#...} after a heading below).
      Signatures and Mechanisms share the same destination on purpose: they are
@@ -229,6 +229,10 @@ Source: <a href="https://doi.org/10.1007/978-3-030-77252-9_1" target="_blank" re
 
 ::: text-center
 The use of these signatures for understanding biology is largely founded on the *"central dogma"* of biology
+:::
+
+::: back-to-hub
+<a href="#/s-hub">↩ Back to menu</a>
 :::
 
 ## THE <i>CENTRAL DOGMA</i> OF BIOLOGY
@@ -386,6 +390,10 @@ Twenty genes are ranked from most induced to most repressed, and each carries a 
 Source: <a href="https://doi.org/10.1016/j.taap.2019.114872" target="_blank" rel="noopener">doi.org/10.1016/j.taap.2019.114872</a>
 :::
 
+::: back-to-hub
+<a href="#/s-hub">↩ Back to menu</a>
+:::
+
 ## IDENTIFYING A POINT OF DEPARTURE FROM GENE EXPRESSION
 
 <br>In safety and efficacy testing we typically rely on a measurement describing some level of <i>effect</i>. In toxicology we often call this the <b>point of departure</b>. In pharmacology this measurement is commonly the <b>minimum effective dose/concentration</b>. 
@@ -394,11 +402,11 @@ Source: <a href="https://doi.org/10.1016/j.taap.2019.114872" target="_blank" rel
 
 ## ONE CURVE IS EASY. THOUSANDS ARE NOT.
 
-![](../assets/figures/one-vs-thousands.svg){.nostretch fig-alt="Left: a single dose-response curve with one benchmark dose marked. Right: a tangle of many dose-response curves, one for every gene, with many different benchmark doses." fig-align="center" width="780px"}
+<br>Normally we have <b>one</b> dose-response curve, and it is easy to read a single benchmark dose from it. With gene expression we have <b>thousands</b>, one for every gene.
 
 - **Which genes count?** Keep only curves that fit well and respond within the tested doses.
 - **How do we boil thousands of benchmark doses down to one?** The lowest gene? A percentile? A pathway?
-- **Which summary can we defend?** Group genes by pathway, test for enrichment, and anchor the estimate in mechanism.
+- **Does the choice matter?** Group genes by pathway, test for enrichment, and compare the options.
 
 ## ACTIVITY: From Gene Curves to a Dose (LO 4)
 
@@ -417,7 +425,19 @@ Source: <a href="https://doi.org/10.1016/j.taap.2019.114872" target="_blank" rel
 :::
 
 ::: notes
-Three steps. Step 1: 80 genes, each with its own dose-response curve and its own benchmark dose (BMD), the dose where its curve crosses the response threshold; click the pathway chips to isolate each group. Step 2: the BMDs grouped by pathway, with a dose slider. At each dose the genes that have responded are tested for enrichment (same Fisher's exact test as the previous activity). Point out that the oxidative stress pathway is enriched first (it is small but every gene responds at low dose), that lipid biosynthesis only becomes enriched at higher doses, that a pathway can lose enrichment once many other genes respond, and that Cell cycle never becomes enriched even though it is a real pathway, because its few responders are scattered. Step 3 has no question: it lists ten established ways to turn gene BMDs into a point of departure (percentiles of gene BMDs, the lowest gene, pathway-level medians and percentiles, the most sensitive process, and BMDL-based versions), computed on this dataset and plotted on one dose axis. They spread over one to three orders of magnitude. Discuss why: the lowest gene is an outlier or an adaptive response, gene-level percentiles ignore mechanism, and pathway-level estimates depend on which pathways qualify. The last row anchors the estimate in mechanism: the median BMD of the enriched pathway linked to the adverse outcome (lipid biosynthesis and steatosis), compared with the efficacy dose (GR targets) to give the window. Each seed changes the doses and the width of the window.
+Three steps. Step 1: 80 genes, each with its own dose-response curve and its own benchmark dose (BMD), the dose where its curve crosses the response threshold; click the pathway chips to isolate each group. Step 2: the BMDs grouped by pathway, with a dose slider. At each dose the genes that have responded are tested for enrichment (same Fisher's exact test as the previous activity). Point out that pathways differ in how tightly their genes respond (GR targets are close together, lipid biosynthesis has strong and weak responders), that a pathway can lose enrichment once many other genes respond, and that Cell cycle never becomes enriched even though it is a real pathway, because its few responders are scattered. Step 3 has no question: it lists ten established ways to turn gene BMDs into a point of departure, computed on this dataset and plotted on one dose axis. The numbers differ by definition, which is the point of this step. Most of them land in a similar range; the exceptions are the extremes, such as the single most sensitive gene (an outlier here) and the lower-confidence-limit versions. The next slide shows a real example of the same thing. Each seed changes the doses and which genes respond.
+:::
+
+## IN REAL DATA, THE METHOD RARELY MATTERS
+
+<br>In real datasets some pathways have strong and weak responders spread widely, and others respond close together. Yet whichever way the point of departure is defined, the answers usually fall in a **similar BMD range**.
+
+- Percentiles of the gene BMDs, pathway medians, and the most sensitive pathway tend to agree.
+- The exceptions are the extremes, such as the single most sensitive gene.
+
+<!-- PLACEHOLDER: figure — a real dataset with the point of departure estimated by several methods; most agree, the single most sensitive gene is the outlier -->
+::: placeholder-box
+PLACEHOLDER — figure: a real example, point of departure estimated by several methods
 :::
 
 ## PUTTING IT TOGETHER
@@ -427,7 +447,7 @@ Three steps. Step 1: 80 genes, each with its own dose-response curve and its own
 - **LO 1** — Systems, pharmacology, and toxicology approaches answer different questions about the same drug.
 - **LO 2** — A signature is a pattern across many genes, and similar patterns suggest similar biology. However, the biological context matters and the same drug can produce very distinct signatures in different contexts. 
 - **LO 3** — Genes driving a shared signature can be mapped to pathways to propose a mode of action or mechanism. 
-- **LO 4** — Collapse gene-level dose-response curves into the median benchmark dose of an enriched, mechanism-linked pathway to weigh efficacy against safety.
+- **LO 4** — Thousands of gene dose-response curves can be collapsed into one point of departure; the definition changes the number, but most reasonable choices land in a similar range.
 
 Next lecture: what changes when we measure **single cells** and **tissue space** instead of a whole-tissue average.
 

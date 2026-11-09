@@ -12,17 +12,19 @@
  *           (the same Fisher's exact test as the enrichment activity).
  *   Step 3  Ten established ways to turn gene BMDs into a point of departure
  *           (PoD), computed on this dataset and shown side by side (no
- *           lock-in). They spread over orders of magnitude. The mechanism-
- *           anchored estimate (median BMD of the enriched pathway linked to
- *           the adverse outcome: lipid biosynthesis -> steatosis) is shown
- *           against the efficacy dose to give the window.
+ *           lock-in, no "right" answer). Where you land depends on the
+ *           definition, but most land in a similar range.
  *
- * Every seed guarantees: the most sensitive gene is NOT in the efficacy or
- * adverse pathway; the adaptive pathway is enriched first; the efficacy and
- * adverse pathways are each enriched at some dose; the cell-cycle pathway
- * (a pathway label without coordinated response) is never enriched.
+ * Every seed guarantees: the three real pathways (GR targets, oxidative stress,
+ * lipid biosynthesis) are each significantly enriched at some dose, the cell-cycle
+ * pathway (a pathway label without coordinated response) never is, and one
+ * unannotated gene responds far below everything else. The pathways differ in how
+ * tightly their genes respond (some have strong and weak responders, others are
+ * close together) but their median BMDs sit in a similar range, so most of the
+ * ten PoD methods land close together; only extremes (the single most sensitive
+ * gene) stand apart.
  *
- * Depends on: prng.js, math-utils.js, stats-utils.js, svg-utils.js, activity-shell.js.
+  * Depends on: prng.js, math-utils.js, stats-utils.js, svg-utils.js, activity-shell.js.
  */
 
 const DOSE_MIN = 0.01, DOSE_MAX = 1000;   // µM
@@ -108,23 +110,27 @@ function firstEnrichedDose(genes, pathId) {
 function pathwayBmds(genes, id) { return genes.filter((g) => g.path === id && g.bmd !== null).map((g) => g.bmd); }
 
 function drawScenario(rng) {
-  const logE = rng.range(-0.5, 0.3);
-  const ratio = rng.pick([2.5, 5, 10, 20, 40]) * rng.range(0.9, 1.1);
-  const logT = logE + Math.log10(ratio);
-  const logS = logE - rng.range(0.5, 1.0);
-  const spec = { gr: [logE, 0.18], lip: [logT, 0.2], ox: [logS, 0.12] };
+  // All pathways respond around one dose range; they differ in how tightly their genes respond.
+  const logD0 = rng.range(-0.3, 1.3);
+  const spec = {
+    gr: [logD0 + rng.range(-0.12, 0.12), 0.15],     // tight: strong and weak responders are close
+    ox: [logD0 - rng.range(0.05, 0.2), 0.2],
+    lip: [logD0 + rng.range(-0.12, 0.12), 0.3]      // wide: a mix of strong and weak responders
+  };
 
   const genes = [];
   PATHWAYS.forEach((p) => {
     if (p.id === "cc") {
       const resp = new Set(rng.shuffle(p.genes.map((_, i) => i)).slice(0, 3));
       p.genes.forEach((name, i) => genes.push(resp.has(i)
-        ? responder(name, p.id, Math.pow(10, rng.range(-0.5, 2.5)), rng)
+        ? responder(name, p.id, clampBmd(Math.pow(10, logD0 + rng.range(-1.0, 1.2))), rng)
         : nonResponder(name, p.id, rng)));
     } else if (p.id === "bg") {
       for (let i = 0; i < N_BACKGROUND; i++) {
         const name = "G" + String(i + 1).padStart(2, "0");
-        genes.push(i < 7 ? responder(name, "bg", Math.pow(10, rng.range(-1.6, 2.8)), rng) : nonResponder(name, "bg", rng));
+        if (i === 0) genes.push(responder(name, "bg", clampBmd(Math.pow(10, logD0 - rng.range(1.1, 1.6))), rng));   // the extreme: one gene far below the rest
+        else if (i < 5) genes.push(responder(name, "bg", clampBmd(Math.pow(10, logD0 + rng.range(-0.8, 1.0))), rng));
+        else genes.push(nonResponder(name, "bg", rng));
       }
     } else {
       const [m, sd] = spec[p.id];
@@ -137,10 +143,8 @@ function drawScenario(rng) {
   const med = (id) => median(pathwayBmds(genes, id));
   const first = { gr: firstEnrichedDose(genes, "gr"), ox: firstEnrichedDose(genes, "ox"), lip: firstEnrichedDose(genes, "lip"), cc: firstEnrichedDose(genes, "cc") };
 
-  const ok = minGene.path !== "gr" && minGene.path !== "lip" &&
-    minGene.bmd < 0.4 * med("lip") &&
+  const ok = minGene.path === "bg" &&
     first.ox !== null && first.gr !== null && first.lip !== null && first.cc === null &&
-    first.ox < first.gr && first.ox < first.lip &&
     pathwayBmds(genes, "lip").length >= 12;
   if (!ok) return null;
 
@@ -152,7 +156,7 @@ function drawScenario(rng) {
   const pathMed = Object.fromEntries(qualifying.map((id) => [id, med(id)]));
   const lowestPath = qualifying.reduce((x, y) => (pathMed[x] < pathMed[y] ? x : y));
   const methods = buildMethods({ allBmds, responding, qualifying, pathMed, lowestPath, first, genes, rng });
-  return { genes, minGene, first, methods, qualifying, pathMed, efficacyPod: med("gr"), adversePod: med("lip"), ratio: med("lip") / med("gr") };
+  return { genes, minGene, first, methods, qualifying, pathMed };
 }
 
 /** Ten established ways to define a point of departure from gene- and pathway-level BMDs. */
@@ -221,7 +225,7 @@ ActivityShell.init({
   instructions:
     "Drug X was tested at doses from 0.01 to 1000 µM and 80 genes were profiled. Each gene has its own dose-response curve. " +
     "Work through three steps: look at the curves, group the genes by pathway and test for enrichment as the dose rises, " +
-    "then choose the point of departure you would carry forward for the drug’s adverse effect.",
+    "then compare ten established ways of defining the point of departure from the same data.",
 
   render(data, { rng, container }) {
     const sc = buildScenario(rng);
@@ -429,49 +433,42 @@ ActivityShell.init({
       const right = el("div", { class: "pp-right" });
       wrap.append(left, right);
 
-      const eff = sc.efficacyPod, adv = sc.adversePod;
       const doses = sc.methods.map((m) => m.dose);
-      const spread = Math.max(...doses) / Math.min(...doses);
+      const sorted = [...doses].sort((a, b) => a - b);
+      const mid = median(doses);
+      // the largest group of estimates that all sit within 3-fold of each other
+      let bestGroup = 0;
+      sorted.forEach((lo) => { bestGroup = Math.max(bestGroup, sorted.filter((d) => d >= lo && d <= lo * 3).length); });
+      const lowest = sc.methods.reduce((a, b) => (a.dose < b.dose ? a : b));
 
       left.appendChild(el("h3", {}, "Step 3 — Many ways to define the point of departure"));
       left.appendChild(el("p", { class: "aw-note" },
-        "Researchers and regulators use many conventions to collapse thousands of gene BMDs into one number. Here are ten established approaches, all computed on Drug X’s data. " +
-        "None is universally right."));
+        "Researchers and regulators use many conventions to collapse thousands of gene BMDs into one number. Here are ten established approaches, all computed on Drug X’s data."));
       const callout = el("div", { class: "pp-callout" });
       callout.innerHTML =
-        `<p>The ten estimates span <b>${fmtFold(spread)}</b>, from <b>${fmtDose(Math.min(...doses))}</b> to <b>${fmtDose(Math.max(...doses))} µM</b>.</p>` +
-        `<p><b>Anchoring in mechanism.</b> Drug X’s adverse effect is hepatic steatosis, which is driven by lipid biosynthesis. The median BMD of that enriched pathway is <b>${fmtDose(adv)} µM</b>; ` +
-        `the median of the GR target genes (the intended effect) is <b>${fmtDose(eff)} µM</b>. The adverse effect starts about <b>${fmtFold(sc.ratio)}</b> above the dose that gives efficacy.</p>` +
-        `<p>Values in red sit below the efficacy dose. Gene-level and lowest-pathway estimates are protective screening values: they pick up sensitive or adaptive responses, so on their own they cannot say whether the <i>adverse</i> effect starts before or after the therapeutic dose. The mechanism-anchored estimate can.</p>`;
+        `<p>The same data give ten different numbers, from <b>${fmtDose(sorted[0])}</b> to <b>${fmtDose(sorted[sorted.length - 1])} µM</b> (${fmtFold(sorted[sorted.length - 1] / sorted[0])}). ` +
+        `Where you find the point of departure depends on how you define it.</p>` +
+        `<p>Look at how they are spread: <b>${bestGroup} of the 10</b> fall within 3-fold of each other. The definition that sits furthest from the rest is <b>${lowest.name.charAt(0).toLowerCase() + lowest.name.slice(1)}</b> (${fmtDose(lowest.dose)} µM, ${fmtFold(mid / lowest.dose)} below the middle of the ten).</p>`;
       left.appendChild(callout);
 
       right.appendChild(ladder());
       const table = el("table", { class: "aw-table pp-table pp-methods" });
       table.innerHTML =
-        "<thead><tr><th>#</th><th>Method</th><th>How the PoD is defined</th><th>Dose (µM)</th><th>× efficacy dose</th></tr></thead><tbody>" +
-        sc.methods.map((m) => {
-          const x = m.dose / eff;
-          return `<tr><td>${m.n}</td><th>${m.name}</th><td class="pp-how">${m.how}</td><td>${fmtDose(m.dose)}</td><td class="${x < 1 ? "pp-below" : ""}">${x < 10 ? x.toFixed(2) : x.toFixed(1)}×</td></tr>`;
-        }).join("") +
-        `<tr class="pp-best"><td>★</td><th>Mechanism-anchored</th><td class="pp-how">Median BMD of the enriched pathway linked to the adverse outcome (lipid biosynthesis)</td><td>${fmtDose(adv)}</td><td>${(adv / eff).toFixed(1)}×</td></tr>` +
+        "<thead><tr><th>#</th><th>Method</th><th>How the PoD is defined</th><th>Dose (µM)</th></tr></thead><tbody>" +
+        sc.methods.map((m) => `<tr><td>${m.n}</td><th>${m.name}</th><td class="pp-how">${m.how}</td><td>${fmtDose(m.dose)}</td></tr>`).join("") +
         "</tbody>";
       right.appendChild(table);
 
-      /** All methods on one log axis, with the efficacy and adverse medians and the window between them. */
+      /** All methods on one log axis. */
       function ladder() {
         const W = 740, H = 142, X0 = 24, X1 = 716, AX = 104;
         const xs = SvgUtils.logScale([DOSE_MIN, DOSE_MAX], [X0, X1]);
-        const svg = sv("svg", { viewBox: `0 0 ${W} ${H}`, class: "pp-svg pp-ladder", role: "img", "aria-label": "The ten point-of-departure estimates on one dose axis, with the efficacy and adverse pathway medians" });
+        const svg = sv("svg", { viewBox: `0 0 ${W} ${H}`, class: "pp-svg pp-ladder", role: "img", "aria-label": "The ten point-of-departure estimates on one dose axis" });
         SvgUtils.logTicks([DOSE_MIN, DOSE_MAX]).forEach((d) => {
           svg.appendChild(sv("line", { x1: xs(d), x2: xs(d), y1: 8, y2: AX, stroke: "#eceff2" }));
           svg.appendChild(sv("text", { x: xs(d), y: AX + 14, "text-anchor": "middle", class: "svg-axis-label" }, [String(d)]));
         });
         svg.appendChild(sv("text", { x: (X0 + X1) / 2, y: H - 4, "text-anchor": "middle", class: "svg-axis-label" }, ["Dose (µM, log scale)"]));
-        svg.appendChild(sv("rect", { x: xs(eff), y: 8, width: Math.max(2, xs(adv) - xs(eff)), height: AX - 8, fill: "#1b7a4b", opacity: 0.1 }));
-        [[eff, "Efficacy (GR median)", PATH.gr.color, "end"], [adv, "Adverse (lipid median)", PATH.lip.color, "start"]].forEach(([d, label, color, anchor]) => {
-          svg.appendChild(sv("line", { x1: xs(d), x2: xs(d), y1: 8, y2: AX, stroke: color, "stroke-width": 2 }));
-          svg.appendChild(sv("text", { x: xs(d) + (anchor === "start" ? 5 : -5), y: 18, "text-anchor": anchor, "font-size": 11, "font-weight": 700, fill: color }, [label]));
-        });
         // numbered dots, staggered so close estimates stay readable
         [...sc.methods].sort((p, q) => p.dose - q.dose).forEach((m, i) => {
           const cy = 40 + (i % 3) * 22;

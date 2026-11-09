@@ -3,13 +3,17 @@
  *
  * A 20 x 20 piece of liver, one dot per cell: blue = hepatocyte, red = immune
  * cell. Raise the share of immune cells and, in "inflammation" mode, they form
- * tight foci rather than spreading evenly. The same tissue is then "measured"
- * three ways:
- *   - single-cell resolution (every dot),
- *   - spot-based spatial (each square spot averages the cells under it),
- *   - bulk (one number for the whole tissue).
- * Switching to "scattered" keeps the bulk number identical but erases the foci,
- * which is the point: bulk cannot see where the cells are.
+ * tight foci rather than spreading evenly. Three views of the same tissue:
+ *   1. the dot map: where every cell is (single-cell resolution with position),
+ *   2. what 10 genes look like in every cell: a compressed heatmap (rows =
+ *      genes, one column per cell, sorted by cell type, no labels),
+ *   3. bulk: those 400 columns collapsed into a single column of 10 genes.
+ *
+ * Each cell's gene values depend only on its type and on a fixed noise "slot"
+ * (the k-th immune cell, the k-th hepatocyte), never on its position. So moving
+ * between "clustered" and "scattered" changes the dot map but leaves the heatmap
+ * and the bulk column exactly as they were: expression alone does not say where
+ * the cells are.
  *
  * Depends on: prng.js, math-utils.js, activity-shell.js.
  */
@@ -18,7 +22,12 @@ const SIZE = 20;
 const TOTAL = SIZE * SIZE;
 const BLUE = [43, 108, 176];
 const RED = [192, 57, 43];
-const SPOT_OPTIONS = [2, 4, 5, 10];
+
+// 10 genes: four hepatocyte genes, four immune genes, two shared genes
+const GENE_TYPE = ["H", "H", "H", "H", "I", "I", "I", "I", "S", "S"];
+const LEVEL = { hep: { H: 8, I: 1, S: 5 }, imm: { H: 1, I: 8, S: 5 } };
+const MAX_LEVEL = 10;
+const HEAT_PX = 350;          // canvas pixels across (shown at 175 css px)
 
 function tag(name, attrs, text) {
   const node = document.createElementNS(
@@ -31,6 +40,13 @@ function tag(name, attrs, text) {
 function mix(f) {
   const c = BLUE.map((b, i) => Math.round(b + (RED[i] - b) * f));
   return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+
+/** White (low) to teal (high) expression color, same as the composition activity. */
+function expressionColor(v) {
+  const t = MathUtils.clamp(v / MAX_LEVEL, 0, 1);
+  const lerp = (a, b) => Math.round(a + (b - a) * t);
+  return `rgb(${lerp(255, 24)},${lerp(255, 110)},${lerp(255, 100)})`;
 }
 
 /** Rank cells so that the first N in the order become immune cells. */
@@ -56,17 +72,41 @@ function immuneSet(order, percent) {
   return new Set(order.slice(0, n));
 }
 
+/** Noise for the k-th cell of each type (so values never depend on position). */
+function buildNoise(rng) {
+  const make = () => Array.from({ length: TOTAL }, () => GENE_TYPE.map(() => rng.gaussian(0, 1)));
+  return { hep: make(), imm: make() };
+}
+
+/** Expression of the cell in sorted column `c` (immune cells first, then hepatocytes). */
+function cellValues(noise, nImm, c) {
+  const immune = c < nImm;
+  const k = immune ? c : c - nImm;
+  const level = immune ? LEVEL.imm : LEVEL.hep;
+  const nz = (immune ? noise.imm : noise.hep)[k];
+  return GENE_TYPE.map((t, g) => MathUtils.clamp(level[t] + nz[g], 0, MAX_LEVEL));
+}
+
+function bulkOf(noise, nImm) {
+  const sums = GENE_TYPE.map(() => 0);
+  for (let c = 0; c < TOTAL; c++) cellValues(noise, nImm, c).forEach((v, g) => { sums[g] += v; });
+  return sums.map((s) => s / TOTAL);
+}
+
+if (typeof module !== "undefined") module.exports = { buildNoise, cellValues, bulkOf, GENE_TYPE, TOTAL };
+
 ActivityShell.init({
   rootId: "activity-root",
   title: "Seeing Space in a Tissue Measurement",
   defaultSeed: 2028,
   instructions:
-    "Each dot is one cell: blue is a hepatocyte, red is an immune cell. Raise the share of immune cells and see how " +
-    "the same tissue looks at single-cell resolution, with spot-based spatial transcriptomics, and as a bulk sample.",
+    "Each dot is one cell: blue is a hepatocyte, red is an immune cell. Raise the share of immune cells and watch three views of the same tissue: " +
+    "where the cells are, what 10 genes look like in every cell, and the single column you get if you measure the whole tissue in bulk.",
 
   render(data, { rng, container }) {
     const orders = buildOrders(rng);
-    const state = { percent: 8, pattern: "clustered", spot: 5 };
+    const noise = buildNoise(rng);
+    const state = { percent: 8, pattern: "clustered" };
 
     const controls = tag("div", { class: "sc-controls aw-panel" });
     const slider = tag("input", { type: "range", id: "sc-percent", min: 0, max: 50, step: 1, value: state.percent });
@@ -87,19 +127,8 @@ ActivityShell.init({
       pattern.appendChild(lab);
     });
 
-    const spotRow = tag("div", { class: "control-row" });
-    const spotLabel = tag("label", { class: "field-label", for: "sc-spot" }, "Spot size for the spatial measurement");
-    const spotSel = tag("select", { id: "sc-spot", class: "touch-target" });
-    SPOT_OPTIONS.forEach((s) => {
-      const o = tag("option", { value: s }, `${s} × ${s} cells per spot`);
-      if (s === state.spot) o.selected = true;
-      spotSel.appendChild(o);
-    });
-    spotSel.addEventListener("change", () => { state.spot = Number(spotSel.value); draw(); });
-    spotRow.append(spotLabel, spotSel);
-
     slider.addEventListener("input", () => { state.percent = Number(slider.value); sliderValue.textContent = `${state.percent}%`; draw(); });
-    controls.append(sliderRow, pattern, spotRow);
+    controls.append(sliderRow, pattern);
 
     const panels = tag("div", { class: "sc-panels" });
     const readout = tag("p", { class: "sc-readout", "aria-live": "polite" });
@@ -112,68 +141,77 @@ ActivityShell.init({
       return p;
     }
 
+    function drawHeat(canvas, nImm) {
+      const ctx = canvas.getContext("2d");
+      const rowH = HEAT_PX / GENE_TYPE.length;
+      for (let x = 0; x < HEAT_PX; x++) {
+        const c0 = Math.floor((x * TOTAL) / HEAT_PX);
+        const c1 = Math.max(c0 + 1, Math.floor(((x + 1) * TOTAL) / HEAT_PX));
+        const sums = GENE_TYPE.map(() => 0);
+        for (let c = c0; c < c1; c++) cellValues(noise, nImm, c).forEach((v, g) => { sums[g] += v; });
+        sums.forEach((s, g) => {
+          ctx.fillStyle = expressionColor(s / (c1 - c0));
+          ctx.fillRect(x, g * rowH, 1, rowH + 0.5);
+        });
+      }
+    }
+
     function draw() {
       const set = immuneSet(orders[state.pattern], state.percent);
-      const immuneFraction = set.size / TOTAL;
+      const nImm = set.size;
+      const immuneFraction = nImm / TOTAL;
       panels.innerHTML = "";
 
-      // 1 — single cell
-      const p1 = panel("Single-cell resolution", "Every cell is measured individually.");
-      const svg1 = tag("svg", { viewBox: `0 0 ${SIZE} ${SIZE}`, class: "sc-svg", role: "img", "aria-label": `${set.size} immune cells among ${TOTAL} cells, ${state.pattern}` });
+      // 1 — where the cells are
+      const p1 = panel("Where the cells are", "Each dot is one cell.");
+      const svg1 = tag("svg", { viewBox: `0 0 ${SIZE} ${SIZE}`, class: "sc-svg", role: "img", "aria-label": `${nImm} immune cells among ${TOTAL} cells, ${state.pattern}` });
       for (let y = 0; y < SIZE; y++) {
         for (let x = 0; x < SIZE; x++) {
-          const imm = set.has(y * SIZE + x);
-          svg1.appendChild(tag("circle", { cx: x + 0.5, cy: y + 0.5, r: 0.4, fill: imm ? mix(1) : mix(0) }));
+          svg1.appendChild(tag("circle", { cx: x + 0.5, cy: y + 0.5, r: 0.4, fill: set.has(y * SIZE + x) ? mix(1) : mix(0) }));
         }
       }
       p1.appendChild(svg1);
-      p1.appendChild(tag("p", { class: "sc-legend" }, ""));
-      p1.lastChild.innerHTML = '<span class="aw-swatch" style="background:' + mix(0) + '"></span>Hepatocyte &nbsp; <span class="aw-swatch" style="background:' + mix(1) + '"></span>Immune cell';
+      const leg1 = tag("p", { class: "sc-legend" });
+      leg1.innerHTML = '<span class="aw-swatch" style="background:' + mix(0) + '"></span>Hepatocyte &nbsp; <span class="aw-swatch" style="background:' + mix(1) + '"></span>Immune cell';
+      p1.appendChild(leg1);
 
-      // 2 — spot based
-      const spot = state.spot;
-      const spots = SIZE / spot;
-      const p2 = panel("Spot-based spatial", `Each ${spot} × ${spot} spot averages the cells under it.`);
-      const svg2 = tag("svg", { viewBox: `0 0 ${SIZE} ${SIZE}`, class: "sc-svg", role: "img", "aria-label": "Spot-based spatial measurement" });
-      let maxSpot = 0;
-      for (let sy = 0; sy < spots; sy++) {
-        for (let sx = 0; sx < spots; sx++) {
-          let count = 0;
-          for (let y = sy * spot; y < (sy + 1) * spot; y++) for (let x = sx * spot; x < (sx + 1) * spot; x++) if (set.has(y * SIZE + x)) count++;
-          const f = count / (spot * spot);
-          maxSpot = Math.max(maxSpot, f);
-          svg2.appendChild(tag("rect", { x: sx * spot + 0.08, y: sy * spot + 0.08, width: spot - 0.16, height: spot - 0.16, rx: 0.5, fill: mix(Math.min(1, f * 2)) }));
-          if (spots <= 5) {
-            svg2.appendChild(tag("text", { x: sx * spot + spot / 2, y: sy * spot + spot / 2 + 0.4, "text-anchor": "middle", "font-size": spot > 4 ? 1.7 : 1.1, fill: "#fff", "font-weight": 700 }, `${Math.round(f * 100)}%`));
-          }
-        }
-      }
-      p2.appendChild(svg2);
-      p2.appendChild(tag("p", { class: "sc-legend" }, "Color: share of immune cells in the spot (red = 50% or more)."));
+      // 2 — 10 genes in every cell, single-cell resolution
+      const p2 = panel("10 genes in every cell", "Rows are genes and each column is a cell, sorted by type (immune first).");
+      const canvas = tag("canvas", { width: HEAT_PX, height: HEAT_PX, class: "sc-heat", role: "img", "aria-label": `Single-cell heatmap: 10 genes across ${TOTAL} cells, ${nImm} of them immune cells` });
+      p2.appendChild(canvas);
+      drawHeat(canvas, nImm);
+      p2.appendChild(tag("p", { class: "sc-legend" }, "White = low expression, teal = high."));
 
-      // 3 — bulk
-      const p3 = panel("Bulk (whole tissue)", "Everything is averaged into one number.");
-      const svg3 = tag("svg", { viewBox: `0 0 ${SIZE} ${SIZE}`, class: "sc-svg", role: "img", "aria-label": `Bulk measurement: ${Math.round(immuneFraction * 100)} percent immune cells` });
-      svg3.appendChild(tag("rect", { x: 0.1, y: 0.1, width: SIZE - 0.2, height: SIZE - 0.2, rx: 1, fill: mix(Math.min(1, immuneFraction * 2)) }));
-      svg3.appendChild(tag("text", { x: SIZE / 2, y: SIZE / 2 + 1.6, "text-anchor": "middle", "font-size": 5, fill: "#fff", "font-weight": 700 }, `${Math.round(immuneFraction * 100)}%`));
+      // 3 — bulk: all columns collapsed into one
+      const bulk = bulkOf(noise, nImm);
+      const p3 = panel("Bulk (whole tissue)", "All the cells averaged into a single column.");
+      const svg3 = tag("svg", { viewBox: `0 0 1 ${GENE_TYPE.length}`, preserveAspectRatio: "none", class: "sc-bulk", role: "img", "aria-label": "Bulk measurement: one column of 10 genes" });
+      bulk.forEach((v, g) => svg3.appendChild(tag("rect", { x: 0, y: g, width: 1, height: 1.02, fill: expressionColor(v) })));
       p3.appendChild(svg3);
-      p3.appendChild(tag("p", { class: "sc-legend" }, "One value: the fraction of immune cells across the whole sample."));
+      p3.appendChild(tag("p", { class: "sc-legend" }, "One column, 10 genes."));
 
       panels.append(p1, p2, p3);
+
+      const immuneGenes = GENE_TYPE.map((t, g) => (t === "I" ? g : -1)).filter((g) => g >= 0);
+      const bulkImm = immuneGenes.reduce((s, g) => s + bulk[g], 0) / immuneGenes.length;
+      if (nImm === 0) {
+        readout.innerHTML = "There are no immune cells yet, so the immune genes are off everywhere. Raise the percentage to add some.";
+        return;
+      }
       readout.innerHTML =
-        `Bulk says <b>${Math.round(immuneFraction * 100)}%</b> immune cells. The busiest spot is <b>${Math.round(maxSpot * 100)}%</b>. ` +
+        `<b>${Math.round(immuneFraction * 100)}%</b> of the cells are immune cells. In the heatmap the immune genes are bright only in the immune block (about ${LEVEL.imm.I} on this scale); ` +
+        `in bulk they are diluted to about <b>${bulkImm.toFixed(1)}</b>. ` +
         (state.pattern === "clustered"
-          ? "The immune cells are packed into foci, so some spots are mostly immune while the bulk number looks modest."
-          : "The immune cells are spread evenly, so the spots stay much closer to the bulk average. Switch back to “clustered” to compare: the bulk number does not change.");
+          ? "The immune cells sit in foci on the map, but nothing in the heatmap or the bulk column records that."
+          : "Switch between clustered and scattered: the dots move, but the heatmap and the bulk column do not change. Expression alone does not say where the cells are.");
     }
 
     draw();
     return {
       reset() {
-        state.percent = 8; state.pattern = "clustered"; state.spot = 5;
+        state.percent = 8; state.pattern = "clustered";
         slider.value = state.percent; sliderValue.textContent = `${state.percent}%`;
         pattern.querySelectorAll("input").forEach((r) => { r.checked = r.value === "clustered"; });
-        spotSel.value = String(state.spot);
         draw();
       }
     };
