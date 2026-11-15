@@ -263,6 +263,10 @@ Similarity in gene <i>'omic'</i> signatures tends to reflect that the drugs have
 Source: <a href="https://doi.org/10.1186/1471-2105-12-381" target="_blank" rel="noopener">Gower, Spira & Lenburg (2011) BMC Bioinformatics</a>
 :::
 
+::: notes
+Some responses are slower (e.g., LG) while antiestrogens have opposite signature (IG, IE). Fulvestrant is an estrogen receptor degrader. 
+:::
+
 ## SAME DRUG, DIFFERENT SIGNATURES?
 
 ::::: columns
@@ -424,7 +428,7 @@ Source: <a href="https://doi.org/10.1016/j.taap.2019.114872" target="_blank" rel
 :::
 
 ::: notes
-Three steps. Step 1: 80 genes, each with its own dose-response curve and its own benchmark dose (BMD), the dose where its curve crosses the response threshold; click the pathway chips to isolate each group. Step 2: the BMDs grouped by pathway, with a dose slider. At each dose the genes that have responded are tested for enrichment (same Fisher's exact test as the previous activity). Point out that pathways differ in how tightly their genes respond (GR targets are close together, lipid biosynthesis has strong and weak responders), that a pathway can lose enrichment once many other genes respond, and that Cell cycle never becomes enriched even though it is a real pathway, because its few responders are scattered. Step 3 has no question: it lists ten established ways to turn gene BMDs into a point of departure, computed on this dataset and plotted on one dose axis. The numbers differ by definition, which is the point of this step. Most of them land in a similar range; the exceptions are the extremes, such as the single most sensitive gene (an outlier here) and the lower-confidence-limit versions. The next slide shows a real example of the same thing. Each seed changes the doses and which genes respond.
+Three steps. Step 1: 80 genes, each with its own dose-response curve and its own benchmark dose (BMD), the dose where its curve crosses the response threshold; click the pathway chips to isolate each group. Step 2: the BMDs grouped by pathway, with a dose slider. At each dose the genes that have responded are tested for enrichment (same Fisher's exact test as the previous activity). Point out that pathways differ in how tightly their genes respond (GR targets are close together, lipid biosynthesis has strong and weak responders), that a pathway can lose enrichment once many other genes respond, and that Cell cycle never becomes enriched even though it is a real pathway, because its few responders are scattered. Step 3 has no question: it lists ten established ways to turn gene BMDs into a point of departure, computed on this dataset and plotted on one dose axis. The numbers differ by definition, which is the point of this step. Most of them land in a similar range; the exceptions are the extremes, such as the single most sensitive gene (an outlier here) and the lower-confidence-limit versions. The next slide points to published studies showing the same thing. Each seed changes the doses and which genes respond.
 :::
 
 ## IN REAL DATA, THE METHOD RARELY MATTERS
@@ -434,10 +438,7 @@ Three steps. Step 1: 80 genes, each with its own dose-response curve and its own
 - Percentiles of the gene BMDs, pathway medians, and the most sensitive pathway tend to agree.
 - The exceptions are the extremes, such as the single most sensitive gene.
 
-<!-- PLACEHOLDER: figure — a real dataset with the point of departure estimated by several methods; most agree, the single most sensitive gene is the outlier -->
-::: placeholder-box
-PLACEHOLDER — figure: a real example, point of departure estimated by several methods
-:::
+- **Evidence:** <a href="https://doi.org/10.1007/s00204-016-1886-5" target="_blank" rel="noopener">Farmahin et al. (2017) Arch Toxicol</a> and <a href="https://doi.org/10.1016/j.taap.2019.114872" target="_blank" rel="noopener">Nault et al. (2020) Toxicol Appl Pharmacol</a>
 
 ## PUTTING IT TOGETHER
 

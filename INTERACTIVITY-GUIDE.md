@@ -73,7 +73,10 @@ blue = repressed, white = no change, red = induced.
 ### 6. Bulk or Mixed? Composition vs. State (LO 1) — `composition-vs-state`
 - **Teaching question:** can a bulk measurement tell more cells from a change in what each cell does?
 - **Students do:** a toy liver of 10 cells × 10 genes. Slide the number of immune cells, then turn
-  up immune genes inside a fixed number of immune cells, then compare the two stories.
+  up immune genes inside a fixed number of immune cells, then compare the two stories. Step 4 is a
+  sampling exercise: a tissue with four cell types (85%, 13.9%, 1% and 0.1%) drawn as a stacked bar,
+  and a second bar showing what a sample of 10 to 100,000 cells contains. Rare types are missing
+  from small samples (about 10,000 cells give ~100 of a 1% type; ~100,000 for a 0.1% type).
 - **Files:** `composition-vs-state.js` / `.css`.
 
 ### 7. Seeing Space in a Tissue Measurement (LO 2) — `spatial-composition`

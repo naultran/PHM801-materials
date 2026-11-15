@@ -122,7 +122,7 @@ Collapse 80 gene dose-response curves into a point of departure and compare ten 
 
 #### Bulk or Mixed? Composition vs. State {.home-activity-title}
 
-Change the mix of cells, then what the cells are doing, and see why a bulk measurement cannot always tell the two apart.
+Change the mix of cells, then what the cells are doing, and see why a bulk measurement cannot always tell the two apart. Then see how many cells you must measure to catch the rare ones.
 
 [Open activity →](activities/composition-vs-state/index.html)
 :::

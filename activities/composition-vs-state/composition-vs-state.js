@@ -8,6 +8,11 @@
  *           each immune cell (slider).
  *   Step 3  Put them side by side: a composition change and the matching state
  *           change give (nearly) the same bulk profile for the immune genes.
+ *   Step 4  Sampling: single cells let you separate the cell types, but you only
+ *           see the cells you measure. A tissue with two abundant and two rare
+ *           cell types is sampled at 10 ... 100,000 cells (one nested sample, so
+ *           measuring more cells only ever adds cells); rare types are missing
+ *           from small samples.
  *
  * Genes: H1-H4 are made by hepatocytes, I1-I4 by immune cells, S1-S2 by both.
  * Depends on: prng.js, math-utils.js, activity-shell.js.
@@ -18,6 +23,39 @@ const GENES = ["H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "S1", "S2"];
 const GENE_TYPE = ["H", "H", "H", "H", "I", "I", "I", "I", "S", "S"];
 const BASE_IMMUNE = 2;   // starting number of immune cells
 const MAX_ACTIVATION = 4;
+const N_STEPS = 4;
+
+// Step 4: the real tissue (fractions sum to 1) and the sample sizes offered.
+const TISSUE = [
+  { id: "hep", name: "Hepatocytes", p: 0.85, color: "var(--series-1)" },
+  { id: "imm", name: "Immune cells", p: 0.139, color: "var(--series-2)" },
+  { id: "stel", name: "Stellate cells", p: 0.01, color: "var(--series-3)" },
+  { id: "prog", name: "Rare progenitor cells", p: 0.001, color: "var(--series-4)" }
+];
+const SAMPLE_SIZES = [10, 30, 100, 300, 1000, 3000, 10000, 30000, 100000];
+const MIN_USEFUL = 50;   // rough minimum number of cells to say anything about a cell type
+
+/**
+ * Draw one nested sample of MAX cells from the tissue and return the running
+ * count of each cell type at every sample size (so a larger sample always
+ * contains the smaller one).
+ */
+function sampleCountsFor(rng) {
+  const cum = [];
+  TISSUE.reduce((s, t) => { cum.push(s + t.p); return s + t.p; }, 0);
+  const run = TISSUE.map(() => 0);
+  const out = [];
+  const max = SAMPLE_SIZES[SAMPLE_SIZES.length - 1];
+  let j = 0;
+  for (let i = 1; i <= max; i++) {
+    const u = rng.random();
+    let k = 0;
+    while (k < cum.length - 1 && u >= cum[k]) k++;
+    run[k]++;
+    if (i === SAMPLE_SIZES[j]) { out.push(run.slice()); j++; }
+  }
+  return out;
+}
 
 // Typical expression of each gene class in each cell type.
 const LEVEL = {
@@ -63,7 +101,7 @@ function matchingActivation(noise, baseImmune, newImmune) {
   return slope > 0 ? Math.max(1, (sumTarget - s1) / slope + 1) : 1;
 }
 
-if (typeof module !== "undefined") module.exports = { buildMatrix, bulkOf, matchingActivation, log2fc, GENES, GENE_TYPE, BASE_IMMUNE };
+if (typeof module !== "undefined") module.exports = { buildMatrix, bulkOf, matchingActivation, log2fc, sampleCountsFor, TISSUE, SAMPLE_SIZES, GENES, GENE_TYPE, BASE_IMMUNE };
 
 function sequential(v) {
   const t = MathUtils.clamp(v / 12, 0, 1);
@@ -82,6 +120,30 @@ function tag(name, attrs, text) {
   Object.entries(attrs || {}).forEach(([k, v]) => node.setAttribute(k, v));
   if (text !== undefined) node.textContent = text;
   return node;
+}
+
+function svgEl(name, attrs, text) {
+  const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+  Object.entries(attrs || {}).forEach(([k, v]) => node.setAttribute(k, v));
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+/** One stacked horizontal bar of cell-type counts, as an SVG group at height y. */
+function stackedBar(svg, counts, y, width, height) {
+  const total = counts.reduce((s, c) => s + c, 0);
+  const MIN_W = 2.5;   // a type that is present is always drawn at least this wide
+  let widths = counts.map((c) => (c / total) * width);
+  let deficit = 0;
+  widths = widths.map((w, i) => { if (counts[i] > 0 && w < MIN_W) { deficit += MIN_W - w; return MIN_W; } return w; });
+  const big = widths.indexOf(Math.max(...widths));
+  widths[big] -= deficit;
+  let x = 0;
+  widths.forEach((w, i) => {
+    if (counts[i] > 0) svg.appendChild(svgEl("rect", { x, y, width: w, height, style: "fill:" + TISSUE[i].color }));
+    x += w;
+  });
+  svg.appendChild(svgEl("rect", { x: 0, y, width, height, fill: "none", stroke: "#6b7280", "stroke-width": 1 }));
 }
 
 function headerRow(extra) {
@@ -155,6 +217,9 @@ ActivityShell.init({
     let immune = BASE_IMMUNE;
     let activation = 1;
     let altImmune = 3;
+    let sizeIdx = 0;
+    // Drawn after the cell noise above, so the earlier steps are unchanged by this step.
+    const sampleCounts = sampleCountsFor(rng);
 
     const dots = tag("div", { class: "aw-steps", role: "list" });
     const body = tag("div", {});
@@ -162,8 +227,8 @@ ActivityShell.init({
 
     function drawDots() {
       dots.innerHTML = "";
-      dots.setAttribute("aria-label", `Step ${step + 1} of 3`);
-      for (let i = 0; i < 3; i++) {
+      dots.setAttribute("aria-label", `Step ${step + 1} of ${N_STEPS}`);
+      for (let i = 0; i < N_STEPS; i++) {
         dots.appendChild(tag("span", { class: "aw-step-dot" + (i === step ? " aw-step-dot--current" : i < step ? " aw-step-dot--done" : ""), role: "listitem" }));
       }
     }
@@ -175,13 +240,14 @@ ActivityShell.init({
         back.addEventListener("click", () => { step -= 1; show(); });
         bar.appendChild(back);
       }
-      if (step < 2) {
-        const next = tag("button", { type: "button" }, step === 0 ? "Next: change what the cells are doing →" : "Next: can you tell them apart? →");
+      if (step < N_STEPS - 1) {
+        const labels = ["Next: change what the cells are doing →", "Next: can you tell them apart? →", "Next: how many cells do we need? →"];
+        const next = tag("button", { type: "button" }, labels[step]);
         next.addEventListener("click", () => { step += 1; show(); });
         bar.appendChild(next);
       } else {
         const again = tag("button", { type: "button" }, "↻ Start over");
-        again.addEventListener("click", () => { immune = BASE_IMMUNE; activation = 1; altImmune = 3; step = 0; show(); });
+        again.addEventListener("click", () => { immune = BASE_IMMUNE; activation = 1; altImmune = 3; sizeIdx = 0; step = 0; show(); });
         bar.appendChild(again);
       }
       return bar;
@@ -273,15 +339,63 @@ ActivityShell.init({
       redraw();
     }
 
+    function stepFour() {
+      body.appendChild(tag("h3", {}, "Step 4 — How many cells do we need?"));
+      const ctl = slider("cs-sample", "Cells measured", 0, SAMPLE_SIZES.length - 1, 1, sizeIdx,
+        (i) => SAMPLE_SIZES[i].toLocaleString(), (v) => { sizeIdx = v; redraw(); });
+      const read = tag("p", { class: "cs-takeaway", "aria-live": "polite" });
+      const right = tag("div", { class: "cs-table-wrap" });
+      body.append(ctl.wrap, read, right);
+
+      function redraw() {
+        const n = SAMPLE_SIZES[sizeIdx];
+        const counts = sampleCounts[sizeIdx];
+        const realCounts = TISSUE.map((t) => t.p * 10000);
+        right.innerHTML = "";
+
+        const W = 720;
+        const svg = svgEl("svg", { viewBox: `0 0 ${W} 112`, class: "cs-bars", role: "img",
+          "aria-label": `Two bars. Top: the real tissue is ${TISSUE.map((t) => (t.p * 100).toFixed(1) + "% " + t.name.toLowerCase()).join(", ")}. Bottom: a sample of ${n.toLocaleString()} cells.` });
+        svg.appendChild(svgEl("text", { x: 0, y: 14, class: "cs-bar-label" }, "Real tissue"));
+        stackedBar(svg, realCounts, 20, W, 28);
+        svg.appendChild(svgEl("text", { x: 0, y: 78, class: "cs-bar-label" }, `Your sample: ${n.toLocaleString()} cells`));
+        stackedBar(svg, counts, 84, W, 28);
+        right.appendChild(svg);
+
+        const pct = (p) => (p * 100 < 1 ? (p * 100).toFixed(1) : String(+(p * 100).toFixed(1))) + "%";
+        const table = tag("table", { class: "aw-table cs-sample-table", "aria-label": "Cells of each type in the sample" });
+        table.innerHTML =
+          "<thead><tr><th>Cell type</th><th>% of tissue</th><th>Expected in sample</th><th>Cells in your sample</th><th>At least " + MIN_USEFUL + "?</th></tr></thead><tbody>" +
+          TISSUE.map((t, i) => {
+            const exp = t.p * n;
+            return `<tr><th><span class="aw-swatch" style="background:${t.color}"></span>${t.name}</th><td>${pct(t.p)}</td>` +
+              `<td>${exp >= 10 ? Math.round(exp).toLocaleString() : exp.toFixed(exp >= 1 ? 1 : 2)}</td><td><b>${counts[i].toLocaleString()}</b></td>` +
+              `<td>${counts[i] >= MIN_USEFUL ? "Yes" : "No"}</td></tr>`;
+          }).join("") + "</tbody>";
+        right.appendChild(table);
+        right.appendChild(tag("p", { class: "aw-note" },
+          "You only see the cells you measure. Rule of thumb: a cell type that is 1% of the tissue gives about 100 cells when you measure 10,000, and one that is 0.1% needs about 100,000."));
+
+        const seen = counts.filter((c) => c > 0).length;
+        const enough = counts.filter((c) => c >= MIN_USEFUL).length;
+        read.innerHTML =
+          `<b>${n.toLocaleString()} cells:</b> ${seen} of ${TISSUE.length} cell types seen, ${enough} with at least ${MIN_USEFUL} cells. ` +
+          (enough === TISSUE.length ? "Even the rarest type can now be studied."
+            : n <= 100 ? "Small samples are almost all abundant cells; rare types are usually missing."
+              : "The rare types still need far more cells.");
+      }
+      redraw();
+    }
+
     function show() {
       body.innerHTML = "";
-      body.className = step < 2 ? "cs-step cs-step--split" : "cs-step";
+      body.className = step === 2 ? "cs-step" : "cs-step cs-step--split";
       drawDots();
-      if (step < 2) stepOneOrTwo(); else stepThree();
+      if (step < 2) stepOneOrTwo(); else if (step === 2) stepThree(); else stepFour();
       body.appendChild(navButtons());
     }
     show();
 
-    return { reset() { immune = BASE_IMMUNE; activation = 1; altImmune = 3; step = 0; show(); } };
+    return { reset() { immune = BASE_IMMUNE; activation = 1; altImmune = 3; sizeIdx = 0; step = 0; show(); } };
   }
 });

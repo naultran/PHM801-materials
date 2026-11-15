@@ -1,5 +1,5 @@
 ---
-title: "Systems Pharmacology II Single-Cell and Spatial Transcriptomics"
+title: "Systems Pharmacology II<br><span style='font-size:0.8em'>Single-Cell and Spatial Transcriptomics</span>"
 subtitle: "PHM801 - Fundamental Principles of Pharmacology and Toxicology"
 author: "Rance Nault"
 format:
@@ -73,7 +73,7 @@ format:
 
 <button type="button" class="practice-card" onclick="location.hash='#/l2-dose-response'" aria-label="Dose-response — go to cell-specific dose-response">
 
-<span class="practice-card-label">At what dose? (Cell-specific dose-response)</span>
+<img src="../assets/figures/dose-cells.png" alt=""/>
 
 </button>
 :::
@@ -133,7 +133,7 @@ Source: <a href="https://doi.org/10.3389/fphar.2023.1200114" target="_blank" rel
 :::
 
 ::: notes
-A toy liver of 10 cells by 10 genes; bulk is the average of the cells. Step 1 (no lock-in): slide the number of immune cells and watch the bulk row. Immune genes rise and hepatocyte genes dilute. Step 2: keep 2 immune cells in 10 and turn up the immune genes inside each immune cell; only the immune genes move. Step 3: Story A (more immune cells) and Story B (same cells, matching increase in immune gene expression) give the same bulk signal for the immune genes, so bulk alone cannot tell composition from state. The only clue is the small dilution of the hepatocyte genes in Story A, which is lost in real-world variability. This is the first activity, so allow about 10 minutes.
+A toy liver of 10 cells by 10 genes; bulk is the average of the cells. Step 1 (no lock-in): slide the number of immune cells and watch the bulk row. Immune genes rise and hepatocyte genes dilute. Step 2: keep 2 immune cells in 10 and turn up the immune genes inside each immune cell; only the immune genes move. Step 3: Story A (more immune cells) and Story B (same cells, matching increase in immune gene expression) give the same bulk signal for the immune genes, so bulk alone cannot tell composition from state. The only clue is the small dilution of the hepatocyte genes in Story A, which is lost in real-world variability. Step 4 (sampling): single-cell data let you separate cell types, but you only see the cells you measure. The top bar is the real tissue (85% hepatocytes, 13.9% immune, 1% stellate, 0.1% rare progenitor cells); the bottom bar is what a sample contains. Slide from 10 to 100,000 cells: at 10 cells the sample is almost all hepatocytes, and you need about 10,000 cells to get roughly 100 cells of a 1% type and about 100,000 for a 0.1% type. The sample is nested, so measuring more cells only adds cells, and a new seed changes the draw. This is the first activity, so allow about 10 to 12 minutes.
 :::
 
 <!-- ======================================================================
@@ -144,7 +144,7 @@ A toy liver of 10 cells by 10 genes; bulk is the average of the cells. Step 1 (n
 
 ::::: columns
 :::: {.column width="33%"}
-Cells in a tissue are arranged in organized neighborhoods, and cells of the same type can behave differently depending on where they are. For example, in the liver, cells near the central vein and cells near the portal vein express different sets of genes.
+Cells in a tissue are typically arranged in <b>organized neighborhoods</b>, and cells of the same type can behave differently depending on <i>where</i> they are. For example, in the liver, cells near the central vein and cells near the portal vein express different sets of genes.
 ::::
 
 :::: {.column .tall-figure width="67%"}
@@ -155,9 +155,12 @@ Cells in a tissue are arranged in organized neighborhoods, and cells of the same
 Your browser cannot play this video.
 </video>
 ```
-
 ::::
 :::::
+
+::: source-credit
+Unpublished real data.
+:::
 
 ::: back-to-hub
 <a href="#/l2-hub">↩ Back to menu</a>
@@ -167,9 +170,9 @@ Your browser cannot play this video.
 
 <br>Spatial transcriptomics keeps track of where each measurement came from.
 
-- **Spot-based** methods capture a small area that can hold several cells, so a spot is a small mixture
-- **Imaging-based** methods read out genes at the level of single cells or molecules, often with a targeted gene panel
-- Resolution, number of genes, and cost trade off against each other
+- **Spot-based** methods capture a small area that can hold several cells, so a spot is a small mixture. <i>Examples include 10X Genomics Visium and Curio Seeker</i>
+- **Imaging-based** methods read out genes at the level of single cells or molecules, often with a targeted gene panel. <i>Examples include 10X Genomics Xenium and Curio Trekker</i>
+- Resolution, number of genes, and cost trade off against each other.  
 
 ## ACTIVITY: Seeing Space in a Tissue (LO 2)
 
@@ -207,13 +210,17 @@ Once cells are separated, each cell type can be seen to have its <i>own</i> patt
 ::::
 :::::
 
+::: source-credit
+Figure derived from <a href="https://doi.org/10.1016/j.jcmgh.2020.07.012" target="_blank" rel="noopener">Nault et al. (2021)</a>
+:::
+
 ::: back-to-hub
 <a href="#/l2-hub">↩ Back to menu</a>
 :::
 
 ## SCREENING WITH CELL-SPECIFIC SIGNATURES
 
-<br>The signature matching from bulk approaches still applies:
+<br>While the resolution changes, the principles of signatures apply to single-cell and spatial transcriptomics:
 
 - Compare a compound's response in the cell type of interest with known drugs.
 - Look for the effect in the intended cell type and for off-target effects in the others.
@@ -246,7 +253,7 @@ This repeats the inverse-signature idea from lecture 1, now with single-cell dat
 
 ## TISSUE-LEVEL DOSE-RESPONSE CAN MISLEAD {#l2-dose-response}
 
-<br>If only a fraction of the cells respond, the tissue-level curve shows only a fraction of that response.
+<br>If only a fraction of the cells respond, the tissue-level curve will show only a fraction of that response.
 
 - A strong response in a small group of cells looks weak in the average.
 - The apparent threshold shifts to higher doses, or the response drops below detection altogether.
@@ -260,7 +267,7 @@ This repeats the inverse-signature idea from lecture 1, now with single-cell dat
 
 <br>This is an actively evolving field, and much of what we have discussed is still largely theoretical. Single-cell and spatial data pose unique challenges for dose-response modeling.
 
-- The data are very sparse, with many zeroes, which creates statistical challenges.
+- The data are very sparse, with many zeroes, creating statistical challenges.
 - There is limited data to develop and test these methods. Single-cell methods are now more affordable (~10X the cost of bulk approaches), but spatial methods are not yet highly scalable (~100–1000X the cost of bulk approaches).
 
 ## ACTIVITY: Cell vs. Tissue Dose-Response (LO 4)
@@ -291,7 +298,7 @@ Start with the bulk dose-response curve for Gene X and the dashed line at 10% re
 
 <br>Four objectives, four activities:
 
-- **LO 1** — A tissue measurement averages over cell types, so composition and state changes can look alike.
+- **LO 1** — A tissue measurement averages over cell types, so composition and state changes can look alike, and rare cell types need many cells to be seen.
 - **LO 2** — Location shapes the response, and capture area decides what you can see.
 - **LO 3** — Cell-specific signatures let you screen for the effect you want, in the cells you want.
 - **LO 4** — Cell-specific dose-response can reveal sensitivity that the tissue average hides.

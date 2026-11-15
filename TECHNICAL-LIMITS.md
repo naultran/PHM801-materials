@@ -67,7 +67,7 @@ analysis notebook or a dedicated application, not a static lecture site.
 | Mode of Action Discovery | 10 compounds × 48 genes, clustered on both axes | instant |
 | Over-Representation or Ranked? | 20 genes, permutation test | instant |
 | From Gene Curves to a Dose | 80 genes, ten point-of-departure methods | instant |
-| Bulk or Mixed? | 10 cells × 10 genes | instant |
+| Bulk or Mixed? | 10 cells × 10 genes; Step 4 draws a nested 100,000-cell sample | instant |
 | Seeing Space in a Tissue Measurement | 400 cells × 10 genes (Canvas) | instant |
 | Screening by Cell-Specific Signature | 30 genes × 2 cell types, 2 drugs | instant |
 | Cell-Specific vs. Tissue-Level Dose-Response | up to 8 curves + bulk | instant |
